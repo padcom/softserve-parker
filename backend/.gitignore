@@ -1,0 +1,12 @@
+# TS incremental build file
+tsconfig.tsbuildinfo
+
+# tsc outDir
+.build/
+
+# npm node modules
+node_modules/
+
+# winston log files
+parker-error.log
+parker-general.log

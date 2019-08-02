@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "outDir": ".build",
+    "incremental": true,
+
+    "module": "commonjs",
+    "target": "es2016",
+    "lib": ["es2016", "esnext.asynciterable"],
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+
+    "esModuleInterop": true
+  }
+}
