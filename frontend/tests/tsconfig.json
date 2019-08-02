@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "baseUrl": "../../node_modules",
+    "lib": ["es6", "dom"],
+    "target": "es5",
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "types": [
+      "cypress",
+      "mocha",
+      "chai"
+    ],
+  },
+  "include": [
+    "**/*.ts"
+  ]
+}

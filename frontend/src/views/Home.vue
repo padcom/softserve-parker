@@ -1,18 +1,17 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    Hello, {{ user.name }}
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import Vue from 'vue'
+import { Component } from 'vue-property-decorator'
 
-export default {
-  name: 'home',
-  components: {
-    HelloWorld
-  }
+import { AuthState } from '@/store/auth'
+
+@Component()
+export default class Home extends Vue {
+  @AuthState user
 }
 </script>
