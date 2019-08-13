@@ -2,7 +2,7 @@
 tsconfig.tsbuildinfo
 
 # tsc outDir
-.build/
+dist
 
 # npm node modules
 node_modules/

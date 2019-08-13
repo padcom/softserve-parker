@@ -1,0 +1,96 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2019-08-08T12:03:53.725Z",
+  "__export_source": "insomnia.desktop.app:v6.6.2",
+  "resources": [
+    {
+      "_id": "req_278b083b80474a3599fae26dce4d28d3",
+      "authentication": {},
+      "body": {
+        "mimeType": "application/graphql",
+        "text": "{\"query\":\"query Launches($first: Int){\\n  launches(first: $first) {id,title}\\n}\",\"variables\":{\"first\":5}}"
+      },
+      "created": 1565250282133,
+      "description": "",
+      "headers": [
+        {
+          "id": "pair_4c965b4ce8a248c890f32620f5ec1e54",
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "isPrivate": false,
+      "metaSortKey": -1565250282133,
+      "method": "POST",
+      "modified": 1565265787060,
+      "name": "launches",
+      "parameters": [],
+      "parentId": "wrk_ac9929baca954e248a5e71fee0794d31",
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingSendCookies": true,
+      "settingStoreCookies": true,
+      "url": "{{ url  }}",
+      "_type": "request"
+    },
+    {
+      "_id": "wrk_ac9929baca954e248a5e71fee0794d31",
+      "created": 1565250030790,
+      "description": "GraphQL calls for the internal SoftServe project \"Parker\", which is a parking spot reservation PWA.\n\nMaintainer:\nArutr Tagisow - atagi@softserveinc.com",
+      "modified": 1565250092553,
+      "name": "Parker",
+      "parentId": null,
+      "_type": "workspace"
+    },
+    {
+      "_id": "env_c84fd207b43217f12a2a3058513e3f56d6929ab4",
+      "color": null,
+      "created": 1565250030864,
+      "data": { "auth_token": "not implemented" },
+      "dataPropertyOrder": { "&": ["auth_token"] },
+      "isPrivate": false,
+      "metaSortKey": 1565250030864,
+      "modified": 1565250348648,
+      "name": "Base Environment",
+      "parentId": "wrk_ac9929baca954e248a5e71fee0794d31",
+      "_type": "environment"
+    },
+    {
+      "_id": "jar_c84fd207b43217f12a2a3058513e3f56d6929ab4",
+      "cookies": [],
+      "created": 1565250030867,
+      "modified": 1565250030867,
+      "name": "Default Jar",
+      "parentId": "wrk_ac9929baca954e248a5e71fee0794d31",
+      "_type": "cookie_jar"
+    },
+    {
+      "_id": "env_8f779ecb06de482da3dac79cbf0663fa",
+      "color": "#969696",
+      "created": 1565250130176,
+      "data": { "url": "127.1:4000/" },
+      "dataPropertyOrder": { "&": ["url"] },
+      "isPrivate": false,
+      "metaSortKey": 1565250130176,
+      "modified": 1565250219244,
+      "name": "LOCAL @ your computer",
+      "parentId": "env_c84fd207b43217f12a2a3058513e3f56d6929ab4",
+      "_type": "environment"
+    },
+    {
+      "_id": "env_2d8720895c0b4afe8a41bfab60988cc7",
+      "color": "#ffb100",
+      "created": 1565250162042,
+      "data": { "url": "[aws is not up yet]:4000/" },
+      "dataPropertyOrder": { "&": ["url"] },
+      "isPrivate": false,
+      "metaSortKey": 1565250162042,
+      "modified": 1565250241241,
+      "name": "DEV @ AWS",
+      "parentId": "env_c84fd207b43217f12a2a3058513e3f56d6929ab4",
+      "_type": "environment"
+    }
+  ]
+}

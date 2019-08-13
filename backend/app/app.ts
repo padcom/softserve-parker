@@ -1,25 +1,33 @@
-import { ApolloServer } from 'apollo-server';
 import dotenv from 'dotenv';
+dotenv.config();
+import cors from 'cors';
+import express from 'express';
+import helmet from 'helmet';
 import 'reflect-metadata'; // required for typegraphql
-import { schema } from './graphql';
+import { apolloServer } from './utils/apolloServer';
 import { logger } from './utils/logger';
 
-dotenv.config();
-const { NODE_ENV, PARKER_PORT } = process.env;
+const { NODE_ENV, PORT } = process.env;
 
 (async function() {
-  const server = new ApolloServer({
-    schema: await schema,
-    debug: NODE_ENV === 'development',
+  const app = express();
+  app.use(helmet());
+  app.use(cors());
+
+  const server = await apolloServer;
+  server.applyMiddleware({
+    app,
+    path: '/',
   });
 
   try {
-    const serverParams = await server.listen({ port: PARKER_PORT });
-    logger.info(
-      `Success! Parker backend started at ${
-        serverParams.url
-      } in ${NODE_ENV.toUpperCase()} mode`,
-    );
+    app.listen(PORT, () => {
+      logger.info(
+        `🚀 Success! Parker backend started in ${NODE_ENV.toUpperCase()} mode at http://127.0.0.1:${PORT}${
+          server.graphqlPath
+        }`,
+      );
+    });
   } catch (e) {
     logger.error(`Error! Failed to start Apollo server. Error message: ${e}`);
   }

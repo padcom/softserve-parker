@@ -20,3 +20,9 @@ Make sure your terminal is in the same directory as the file you are reading rig
 `mysql_secure_installation`
 
 `sudo service mysql start`
+
+`sudo mysql`
+
+`ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';`
+
+`CREATE DATABASE test`
