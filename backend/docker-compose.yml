@@ -1,0 +1,23 @@
+# For info on how to configure this image:
+# read https://hub.docker.com/_/mysql
+version: '3.7'
+services:
+  parker-db:
+    image: mysql:8
+    container_name: parker-db
+
+    # mysql 8 uses the new 'caching_sha2_password' auth plugin by default
+    # our database driver - mysql2 - doesn't support 'caching_sha2_password'
+    # so we roll back to the good old 'mysql_native_password' auth plugin
+    # like so:
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      # load the parker sql migration script to the mysql 'autorun' directory
+      - ./db.sql:/docker-entrypoint-initdb.d/db.sql
+    ports:
+      # localhost:4242 points to [mysql container]:3306 (default mysql port)
+      - 4242:3306
+    #logging:
+    #driver: local

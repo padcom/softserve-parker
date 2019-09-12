@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
     "outDir": "dist",
-    "incremental": true,
+    "incremental": true, //faster dev environment builds
 
-    //Required for typegraphql
+    //Required for typegraphql, see https://typegraphql.ml/docs/installation.html
     "module": "commonjs",
     "target": "es2016",
     "lib": ["es2016", "esnext.asynciterable"],
@@ -12,7 +12,6 @@
     //End of required for typegraphql
 
     "esModuleInterop": true, //Required for async/await
-    "sourceMap": true, //for debug
-    "noUnusedLocals": true
+    "sourceMap": true //for debug
   }
 }

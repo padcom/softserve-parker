@@ -3,8 +3,12 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "tsc",
-    "dev": "ts-node-dev --no-notify app/app.ts"
+    "dev:backend": "ts-node-dev --no-notify app/app.ts",
+    "dev:db": "docker-compose up --detach",
+    "dev:db-ssh": "docker exec -it parker-db mysql -h 0 -uroot -proot --database=parker",
+    "ci:lint": "eslint \"app/**/*.ts\" --max-warnings 1",
+    "ci:prettier": "prettier-eslint \"app/**/*.ts\"",
+    "build": "tsc"
   },
   "//": "DO NOT REMOVE the graphql package - it's not used in code but it's a peer dependency",
   "dependencies": {
@@ -14,18 +18,24 @@
     "express": "^4.17.1",
     "graphql": "^14.4.2",
     "helmet": "^3.18.0",
-    "mysql": "^2.17.1",
+    "mysql2": "^1.7.0",
     "reflect-metadata": "^0.1.13",
     "type-graphql": "^0.17.4",
-    "typescript": "^3.5.2",
-    "winston": "^3.2.1"
+    "winston": "^3.2.1",
+    "lodash.get": "^4.4.2"
   },
   "devDependencies": {
     "@types/dotenv": "^6.1.1",
     "@types/express": "^4.17.0",
     "@types/graphql": "^14.2.2",
-    "@types/mysql": "^2.15.6",
+    "@types/lodash.get": "^4.4.6",
+    "@types/mysql2": "github:types/mysql2",
+    "@typescript-eslint/eslint-plugin": "^1.13.0",
+    "@typescript-eslint/parser": "^1.13.0",
+    "eslint": "^5.0.0",
+    "eslint-config-prettier": "^6.0.0",
+    "prettier-eslint-cli": "^5.0.0",
     "ts-node-dev": "^1.0.0-pre.40",
-    "tslint": "^5.18.0"
+    "typescript": "^3.5.3"
   }
 }

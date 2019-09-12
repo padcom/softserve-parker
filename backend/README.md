@@ -1,28 +1,18 @@
 # PARKER backend
 
-Repo: https://gitlab.aplaline.com/softserve/parker
+## Prerequisites
 
-If you need to grand somebody, ask Maciej Hryniszak (mhyrn@softserveinc.com)
+_click the links for installation guide_
 
-How to start the backend:
+- [ Node 10.x.x ](https://nodejs.org/en/download/)
+- docker 19.03.2 or greater [Windows](https://docs.docker.com/docker-for-windows/install/)/[Linux](https://docs.docker.com/install/linux/docker-ce/ubuntu/)
+- [docker-compose v18.06.0 or greater](https://docs.docker.com/compose/install/#install-compose)
 
-Make sure your terminal is in the same directory as the file you are reading right now
+## Setup
 
 1. Run `npm install`
-2. Run `npm run dev`
+2. Run `npm run dev:db` **<--make sure docker & docker-compose is installed!**
+3. Run `npm run dev:backend`
 
-## MySQL installation
-
-### Linux
-
-`sudo apt-get install mysql-server`
-
-`mysql_secure_installation`
-
-`sudo service mysql start`
-
-`sudo mysql`
-
-`ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';`
-
-`CREATE DATABASE test`
+## Debug
+* If you ever need to ssh into the dev database, run `npm run dev:db-ssh`

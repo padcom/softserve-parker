@@ -1,0 +1,25 @@
+{
+  //https://github.com/typescript-eslint/typescript-eslint/tree/master/packages/eslint-plugin
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "plugins": ["@typescript-eslint"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
+  ],
+  "rules": {
+    "@typescript-eslint/explicit-member-accessibility": [
+      "error",
+      {
+        "accessibility": "no-public"
+      }
+    ],
+    "@typescript-eslint/indent": ["error", 2],
+    "@typescript-eslint/explicit-function-return-type": ["off"], //disabled it because it's annyoing with TyepGraphQL syntax like '() => Int!' - function works but has no return type
+    "@typescript-eslint/no-non-null-assertion": ["off"] //disabled because it's annoying with TypeGraphQl, eg. with Int! return type. Int! is a non-null assertion.
+  }
+}

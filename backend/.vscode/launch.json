@@ -8,12 +8,10 @@
       "type": "node",
       "request": "launch",
       "name": "Launch Program",
-      "program": "${workspaceFolder}/.build/app.js",
-      "outFiles": [
-        "${workspaceFolder}/.build/**/*.js"
-      ],
+      "program": "${workspaceFolder}/dist/app.js",
+      "outFiles": ["${workspaceFolder}/dist/**/*.js"],
       "sourceMaps": true,
-      "smartStep": true,
+      "smartStep": true
     }
   ]
 }
