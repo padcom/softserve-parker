@@ -1,12 +1,25 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link>|
-      <router-link to="/about">About</router-link>
+    <div id="nav" v-if="isLoggedIn">
+      <router-link to="/">Home</router-link> |
+      <router-link to="/logout">Logout</router-link>
     </div>
+
     <router-view />
   </div>
 </template>
+
+<script>
+import Vue from 'vue'
+import { Component } from 'vue-property-decorator'
+
+import { AuthGetter } from '@/store/auth'
+
+@Component()
+export default class App extends Vue {
+  @AuthGetter isLoggedIn
+}
+</script>
 
 <style lang="scss">
 #app {

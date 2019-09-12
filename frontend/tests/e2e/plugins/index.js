@@ -6,13 +6,35 @@
 // https://docs.cypress.io/api/plugins/preprocessors-api.html#Examples
 
 /* eslint-disable import/no-extraneous-dependencies, global-require, arrow-body-style */
-// const webpack = require('@cypress/webpack-preprocessor')
+const webpack = require('@cypress/webpack-preprocessor')
+
+function getRuleForTypeScript (rules) {
+  return rules.find(rule => `${rule.test}`.includes('ts'))
+}
+
+function removeBabelRule (rule) {
+  const babelRuleIndex = rule
+    .use
+    .findIndex(item => item.loader === 'babel-loader')
+  // eslint-disable-next-line no-console
+  if (babelRuleIndex === -1) {
+    console.warn('Warning: babel-loader rule not found!')
+  }
+  rule.use.splice(babelRuleIndex, 1)
+}
 
 module.exports = (on, config) => {
-  // on('file:preprocessor', webpack({
-  //  webpackOptions: require('@vue/cli-service/webpack.config'),
-  //  watchOptions: {}
-  // }))
+  const webpackOptions = require('@vue/cli-service/webpack.config')
+
+  // For whatever reason the rules for *.ts files contain additional
+  // babel loader which messes up completely the possibility to do imports
+  // using ES6 modules. The following code removes the babel loader rule
+  removeBabelRule(getRuleForTypeScript(webpackOptions.module.rules))
+
+  on('file:preprocessor', webpack({
+    webpackOptions,
+    watchOptions: {}
+  }))
 
   return Object.assign({}, config, {
     fixturesFolder: 'tests/e2e/fixtures',

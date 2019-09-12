@@ -3,16 +3,16 @@ module.exports = {
   env: {
     browser: true,
   },
-  extends: ['plugin:vue/essential', '@vue/standard'],
+  'extends': [
+    'plugin:vue/essential',
+    '@vue/standard',
+    '@vue/typescript'
+  ],
   rules: {
-    'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    indent: ['error', 2],
-    'no-trailing-spaces': ['error'],
-    'eol-last': ['error', 'always'],
+    'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'warn',
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'warn'
   },
   parserOptions: {
-    parser: 'babel-eslint',
-    rules: {},
-  },
-};
+    parser: '@typescript-eslint/parser'
+  }
+}
