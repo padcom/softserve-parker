@@ -9,7 +9,6 @@ export const apolloServer = schema.then(
     const server = new ApolloServer({
       schema: resolvedSchema,
       introspection: NODE_ENV === 'development',
-      playground: NODE_ENV === 'development',
       formatResponse: (resp): unknown => {
         /*
         Introspection queries are gigantic (+200 lines)

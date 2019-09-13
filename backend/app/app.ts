@@ -19,7 +19,6 @@ const { NODE_ENV, PORT } = process.env
     path: '/',
   })
 
-
   try {
     app.listen(PORT, () => {
       logger.info(

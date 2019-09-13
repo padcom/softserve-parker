@@ -70,7 +70,7 @@ export class ParkingSpotsResolver {
       description:
         'Method argument description. This is argument limits the amount of rows returned',
     })
-      limit: number
+    limit: number
   ) {
     return ParkingSpotService.getAllLimit(limit)
   }

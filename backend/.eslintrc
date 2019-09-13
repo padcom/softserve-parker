@@ -4,12 +4,13 @@
   "parserOptions": {
     "project": "./tsconfig.json"
   },
-  "plugins": ["@typescript-eslint"],
+  "plugins": ["@typescript-eslint", "prettier"],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
-    "prettier"
+    "prettier/@typescript-eslint",
+    "plugin:prettier/recommended"
   ],
   "rules": {
     "@typescript-eslint/explicit-member-accessibility": [
@@ -18,7 +19,7 @@
         "accessibility": "no-public"
       }
     ],
-    "@typescript-eslint/indent": ["error", 2],
+    // "@typescript-eslint/indent": ["error", 2],
     "@typescript-eslint/explicit-function-return-type": ["off"], //disabled it because it's annyoing with TyepGraphQL syntax like '() => Int!' - function works but has no return type
     "@typescript-eslint/no-non-null-assertion": ["off"] //disabled because it's annoying with TypeGraphQl, eg. with Int! return type. Int! is a non-null assertion.
   }

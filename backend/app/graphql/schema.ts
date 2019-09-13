@@ -1,6 +1,6 @@
-import { buildSchema } from 'type-graphql';
-import { ParkingSpotsResolver } from './collections/example/typeDefs';
+import { buildSchema } from 'type-graphql'
+import { ParkingSpotsResolver } from './collections/example/typeDefs'
 
-const resolvers = [ParkingSpotsResolver];
+const resolvers = [ParkingSpotsResolver]
 
-export const schema = buildSchema({ resolvers });
+export const schema = buildSchema({ resolvers })
