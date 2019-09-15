@@ -6,7 +6,7 @@ import './registerServiceWorker'
 
 Vue.config.productionTip = false
 
-//@ts-ignore
+// @ts-ignore
 window.app = new Vue({
   router,
   store,
