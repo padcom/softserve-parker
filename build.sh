@@ -25,5 +25,5 @@ npm run build
 
 echo "Spawning PM2"
 cd ../
-JENKINS_NODE_COOKIE=dontKillMe pm2 start
+pm2 start
 

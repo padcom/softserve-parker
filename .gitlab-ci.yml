@@ -1,0 +1,45 @@
+image: node:10.16.3-jessie
+
+stages:
+  - build_frontend
+  - build_backend
+  - test
+
+cache:
+  paths:
+    - node_modules/
+
+Build frontend:
+  stage: build_frontend
+  script:
+    - cd frontend
+    - npm i
+    - npm run lint
+    - npm run test
+    - npm run build
+    - cd ..
+
+Build backend:
+  stage: build_backend
+  script:
+    - cd backend
+    - npm i
+    - npm run lint
+    - npm run test
+    - npm run build
+    - cd ..
+
+test:
+  stage: test
+  script:
+    - cd frontend
+    - npm i
+    - npm run lint
+    - npm run test
+    - npm run build
+    - cd ../backend
+    - npm i
+    - npm run-all ci:*
+    - npm run build
+  only:
+    - merge_requests
