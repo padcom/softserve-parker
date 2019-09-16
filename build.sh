@@ -11,14 +11,14 @@ pm2 kill
 echo "Building backend"
 cd ./backend
 echo 'Backend: npm install'
-npm ci  #npm i is slower
+npm i
 echo 'Backend: build'
 npm run build
 
 echo "Building frontend"
 cd ../frontend
 echo 'Frontend: npm install'
-npm ci
+npm i
 echo 'Frontend: build'
 npm run build
 
