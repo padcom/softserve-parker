@@ -13,11 +13,11 @@ function getRuleForTypeScript (rules) {
 }
 
 function removeBabelRule (rule) {
-  const babelRuleIndex = rule
-    .use
-    .findIndex(item => item.loader === 'babel-loader')
-  // eslint-disable-next-line no-console
+  const babelRuleIndex = rule.use.findIndex(
+    item => item.loader === 'babel-loader'
+  )
   if (babelRuleIndex === -1) {
+    // eslint-disable-next-line no-console
     console.warn('Warning: babel-loader rule not found!')
   }
   rule.use.splice(babelRuleIndex, 1)
@@ -31,10 +31,13 @@ module.exports = (on, config) => {
   // using ES6 modules. The following code removes the babel loader rule
   removeBabelRule(getRuleForTypeScript(webpackOptions.module.rules))
 
-  on('file:preprocessor', webpack({
-    webpackOptions,
-    watchOptions: {}
-  }))
+  on(
+    'file:preprocessor',
+    webpack({
+      webpackOptions,
+      watchOptions: {}
+    })
+  )
 
   return Object.assign({}, config, {
     fixturesFolder: 'tests/e2e/fixtures',
