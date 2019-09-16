@@ -7,7 +7,8 @@ stages:
 
 cache:
   paths:
-    - node_modules/
+    - frontend/node_modules/
+    - backend/node_modules/
 
 Build frontend:
   stage: build_frontend
@@ -24,8 +25,8 @@ Build backend:
   script:
     - cd backend
     - npm i
-    - npm run lint
-    - npm run test
+    - npm run ci:lint
+    - npm run ci:prettier
     - npm run build
     - cd ..
 
