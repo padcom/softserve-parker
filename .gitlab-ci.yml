@@ -30,10 +30,24 @@ Build & CI checks backend:
     - npm run build
     - cd ..
 
-Deploy to AWS EC2:
+Deploy to STAGE:
   stage: deploy
   script:
     - pm2 kill
     - pm2 start
+  environment:
+    name: STAGE
+    url: ec2-3-121-214-2.eu-central-1.compute.amazonaws.com
+  only:
+    - master
+
+Deploy to PROD (not implemented):
+  stage: deploy
+  script:
+    - echo 'Not implemented'
+  environment:
+    name: PROD
+    url: example.org
+  when: manual
   only:
     - master
