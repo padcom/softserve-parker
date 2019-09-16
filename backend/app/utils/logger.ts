@@ -1,5 +1,4 @@
 import winston from 'winston'
-
 export const logger = winston.createLogger({
   format: winston.format.combine(winston.format.json()), // SoftServe logging system (Splunk) prefers JSON error format
   transports: [
