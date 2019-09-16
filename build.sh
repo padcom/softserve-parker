@@ -25,5 +25,5 @@ npm run build
 
 echo "Spawning PM2"
 cd ../
-# cd /var/lib/jenkins/workspace/parker
-BUILD_ID=dontKillMe pm2 start
+JENKINS_NODE_COOKIE=dontKillMe pm2 start
+
