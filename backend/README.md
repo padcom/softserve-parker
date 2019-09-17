@@ -13,7 +13,7 @@ _click the links for installation guide_
 1. Run `npm install`
 2. Run `docker-compose up` and wait for the 'parker-mysql' server to complete initialization which usually takes about 30 seconds tops
 3. Run `npm run db:migrate` to initialize the database
-4. Run `npm run dev` to start the application
+4. Run `npm start` to start the application
 5. Done! The app backend is set up. Go to the link shown in the terminal (`Success! Started at localhost:xxxx`).
    Press CTRL+Space after the page loads to see the possible queries.
 
