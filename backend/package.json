@@ -4,11 +4,11 @@
   "private": true,
   "scripts": {
     "start": "ts-node-dev --no-notify app/main.ts",
+    "build": "tsc",
     "db:migrate": "db-migrate up",
     "db:create-migration": "db-migrate create",
     "ci:lint": "eslint \"app/**/*.ts\" --max-warnings 1",
-    "ci:prettier": "prettier \"app/**/*.ts\" --check",
-    "build": "tsc"
+    "ci:prettier": "prettier \"app/**/*.ts\" --check"
   },
   "//": "DO NOT REMOVE the graphql package - it's not used in code but it's a peer dependency",
   "dependencies": {
