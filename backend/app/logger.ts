@@ -15,8 +15,7 @@ export const logger = winston.createLogger({
   ],
 })
 
-if (NODE_ENV !== 'production') {
-  logger.add(new winston.transports.Console({
-    format: winston.format.simple()
-  }))
-}
+// PM2 will be running the processes and it needs console logs to do logging
+logger.add(new winston.transports.Console({
+  format: winston.format.simple()
+}))

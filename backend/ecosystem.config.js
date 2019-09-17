@@ -9,7 +9,7 @@ module.exports = {
         },
         env_qa: {
             "PORT": 3000,
-            "NODE_ENV": "production",
+            "NODE_ENV": "qa",
         }
       }
   ]
