@@ -1,7 +1,8 @@
 import mysql from 'mysql2'
-import { logger } from './logger'
 
-import config from '../../database.json'
+import config from '../database.json'
+
+import { logger } from './logger'
 
 const { NODE_ENV } = process.env
 

@@ -2,8 +2,8 @@ import cors from 'cors'
 import express from 'express'
 import helmet from 'helmet'
 import 'reflect-metadata' // required for typegraphql
-import { apolloServer } from './utils/apolloServer'
-import { logger } from './utils/logger'
+import { graphql } from './graphql'
+import { logger } from './logger'
 
 const { NODE_ENV, PORT = 4000 } = process.env
 
@@ -12,7 +12,7 @@ async function main () {
   app.use(helmet())
   app.use(cors())
 
-  const server = await apolloServer
+  const server = await graphql
   server.applyMiddleware({ app, path: '/' })
 
   try {

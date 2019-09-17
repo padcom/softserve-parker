@@ -27,11 +27,16 @@ export class ParkingSpotsResolver {
     description: 'Query description. Returns all parking spots up to limit.',
   })
   async parkingspots(
+    @Arg('skip', () => Int!, {
+      description: 'Method argument description. This is argument defines how many rows to skip',
+    })
+    skip: number,
     @Arg('limit', () => Int!, {
       description: 'Method argument description. This is argument limits the amount of rows returned',
     })
     limit: number
-  ) {
-    return ParkingSpotService.getAll()
+  )
+  {
+    return ParkingSpotService.fetch(skip, limit)
   }
 }

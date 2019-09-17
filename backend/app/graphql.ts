@@ -1,12 +1,13 @@
-import { ApolloServer } from 'apollo-server-express'
-import { schema } from '../graphql/schema'
-import { logger } from './logger'
-import { GraphQLFormattedError } from 'graphql'
 import lodashGet from 'lodash.get'
+import { ApolloServer } from 'apollo-server-express'
+import { GraphQLFormattedError } from 'graphql'
+
+import { schema } from './graphql/schema'
+import { logger } from './logger'
 
 const { NODE_ENV } = process.env
 
-export const apolloServer = schema.then((resolvedSchema): ApolloServer => {
+export const graphql = schema.then((resolvedSchema): ApolloServer => {
   const server = new ApolloServer({
     schema: resolvedSchema,
     introspection: NODE_ENV === 'development',
