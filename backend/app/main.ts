@@ -13,7 +13,7 @@ async function main () {
   app.use(cors())
 
   const server = await graphql
-  server.applyMiddleware({ app, path: '/' })
+  server.applyMiddleware({ app, path: '/graphql' })
 
   try {
     app.listen(PORT, () => {
