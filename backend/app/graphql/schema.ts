@@ -1,5 +1,5 @@
 import { buildSchema } from 'type-graphql'
-import { ParkingSpotsResolver } from './collections/example/typeDefs'
+import { ParkingSpotsResolver } from './collections/parkingspots'
 
 const resolvers = [ ParkingSpotsResolver ]
 

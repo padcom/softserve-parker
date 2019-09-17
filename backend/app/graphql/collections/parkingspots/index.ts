@@ -1,0 +1,1 @@
+export { ParkingSpotsResolver } from './typedefs'

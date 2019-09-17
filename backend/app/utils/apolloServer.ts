@@ -16,10 +16,9 @@ export const apolloServer = schema.then((resolvedSchema): ApolloServer => {
       // They fill up the terminal with unimportant information.
       // Filtering them here.
       const isIntrospectionResponse = lodashGet(resp, 'data.__schema', false)
-      const logMessage = isIntrospectionResponse
-        ? '[skipping introspection query]'
-        : resp
-      logger.info(logMessage)
+      if (!isIntrospectionResponse) {
+        logger.info(JSON.stringify(resp))
+      }
 
       return resp
     },
