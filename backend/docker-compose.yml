@@ -6,6 +6,7 @@ services:
   mysql:
     image: mysql:8
     container_name: parker-mysql
+    restart: always
 
     # mysql 8 uses the new 'caching_sha2_password' auth plugin by default
     # our database driver - mysql2 - doesn't support 'caching_sha2_password'
