@@ -10,9 +10,7 @@ class Service {
    * @memberof Service
    */
   async getAllLimit(limit: number): Promise<ParkingSpots[]> {
-    const [rows] = await db.execute(`SELECT * FROM parkingSpots LIMIT ?`, [
-      limit,
-    ])
+    const [ rows ] = await db.execute(`SELECT * FROM parkingSpots LIMIT ?`, [ limit ])
     return rows as ParkingSpots[]
   }
 }

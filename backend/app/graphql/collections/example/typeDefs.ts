@@ -44,7 +44,7 @@ The class is both a TS interface and a typedef (in one).
 */
 
 @ObjectType({
-  //In normal graphql, this would be type ParkingSpots {id: ID!, userId: Int}
+  // In normal graphql, this would be type ParkingSpots { id: ID!, userId: Int }
   description:
     'Returns all parking spots. THIS WILL APPEAR IN THE DOCUMENTATION EXPLORER IN APOLLOGRAPHQL. Click "Docs" on the right on localhost:4000',
 })
@@ -62,7 +62,7 @@ export class ParkingSpots {
 
 @Resolver(ParkingSpots)
 export class ParkingSpotsResolver {
-  @Query(() => [ParkingSpots], {
+  @Query(() => [ ParkingSpots ], {
     description: 'Query description. Returns all parking spots up to limit.',
   })
   async parkingspots(

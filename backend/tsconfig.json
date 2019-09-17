@@ -1,17 +1,25 @@
 {
   "compilerOptions": {
     "outDir": "dist",
-    "incremental": true, //faster dev environment builds
 
-    //Required for typegraphql, see https://typegraphql.ml/docs/installation.html
+    // Enable faster development builds
+    "incremental": true,
+
+    // Required for typegraphql, see https://typegraphql.ml/docs/installation.html
     "module": "commonjs",
     "target": "es2016",
     "lib": ["es2016", "esnext.asynciterable"],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    //End of required for typegraphql
 
-    "esModuleInterop": true, //Required for async/await
-    "sourceMap": true //for debug
+    // Required for async/await
+    "esModuleInterop": true,
+
+    // Other options
+    "resolveJsonModule": true,
+
+    // For debugging
+    "sourceMap": true,
+
   }
 }

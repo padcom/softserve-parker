@@ -1,12 +1,16 @@
 import mysql from 'mysql2'
 import { logger } from './logger'
 
+import config from '../../database.json'
+
+const { NODE_ENV } = process.env
+
 const {
-  MYSQL_HOST,
-  MYSQL_USER,
-  MYSQL_PASSWORD,
-  MYSQL_DATABASE,
-  MYSQL_PORT,
+  MYSQL_HOST = config[NODE_ENV].host,
+  MYSQL_PORT = config[NODE_ENV].port,
+  MYSQL_USER = config[NODE_ENV].user,
+  MYSQL_PASSWORD = config[NODE_ENV].password,
+  MYSQL_DATABASE = config[NODE_ENV].database,
 } = process.env
 
 const pool = mysql.createPool({
@@ -36,5 +40,4 @@ pool.getConnection((err, connection): void => {
   if (connection) {
     connection.release()
   }
-  return
 })

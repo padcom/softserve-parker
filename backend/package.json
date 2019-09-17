@@ -3,10 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev:backend": "ts-node-dev --no-notify app/app.ts",
-    "dev:db": "docker-compose up --detach --force-recreate --renew-anon-volumes",
-    "dev:db-ssh": "docker exec -it parker-db mysql -h 0 -uroot -proot --database=parker",
-    "dev:db-purge": "docker-compose stop && docker-compose rm",
+    "dev": "ts-node-dev --no-notify app/app.ts",
+    "db:migrate": "db-migrate up",
+    "db:create-migration": "db-migrate create",
     "ci:lint": "eslint \"app/**/*.ts\" --max-warnings 1",
     "ci:prettier": "prettier \"app/**/*.ts\" --check",
     "build": "tsc"
@@ -15,6 +14,8 @@
   "dependencies": {
     "apollo-server-express": "^2.8.1",
     "cors": "^2.8.5",
+    "db-migrate": "^0.11.6",
+    "db-migrate-mysql": "^1.1.10",
     "dotenv": "^8.0.0",
     "express": "^4.17.1",
     "graphql": "^14.4.2",
