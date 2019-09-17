@@ -11,7 +11,7 @@ class Service {
    * @memberof Service
    */
   async fetch(skip: number, limit: number): Promise<ParkingSpots[]> {
-    const [ rows ] = await db.execute(`SELECT * FROM parkingspot LIMIT ?,?`, [ skip, limit ])
+    const [ rows ] = await db.execute(`SELECT * FROM parkingspot ORDER BY id LIMIT ?,?`, [ skip, limit ])
     return rows as ParkingSpots[]
   }
 }
