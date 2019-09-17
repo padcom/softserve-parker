@@ -9,11 +9,6 @@ export class ParkingSpots {
   @Field(() => ID)
   id: number
 
-  @Field(() => Int, {
-    // if you don't provide () => Int here, the graphql typedefs will make the userId var type equal to 'Float'
-    description: 'Field description. This is the userId the parking spot is assigned to',
-  })
-
   @Field(() => Boolean)
   reserved: boolean
 

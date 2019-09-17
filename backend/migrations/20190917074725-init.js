@@ -19,6 +19,7 @@ exports.up = function(db) {
     id: { type: 'int', primaryKey: true, autoIncrement: true },
     email: { type: 'string', notNull: true },
     password: { type: 'string', notNull: true },
+    rank: { type: 'float', defaultValue: 0 },
     enabled: { type: 'boolean', defaultValue: true },
     created: { type: 'timestamp', defaultValue: 'CURRENT_TIMESTAMP' }
   })

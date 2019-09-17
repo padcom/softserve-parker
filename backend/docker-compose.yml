@@ -22,7 +22,7 @@ services:
     logging:
       driver: json-file
     volumes:
-      - mysql-db:/var/lib/mysql
+      - parker-mysql-db:/var/lib/mysql
 
 volumes:
-  mysql-db:
+  parker-mysql-db:

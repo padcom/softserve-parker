@@ -1,6 +1,8 @@
 import { buildSchema } from 'type-graphql'
-import { ParkingSpotsResolver } from './collections/parkingspots'
+import { ParkingSpotsResolver } from './parkingspots'
 
-const resolvers = [ ParkingSpotsResolver ]
+const resolvers = [
+  ParkingSpotsResolver,
+]
 
 export const schema = buildSchema({ resolvers })

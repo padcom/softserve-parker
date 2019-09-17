@@ -1,4 +1,4 @@
-import { db } from '../../../mysql'
+import { db } from '../../mysql'
 import { ParkingSpots } from './typedefs'
 
 class Service {

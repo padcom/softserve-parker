@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "ts-node-dev --no-notify app/main.ts",
+    "start": "ts-node-dev --no-notify app/main.ts",
     "db:migrate": "db-migrate up",
     "db:create-migration": "db-migrate create",
     "ci:lint": "eslint \"app/**/*.ts\" --max-warnings 1",
