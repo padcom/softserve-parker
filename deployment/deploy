@@ -21,7 +21,7 @@ cp ecosystem.config.js /var/lib/parker/
 sudo pm2 restart parker
 
 echo "Deploying Apache configuration..."
-cd ../../deployment/apache
+cd ../deployment/apache
 sudo cp 001-parker.conf /etc/apache2/sites-available/
 sudo a2ensite 001-parker.conf
 sudo service apache2 reload
@@ -49,7 +49,6 @@ do
   then
     deploy $branch $branch
   else
-    echo "Master branch - skipping for now"
-    # deploy $branch "release"
+    deploy $branch "release"
   fi
 done
