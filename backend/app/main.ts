@@ -11,6 +11,7 @@ async function main () {
   const app = express()
   app.use(helmet())
   app.use(cors())
+  app.use(express.static('public'))
 
   const server = await graphql
   server.applyMiddleware({ app, path: '/graphql' })
