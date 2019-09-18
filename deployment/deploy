@@ -21,8 +21,8 @@ cp ecosystem.config.js /var/lib/parker/
 sudo pm2 restart parker
 
 echo "Deploying Apache configuration..."
-cd ../deployment/apache
-sudo cp 001-parker.conf /etc/apache2/sites-available/
+cd ../deployment
+sudo cp apache/001-parker.conf /etc/apache2/sites-available/
 sudo a2ensite 001-parker.conf
 sudo service apache2 reload
 
@@ -41,6 +41,10 @@ function deploy() {
 
   rm -rf $tmp
 }
+
+cd ..
+
+echo "Deploying frontend... $(pwd)"
 
 for ref in $@;
 do
