@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# Stop on error
+set -e
+
 echo "Building backend..."
 cd ../backend
 npm ci
@@ -10,26 +13,26 @@ cd ../frontend
 npm ci
 npm run build
 
-echo "Deploying frontend..."
-cd ../frontend/dist
-rm -rf /var/lib/parker/frontend/*
-cp -r * /var/lib/parker/frontend/
-
 echo "Deploying database migrations"
-cd ../../backend
+cd ../backend
 npm run db:migrate
 
-echo "Deploying backend..."
-cd dist
-rm -rf /var/lib/parker/backend/*
-cp -r * /var/lib/parker/backend/
-cd ..
-cp -r node_modules /var/lib/parker/backend/
-cp ecosystem.config.js /var/lib/parker/backend/
-sudo pm2 restart parker-backend
+echo "Deploying..."
+sudo pm2 stop parker
+rm -rf /var/lib/parker/*
+cp -r app /var/lib/parker/
+cp -r node_modules /var/lib/parker/
+cp tsconfig.json /var/lib/parker/
+cp database.json /var/lib/parker/
+cp ecosystem.config.js /var/lib/parker/
+cd ../frontend/dist
+rm -rf /var/lib/parker/public/*
+cp -r * /var/lib/parker/public/
+
+sudo pm2 restart parker
 
 echo "Deploying Apache configuration..."
-cd ../deployment/apache
+cd ../../deployment/apache
 sudo cp 001-parker.conf /etc/apache2/sites-available/
 sudo a2ensite 001-parker.conf
 sudo service apache2 reload

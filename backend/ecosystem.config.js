@@ -1,7 +1,7 @@
 module.exports = {
   apps : [
       {
-        name: "parker-backend",
+        name: "parker",
         script: "./app/main.ts",
         env: {
             "PORT": 3000,
