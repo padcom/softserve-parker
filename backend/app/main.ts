@@ -14,8 +14,7 @@ async function main () {
   app.use(helmet())
   app.use(cors())
   app.use(cookieParser())
-  app.use(baibulo({ root: '/tmp/parker-frontend', download: true, upload: true }))
-  //app.use(express.static('public'))
+  app.use(baibulo({ root: '/tmp/parker-frontend', download: true, upload: false }))
 
   const server = await graphql
   server.applyMiddleware({ app, path: '/graphql' })
@@ -27,6 +26,13 @@ async function main () {
   } catch (e) {
     logger.error(`Error! Failed to start Apollo server. Error message: ${e}`)
   }
+  
+  // second server just for uploading new versions of frontend, on separate port to guard it from using it from outside world
+  const deployment = express()
+  deployment.use(cookieParser())
+  deployment.use(baibulo({ root: '/tmp/parker-frontend', download: false, upload: true }))
+  const deploymentPort = typeof(PORT) === 'string' ? parseInt(PORT) + 1 : PORT + 1
+  deployment.listen(deploymentPort, () => { logger.info(`Frontend deployment server running on port ${deploymentPort}`) })
 }
 
 main()
