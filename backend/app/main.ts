@@ -14,10 +14,11 @@ async function main () {
   app.use(helmet())
   app.use(cors())
   app.use(cookieParser())
-  app.use(baibulo({ root: '/tmp/parker-frontend', download: true, upload: false }))
 
   const server = await graphql
   server.applyMiddleware({ app, path: '/graphql' })
+
+  app.use(baibulo({ root: '/tmp/parker-frontend', download: true, upload: false }))
 
   try {
     app.listen(PORT, () => {
