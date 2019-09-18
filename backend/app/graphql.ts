@@ -10,7 +10,7 @@ const { NODE_ENV } = process.env
 export const graphql = schema.then((resolvedSchema): ApolloServer => {
   const server = new ApolloServer({
     schema: resolvedSchema,
-    introspection: NODE_ENV === 'development',
+    introspection: [ 'development', 'qa' ].includes(NODE_ENV),
 
     formatResponse: (resp): unknown => {
       // Introspection queries are gigantic (+200 lines)

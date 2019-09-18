@@ -13,11 +13,11 @@ cd ../frontend
 npm ci
 npm run build
 
-echo "Deploying database migrations"
+echo "Deploying database migrations..."
 cd ../backend
 npm run db:migrate
 
-echo "Deploying..."
+echo "Deploying application..."
 sudo pm2 stop parker
 rm -rf /var/lib/parker/*
 cp -r app /var/lib/parker/
