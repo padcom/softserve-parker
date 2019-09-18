@@ -1,12 +1,14 @@
 #!/bin/bash -e
 
 function deploy() {
-  echo "Deploying branch $1 in version $2"
+  echo "================================================================"
+  echo "Deploying frontend branch $1 in version $2"
+  echo "================================================================"
 
   tmp=$(mktemp -d -t parker-XXXXXXXXXX)
   echo "Temp dir: $tmp"
 
-  git --work-tree $tmp checkout $1 -- frontend
+  git --git-dir=$GIT_DIR --work-tree $tmp checkout $1 -- frontend
   cd "$tmp/frontend"
   npm install
   npm run build
@@ -23,7 +25,6 @@ do
   then
     deploy $branch $branch
   else
-    echo "Master branch - skipping for now"
-    # deploy $branch "release"
+    deploy $branch "release"
   fi
 done

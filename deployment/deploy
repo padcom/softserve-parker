@@ -1,71 +1,7 @@
 #!/bin/bash -e
 
-set -x
+echo "Current folder: $(pwd); GIT_DIR=$GIT_DIR; DEPLOYMENT_DIR=$DEPLOYMENT_DIR; versions: $*"
 
-GIT_DIR="/home/ubuntu/parker/.git"
-DEPLOYMENT_DIR="/var/lib/parker"
-
-echo "Current folder: $(pwd); GIT_DIR=$GIT_DIR; DEPLOYMENT_DIR=$DEPLOYMENT_DIR"
-
-echo "================================================================"
-echo "Building backend..."
-echo "================================================================"
-cd ../backend
-npm ci
-npm run build
-
-echo "================================================================"
-echo "Deploying database migrations..."
-echo "================================================================"
-cd $GIT_DIR/../backend
-npm run db:migrate
-
-echo "================================================================"
-echo "Deploying backend..."
-echo "================================================================"
-sudo pm2 stop parker
-rm -rf $DEPLOYMENT_DIR/*
-cp -r app $DEPLOYMENT_DIR/
-cp -r node_modules $DEPLOYMENT_DIR/
-cp tsconfig.json $DEPLOYMENT_DIR/
-cp database.json $DEPLOYMENT_DIR/
-cp ecosystem.config.js $DEPLOYMENT_DIR/
-
-sudo pm2 restart parker
-
-echo "================================================================"
-echo "Deploying Apache configuration..."
-echo "================================================================"
-cd $GIT_DIR/../deployment
-sudo cp apache/001-parker.conf /etc/apache2/sites-available/
-sudo a2ensite 001-parker.conf
-sudo service apache2 reload
-
-function deploy() {
-  echo "================================================================"
-  echo "Deploying frontend branch $1 in version $2"
-  echo "================================================================"
-
-  tmp=$(mktemp -d -t parker-XXXXXXXXXX)
-  echo "Temp dir: $tmp"
-
-  git --git-dir=$GIT_DIR --work-tree $tmp checkout $1 -- frontend
-  cd "$tmp/frontend"
-  npm install
-  npm run build
-  npm run deploy -- --version $2
-  cd -
-
-  rm -rf $tmp
-}
-
-for ref in $@;
-do
-  branch=$(basename $ref)
-  if [ "$branch" != "master" ];
-  then
-    deploy $branch $branch
-  else
-    deploy $branch "release"
-  fi
-done
+$GIT_DIR/../deployment/deploy-backend.sh
+$GIT_DIR/../deployment/deploy-apache-conf.sh
+$GIT_DIR/../deployment/deploy-frontend.sh $@
