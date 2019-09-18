@@ -30,7 +30,7 @@ function deploy() {
   echo "Deploying frontend branch $1 in version $2"
 
   tmp=$(mktemp -d -t parker-XXXXXXXXXX)
-  echo "Temp dir: $tmp"
+  echo "Temp dir: $tmp, current dir: $(pwd)"
 
   git --work-tree $tmp checkout $1 -- frontend
   cd "$tmp/frontend"
