@@ -1,23 +1,29 @@
-#!/bin/bash
+#!/bin/bash -e
+
+function deploy() {
+  echo "Deploying branch $1 in version $2"
+
+  tmp=$(mktemp -d -t parker-XXXXXXXXXX)
+  echo "Temp dir: $tmp"
+
+  git --work-tree $tmp checkout $1 -- frontend
+  cd "$tmp/frontend"
+  npm install
+  npm run build
+  npm run deploy -- --version $2
+  cd -
+
+  rm -rf $tmp
+}
 
 for ref in $@;
 do
   branch=$(basename $ref)
   if [ "$branch" != "master" ];
   then
-    echo "Branch: $branch"
-    tmp=$(mktemp -d -t parker-XXXXXXXXXX)
-    echo "Temp dir: $tmp"
-
-    git --work-tree $tmp checkout $branch -- frontend
-    cd "$tmp/frontend"
-    npm install
-    npm run build
-    npm run deploy -- --version $branch
-    cd -
-
-    #rm -rf $tmp
+    deploy $branch $branch
   else
-    echo "Master branch... skipping for now"
+    echo "Master branch - skipping for now"
+    # deploy $branch "release"
   fi
 done
