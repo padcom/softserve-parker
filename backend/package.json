@@ -13,6 +13,8 @@
   "//": "DO NOT REMOVE the graphql package - it's not used in code but it's a peer dependency",
   "dependencies": {
     "apollo-server-express": "^2.8.1",
+    "baibulo": "1.0.12",
+    "cookie-parser": "^1.4.4",
     "cors": "^2.8.5",
     "db-migrate": "^0.11.6",
     "db-migrate-mysql": "^1.1.10",

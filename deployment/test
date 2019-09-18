@@ -1,0 +1,23 @@
+#!/bin/bash
+
+for ref in $@;
+do
+  branch=$(basename $ref)
+  if [ "$branch" != "master" ];
+  then
+    echo "Branch: $branch"
+    tmp=$(mktemp -d -t parker-XXXXXXXXXX)
+    echo "Temp dir: $tmp"
+
+    git --work-tree $tmp checkout $branch -- frontend
+    cd "$tmp/frontend"
+    npm install
+    npm run build
+    npm run deploy -- --version $branch
+    cd -
+
+    #rm -rf $tmp
+  else
+    echo "Master branch... skipping for now"
+  fi
+done
