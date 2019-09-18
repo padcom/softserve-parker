@@ -34,7 +34,7 @@ function deploy() {
   tmp=$(mktemp -d -t parker-XXXXXXXXXX)
   echo "Temp dir: $tmp, current dir: $(pwd)"
 
-  git --work-tree $tmp checkout $1 -- frontend
+  git --git-dir=/home/ubuntu/parker/.git --work-tree $tmp checkout $1 -- frontend
   cd "$tmp/frontend"
   npm install
   npm run build
