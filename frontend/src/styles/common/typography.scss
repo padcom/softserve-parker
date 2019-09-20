@@ -1,0 +1,21 @@
+@import '../variables';
+
+@font-face {
+  font-family: 'ProximaNova';
+  font-weight: 600;
+  src: url('assets/fonts/ProximaNova-AltBold.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'ProximaNova';
+  font-weight: 800;
+  src: url('assets/fonts/ProximaNova-Extrabold.otf') format('opentype');
+}
+
+@import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
+
+a {
+  color: $black;
+  font-family: 'ProximaNova';
+  font-weight: $proxima-nova-medium;
+}
