@@ -21,7 +21,7 @@ export async function isAuthorized(req: Request, res: Response, next: NextFuncti
 }
 
 function getTokenFromRequest(req: Request): string {
-  const authHeader: string | undefined = req.get('Authorization')
+  const authHeader: string = req.get('Authorization')
   if (!authHeader) throw new UnauthenticatedError('Token not provided')
   return authHeader.split(' ')[1]
 }
