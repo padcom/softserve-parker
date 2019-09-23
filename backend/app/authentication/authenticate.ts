@@ -1,9 +1,12 @@
 import { Response, Request } from 'express';
+import * as fs from 'fs';
+import * as path from 'path'
 import { FieldPacket, RowDataPacket } from 'mysql'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken';
 import { db } from '../db'
 import { logger } from '../logger'
+import { UnauthenticatedError } from '../customErrors'
 
 export class Authenticator {
     authenticate = async (req: Request, res: Response) => {
@@ -32,32 +35,21 @@ export class Authenticator {
         return rows[0]
     }
 
-    private assertUserIsFound(user) {
+    private assertUserIsFound(user): void | UnauthenticatedError {
         if (!user) throw new UnauthenticatedError(`User doesn't exist.`)
     }
 
-    private async assertPasswordsMatching(password, hash) {
+    private async assertPasswordsMatching(password, hash): Promise<void | UnauthenticatedError>  {
         const match = await bcrypt.compare(password, hash)
         if (!match) throw new UnauthenticatedError('Incorrect password.')
     }
 
-    private async getJSONToken(userID, email) {
-        return jwt.sign({userID, email}, 'ndlu35nap@nd#!nd1k8cy');
+    private async getJSONToken(userID, email): Promise<string> {
+        var cert  = fs.readFileSync(path.resolve(__dirname, '../../private.key'), 'utf8');
+        return jwt.sign({userID, email}, cert, {algorithm: 'RS256'});
     }
 
     private async saveSession(token) {
-        db.execute(
-            `INSERT INTO sessions (token) VALUES (?)`,
-            [token]
-          )
-    }
-}
-
-class UnauthenticatedError extends Error {
-    status: number
-    constructor(txt: string) {
-        super(txt)
-        this.name = 'UnauthenticatedError';
-        this.status = 403
+        db.execute(`INSERT INTO sessions (token) VALUES (?)`,[token])
     }
 }

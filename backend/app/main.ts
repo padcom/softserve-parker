@@ -6,6 +6,7 @@ import 'reflect-metadata' // required for typegraphql
 import { graphql } from './graphql'
 import authentication from './authentication';
 import { logger } from './logger'
+import { isAuthorized } from './middleware/authorization'
 
 const { NODE_ENV, PORT = 3000 } = process.env
 
@@ -18,6 +19,7 @@ async function main () {
   app.use(authentication);
 
   const server = await graphql
+  app.use(isAuthorized)
   server.applyMiddleware({ app, path: '/graphql' })
 
   app.use(baibulo({ root: '/tmp/parker-frontend', download: true, upload: false }))
