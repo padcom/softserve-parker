@@ -37,7 +37,6 @@ const actions: ActionTree<AuthState, RootState> = {
         })
 
         window.localStorage.setItem('token', data)
-
         bus.emit('user-logged-in', user)
         commit('setUser', user)
         resolve(user)

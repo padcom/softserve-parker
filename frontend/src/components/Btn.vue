@@ -1,5 +1,6 @@
 <template>
   <button
+    :name="name"
     :type="type"
     @click="$emit('click')"
     v-bind:class="[
@@ -18,7 +19,8 @@ import { AuthAction } from '@/store/auth'
 
 @Component()
 export default class Btn extends Vue {
-  @Prop(String) text
+  @Prop({ type: String, default: '' }) text
+  @Prop(String) name
   @Prop({ type: String, default: 'button' }) type
   @Prop({ type: String, default: 'black' }) color
   @Prop({ type: Boolean, default: false }) fullWidth
