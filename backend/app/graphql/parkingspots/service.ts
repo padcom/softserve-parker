@@ -1,6 +1,5 @@
 import { db } from '../../db'
 import { ParkingSpot } from './typedefs'
-import { info } from 'winston'
 import { OkPacket, FieldPacket, RowDataPacket } from 'mysql'
 
 class Service {

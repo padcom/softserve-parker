@@ -1,43 +1,32 @@
 import { Response, Request } from 'express';
 import * as fs from 'fs';
 import * as path from 'path'
-import { FieldPacket, RowDataPacket } from 'mysql'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken';
 import { db } from '../db'
 import { logger } from '../logger'
 import { UnauthenticatedError } from '../customErrors'
 import { User } from '../graphql/users/typedefs'
+import { UserService } from '../graphql/users/service'
 
 export class Authenticator {
   authenticate = async (req: Request, res: Response) => {
     try {
-      const user: User = await this.getUser(req.body.username)
+      this.validateParams(req, res);
+      const user: User = await UserService.getUseByUsername(req.body.username)
       await this.assertPasswordsMatching(req.body.password, user.password)
       const token: string = await this.getJSONToken(user.id, user.email);
       await this.saveSession(token);
       res.send(token);
     } catch (e) {
       logger.error(e)
-      res.status(e.status || 500).send()
+      const status = this.getErrorStatus(e)
+      res.status(status).send()
     }
   }
 
-  private async getUser(username: string): Promise<User> {
-    const [rows]: [RowDataPacket[], FieldPacket[]] = await db.execute(
-      `
-      SELECT *
-      FROM user
-      WHERE email = ?
-      `,
-      [username]
-    )
-    this.assertUserIsFound(rows[0])
-    return rows[0] as User
-  }
-
-  private assertUserIsFound(user: RowDataPacket): void | UnauthenticatedError {
-    if (!user) throw new UnauthenticatedError(`User doesn't exist.`)
+  private validateParams(req: Request, res: Response): void | UnauthenticatedError {
+    if (!req.body.username || !req.body.password) throw new UnauthenticatedError('Credentials not provided.')
   }
 
   private async assertPasswordsMatching(password: string, hash: string): Promise<void | UnauthenticatedError>  {
@@ -51,6 +40,14 @@ export class Authenticator {
   }
 
   private async saveSession(token: string): Promise<void> {
-    db.execute(`INSERT INTO sessions (token) VALUES (?)`,[token])
+    db.execute(`INSERT INTO sessions (token) VALUES (?)`, [token])
+  }
+
+  private getErrorStatus(e: Error): number {
+    if (e instanceof UnauthenticatedError || e.message === `User doesn't exist.`) {
+      return 403
+    } else {
+      return 500
+    }
   }
 }
