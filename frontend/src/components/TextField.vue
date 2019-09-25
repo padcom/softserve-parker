@@ -17,18 +17,18 @@
 </template>
 
 <script>
-import { Vue, Component, Prop, Model } from "vue-property-decorator";
-import { AuthAction } from "@/store/auth";
+import { Vue, Component, Prop, Model } from 'vue-property-decorator'
+import { AuthAction } from '@/store/auth'
 
 @Component()
 export default class TextField extends Vue {
-  @Prop({ type: String, default: "text" }) type;
+  @Prop({ type: String, default: 'text' }) type;
   @Prop(String) placeholder;
-  @Prop({ type: String, default: "black" }) color;
+  @Prop({ type: String, default: 'black' }) color;
   @Prop(String) name;
   @Prop(String) label;
   @Prop({ type: Boolean, default: false }) fullWidth;
-  @Model("input", { type: String }) value;
+  @Model('input', { type: String }) value;
 }
 </script>
 

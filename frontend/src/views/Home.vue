@@ -1,7 +1,5 @@
 <template>
-  <div class="home">
-    Hello, {{ user.name }}
-  </div>
+  <div class="home">Hello, {{ user.name }}</div>
 </template>
 
 <script>
