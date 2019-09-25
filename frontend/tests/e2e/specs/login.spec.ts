@@ -10,6 +10,11 @@ describe('Login', () => {
     cy.location('hash').should('eq', '#/')
   })
 
+  it("won't login to the application with incorrect data", () => {
+    cy.login('johndoe', 'supersecret')
+    cy.location('hash').should('eq', '#/')
+  })
+
   it('will logout from the application', () => {
     cy.login('johndoe', 'supersecret')
     cy.goto('logout')
