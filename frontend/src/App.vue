@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Header />
+    <AppHeader />
     <div id="nav" v-if="isLoggedIn">
       <router-link to="/">Home</router-link>|
       <router-link to="/logout">Logout</router-link>
@@ -14,12 +14,12 @@
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 
-import Header from './components/Header'
+import AppHeader from './components/AppHeader'
 import { AuthGetter } from '@/store/auth'
 
 @Component({
   components: {
-    Header
+    AppHeader
   }
 })
 export default class App extends Vue {

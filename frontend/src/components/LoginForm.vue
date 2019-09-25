@@ -17,7 +17,7 @@
       fullWidth
     />
 
-    <Button type="submit" text="sign in" fullWidth />
+    <Btn type="submit" text="sign in" fullWidth />
   </form>
 </template>
 
@@ -25,12 +25,12 @@
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 import { AuthAction } from '@/store/auth'
-import Button from './Button'
+import Btn from './Btn'
 import TextField from './TextField'
 
 @Component({
   components: {
-    Button,
+    Btn,
     TextField
   }
 })

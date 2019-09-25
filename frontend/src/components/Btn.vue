@@ -17,16 +17,16 @@ import { Vue, Component, Prop } from 'vue-property-decorator'
 import { AuthAction } from '@/store/auth'
 
 @Component()
-export default class Button extends Vue {
-  @Prop(String) text;
-  @Prop({ type: String, default: 'button' }) type;
-  @Prop({ type: String, default: 'black' }) color;
-  @Prop({ type: Boolean, default: false }) fullWidth;
+export default class Btn extends Vue {
+  @Prop(String) text
+  @Prop({ type: String, default: 'button' }) type
+  @Prop({ type: String, default: 'black' }) color
+  @Prop({ type: Boolean, default: false }) fullWidth
 }
 </script>
 
 <style lang="scss" scoped>
-@import "../styles/variables";
+@import '../styles/variables';
 
 .btn {
   padding: 14px;
