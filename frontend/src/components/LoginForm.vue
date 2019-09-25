@@ -22,11 +22,11 @@
 </template>
 
 <script>
-import Vue from "vue";
-import { Component } from "vue-property-decorator";
-import { AuthAction } from "@/store/auth";
-import Button from "./Button";
-import TextField from "./TextField";
+import Vue from 'vue'
+import { Component } from 'vue-property-decorator'
+import { AuthAction } from '@/store/auth'
+import Button from './Button'
+import TextField from './TextField'
 
 @Component({
   components: {
@@ -35,14 +35,17 @@ import TextField from "./TextField";
   }
 })
 export default class LoginForm extends Vue {
-  username = "";
-  password = "";
+  username = ''
+  password = ''
 
-  @AuthAction login;
+  @AuthAction login
 
   submit() {
-    this.login({ username: this.username, password: this.password });
-    this.$router.push("/");
+    this.login({ username: this.username, password: this.password }).then(
+      response => {
+        this.$router.push('/')
+      }
+    )
   }
 }
 </script>

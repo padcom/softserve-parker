@@ -11,11 +11,11 @@
 </template>
 
 <script>
-import Vue from "vue";
-import { Component } from "vue-property-decorator";
+import Vue from 'vue'
+import { Component } from 'vue-property-decorator'
 
-import Header from "./components/Header";
-import { AuthGetter } from "@/store/auth";
+import Header from './components/Header'
+import { AuthGetter } from '@/store/auth'
 
 @Component({
   components: {
@@ -23,12 +23,12 @@ import { AuthGetter } from "@/store/auth";
   }
 })
 export default class App extends Vue {
-  @AuthGetter isLoggedIn;
+  @AuthGetter isLoggedIn
 }
 </script>
 
 <style lang="scss">
-@import "./styles";
+@import './styles';
 
 #nav {
   padding: 30px;

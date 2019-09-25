@@ -13,10 +13,10 @@
 </template>
 
 <script>
-import Vue from "vue";
-import { Component } from "vue-property-decorator";
-import LoginForm from "@/components/LoginForm";
-import Avatar from "@/components/Avatar";
+import Vue from 'vue'
+import { Component } from 'vue-property-decorator'
+import LoginForm from '@/components/LoginForm'
+import Avatar from '@/components/Avatar'
 
 @Component({
   components: {
@@ -28,7 +28,7 @@ export default class Login extends Vue {}
 </script>
 
 <style lang="scss" scoped>
-@import "../styles/variables";
+@import '../styles/variables';
 
 .login-page {
   display: flex;
