@@ -28,3 +28,16 @@ _click the links for installation guide_
   ```
   This will create a new file in the `migrations` folder. Follow the documentation on https://db-migrate.readthedocs.io to see how to create migrations
 
+- Accessing MySQL via SSH port forwarding
+  MySQL server is not directly accessible remotely for security reasons. To connect to it you need to create an SSH tunnel.
+
+  For Windows use Putty SSH client. There are many instructions available on the Internet how to do it. One can be found here:
+  https://www.linode.com/docs/databases/mysql/create-an-ssh-tunnel-for-mysql-remote-access/#how-to-access-mysql-remotely-by-creating-an-ssh-tunnel-with-putty
+  
+  Username is `ubuntu` and the host name is `parker-qa.aplaline.com`. You'll also need to specify the key instead of using password.
+  It's in `deployment/qa/parker.pem`
+
+  For Linux/MacOS the situation is a bit simpler. Assuming you're in the root level of the repository issue the following command:
+  ```
+  $ ssh ubuntu@parker-qa.aplaline.com -i deployment/qa/parker.pem -L 3306:127.0.0.1:3306 -N
+  ```
