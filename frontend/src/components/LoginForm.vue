@@ -40,12 +40,13 @@ export default class LoginForm extends Vue {
 
   @AuthAction login
 
-  submit () {
-    this.login({ username: this.username, password: this.password }).then(
-      response => {
-        this.$router.push('/')
-      }
-    )
+  async submit () {
+    try {
+      await this.login({ username: this.username, password: this.password })
+      this.$router.push('/')
+    } catch (error) {
+      // TODO
+    }
   }
 }
 </script>
