@@ -17,7 +17,7 @@
       fullWidth
     />
 
-    <Btn type="submit" text="sign in" fullWidth />
+    <Btn name="login" type="submit" text="sign in" fullWidth />
   </form>
 </template>
 
@@ -40,7 +40,7 @@ export default class LoginForm extends Vue {
 
   @AuthAction login
 
-  submit() {
+  submit () {
     this.login({ username: this.username, password: this.password }).then(
       response => {
         this.$router.push('/')

@@ -38,8 +38,10 @@ Cypress.Commands.add('login', (username: string, password: string) => {
 })
 
 Cypress.Commands.add('goto', (route: string, params: any = null) => {
-  // @ts-ignore
-  return cy.window().its('app.$router').invoke('push', { name: route, params })
+  return cy.window().then(window => {
+    // @ts-ignore
+    window.app.$router.push({ name: route })
+  })
 })
 
 Cypress.Commands.add('mockSockJsResponse', () => {

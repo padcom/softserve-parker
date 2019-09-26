@@ -32,7 +32,7 @@ export default class Login extends Vue {}
 
 .login-page {
   display: flex;
-  height: calc(100vh - $header-height);
+  height: calc(100vh - #{$header-height});
   flex-direction: column;
 
   &__forgot-password-link {
