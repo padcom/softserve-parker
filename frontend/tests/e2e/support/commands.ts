@@ -40,7 +40,7 @@ Cypress.Commands.add('login', (username: string, password: string) => {
 Cypress.Commands.add('goto', (route: string, params: any = null) => {
   return cy.window().then(window => {
     // @ts-ignore
-    window.app.$router.push({ name: route })
+    window.app.$router.push({ name: route, params })
   })
 })
 
