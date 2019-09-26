@@ -20,13 +20,13 @@ const getters: GetterTree<AuthState, RootState> = {
 }
 
 const mutations: MutationTree<AuthState> = {
-  setUser(state, user) {
+  setUser (state, user) {
     state.user = user
   }
 }
 
 const actions: ActionTree<AuthState, RootState> = {
-  async login({ commit }, { username, password }): Promise<any> {
+  async login ({ commit }, { username, password }): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const user = { name: username }
 
@@ -47,7 +47,7 @@ const actions: ActionTree<AuthState, RootState> = {
     })
   },
 
-  async logout({ commit, state }): Promise<void> {
+  async logout ({ commit, state }): Promise<void> {
     const user = state.user
     window.localStorage.removeItem('token')
     commit('setUser', null)
