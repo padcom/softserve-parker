@@ -13,7 +13,7 @@ export async function isAuthorized(req: Request, res: Response, next: NextFuncti
     assertUserIsAuthorized(userToken, token)
   } catch (e) {
     logger.error(e)
-    return res.status(e.status || 500).send()
+    res.status(e.status || 500).send(e.message)
   }
   return next()
 }

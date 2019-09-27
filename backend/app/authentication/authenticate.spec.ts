@@ -3,16 +3,16 @@ import { Authenticator } from './authenticate'
 import { db } from '../db'
 import * as sessions from '../utilities/sessions'
 
-beforeAll(() => {
-	db.execute(`
+beforeEach(async () => {
+	await db.execute(`
 		INSERT INTO user 
 		(email, password) 
 		VALUES ("fake@softserveinc.com", "$2b$10$RKJermYaezNSXeQK.osx8OOgIppGcd7CaVC4dCAcMRnhjrmnXeIG.")`
 	)
 })
 
-afterAll(() => {
-	db.execute(`
+afterEach(async () => {
+	await db.execute(`
 		DELETE from user
 		WHERE email = "fake@softserveinc.com"`
 	)
