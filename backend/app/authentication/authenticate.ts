@@ -12,7 +12,7 @@ import { UserService } from '../graphql/users/service'
 export class Authenticator {
   authenticate = async (req: Request, res: Response) => {
     try {
-      this.validateParams(req, res);
+      this.validateParams(req);
       const user: User = await UserService.getUseByUsername(req.body.username)
       await this.assertPasswordsMatching(req.body.password, user.password)
       const token: string = await this.getJSONToken(user.id, user.email);
@@ -21,12 +21,12 @@ export class Authenticator {
     } catch (e) {
       logger.error(e)
       const status = this.getErrorStatus(e)
-      res.status(status).send()
+      res.status(status).send(e.message)
     }
   }
 
-  private validateParams(req: Request, res: Response): void | UnauthenticatedError {
-    if (!req.body.username || !req.body.password) throw new UnauthenticatedError('Credentials not provided.')
+  private validateParams(req: Request): void | UnauthenticatedError {
+    if (!req.body || !req.body.username || !req.body.password) throw new UnauthenticatedError('Credentials not provided.')
   }
 
   private async assertPasswordsMatching(password: string, hash: string): Promise<void | UnauthenticatedError>  {
@@ -40,7 +40,7 @@ export class Authenticator {
   }
 
   private async saveSession(token: string): Promise<void> {
-    db.execute(`INSERT INTO sessions (token) VALUES (?)`, [token])
+    await db.execute(`INSERT INTO sessions (token) VALUES (?)`, [token])
   }
 
   private getErrorStatus(e: Error): number {

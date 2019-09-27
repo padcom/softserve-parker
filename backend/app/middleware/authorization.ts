@@ -1,9 +1,8 @@
 import { Response, Request, NextFunction } from 'express';
-import { FieldPacket, RowDataPacket } from 'mysql'
 import * as fs from 'fs';
 import * as path from 'path'
 import jwt from 'jsonwebtoken';
-import { db } from '../db'
+import { fetchSessionToken } from '../utilities/sessions'
 import { logger } from '../logger'
 import { UnauthenticatedError } from '../customErrors'
 
@@ -23,23 +22,6 @@ function getTokenFromRequest(req: Request): string {
   const authHeader: string = req.get('Authorization')
   if (!authHeader) throw new UnauthenticatedError('Token not provided')
   return authHeader.split(' ')[1]
-}
-
-async function fetchSessionToken(token: string): Promise<string> {
-  const [rows]: [RowDataPacket[], FieldPacket[]] = await db.execute(
-    `
-    SELECT *
-    FROM sessions
-    WHERE token = ?
-    `,
-    [token]
-  )
-  assertSessionIsFound(rows[0])
-  return rows[0].token
-}
-
-function assertSessionIsFound(session: RowDataPacket): void | UnauthenticatedError {
-  if (!session) throw new UnauthenticatedError(`Session doesn't exist.`)
 }
 
 function assertUserIsAuthorized(userToken: string, sessionToken: string): void | Error {
