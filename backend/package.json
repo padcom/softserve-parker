@@ -8,7 +8,8 @@
     "db:migrate": "db-migrate up",
     "db:create-migration": "db-migrate create",
     "ci:lint": "eslint \"app/**/*.ts\" --max-warnings 1",
-    "ci:prettier": "prettier \"app/**/*.ts\" --check"
+    "ci:prettier": "prettier \"app/**/*.ts\" --check",
+    "test": "NODE_ENV=development jest"
   },
   "//": "DO NOT REMOVE the graphql package - it's not used in code but it's a peer dependency",
   "dependencies": {
@@ -33,6 +34,7 @@
     "@types/dotenv": "^6.1.1",
     "@types/express": "^4.17.0",
     "@types/graphql": "^14.2.2",
+    "@types/jest": "^24.0.18",
     "@types/lodash.get": "^4.4.6",
     "@types/mysql2": "github:types/mysql2",
     "@typescript-eslint/eslint-plugin": "^1.13.0",
@@ -40,7 +42,10 @@
     "eslint": "^5.0.0",
     "eslint-config-prettier": "^6.3.0",
     "eslint-plugin-prettier": "^3.1.0",
+    "jest": "^24.9.0",
+    "node-mocks-http": "^1.8.0",
     "prettier": "^1.18.2",
+    "ts-jest": "^24.1.0",
     "ts-node-dev": "^1.0.0-pre.40",
     "typescript": "^3.5.3"
   }
