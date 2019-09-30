@@ -1,0 +1,1 @@
+export { ReservationRequestResolver } from './typedefs'
