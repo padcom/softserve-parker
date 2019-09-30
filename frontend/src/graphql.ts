@@ -3,7 +3,7 @@ import axios from 'axios'
 export async function query (query: string, variables: object = {}) {
   const store = require('@/store').default
   const headers = {
-    'Authorization': `Bearer ${store.state.auth.token}`
+    'Authorization': `Bearer ${store.state.auth.token} `
   }
 
   return axios
