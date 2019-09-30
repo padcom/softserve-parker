@@ -37,7 +37,7 @@ export class User {
 
 @Resolver(User)
 export class UserResolver {
-  @Query(() => User, {
+  @Query(() => User!, {
     description: 'Returns a given user',
   })
   async user (

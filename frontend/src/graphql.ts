@@ -16,7 +16,11 @@ export async function query (query: string, variables: object) {
     if (response.ok) return response.json()
     else throw new Error(response.statusText)
   }).then(response => {
-    if (response.errors) throw new Error(JSON.stringify(response.errors))
-    else return response.data
+    if (response.errors) {
+      const messages = response.errors.map((error: any) => JSON.stringify(error.message))
+      throw new Error(messages.join('\n'))
+    } else {
+      return response.data
+    }
   })
 }
