@@ -22,18 +22,18 @@ import { AuthAction } from '@/store/auth'
 
 @Component()
 export default class TextField extends Vue {
-  @Prop({ type: String, default: 'text' }) type;
-  @Prop(String) placeholder;
-  @Prop({ type: String, default: 'black' }) color;
-  @Prop(String) name;
-  @Prop(String) label;
-  @Prop({ type: Boolean, default: false }) fullWidth;
-  @Model('input', { type: String }) value;
+  @Prop({ type: String, default: 'text' }) type
+  @Prop(String) placeholder
+  @Prop({ type: String, default: 'black' }) color
+  @Prop(String) name
+  @Prop(String) label
+  @Prop({ type: Boolean, default: false }) fullWidth
+  @Model('input', { type: String }) value
 }
 </script>
 
 <style lang="scss" scoped>
-@import "../styles/variables";
+@import '../styles/variables';
 
 .text-field {
   margin-bottom: 20px;

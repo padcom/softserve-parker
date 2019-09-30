@@ -12,7 +12,7 @@ export default class Avatar extends Vue {}
 </script>
 
 <style lang="scss" scoped>
-@import "../styles/variables";
+@import '../styles/variables';
 
 .avatar {
   width: 100%;

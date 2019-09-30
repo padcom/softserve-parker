@@ -32,10 +32,12 @@ const router = new Router({
 
 router.beforeEach(async (to, from, next) => {
   logger.debug('ROUTER: to', to, ', from', from)
+  const isLoggedIn = store.getters['auth/isLoggedIn']
 
   if (to.name === 'login') {
+    if (isLoggedIn) next('/')
     next()
-  } else if (!store.getters['auth/isLoggedIn']) {
+  } else if (!isLoggedIn) {
     next('/login')
   } else if (to.name === 'logout' || to.name === '/logout') {
     await store.dispatch('auth/logout')

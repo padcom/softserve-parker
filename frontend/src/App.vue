@@ -1,10 +1,10 @@
 <template>
   <div id="app">
     <AppHeader />
-    <div id="nav" v-if="isLoggedIn">
+    <!-- <div id="nav" v-if="isLoggedIn">
       <router-link to="/">Home</router-link>|
       <router-link to="/logout">Logout</router-link>
-    </div>
+    </div>-->
 
     <router-view />
   </div>
