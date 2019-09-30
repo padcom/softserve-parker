@@ -12,7 +12,7 @@ export interface AuthState {
 }
 
 const state: AuthState = {
-  // @ts-ignore
+  // @ts-ignore because JSON.parse(null) => null
   user: JSON.parse(window.localStorage.getItem('parker:user')),
   token: window.localStorage.getItem('parker:token')
 }
@@ -63,6 +63,7 @@ const actions: ActionTree<AuthState, RootState> = {
             }
           }
         `, { email: username })
+
         commit('setUser', user)
 
         bus.emit('user-logged-in', user)
