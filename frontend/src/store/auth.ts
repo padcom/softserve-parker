@@ -53,8 +53,6 @@ const actions: ActionTree<AuthState, RootState> = {
 
         commit('setToken', token)
 
-        console.log('TOKEN', token)
-
         const { user } = await query(`query
           User($email: String!) {
             user(email: $email) {
@@ -65,8 +63,6 @@ const actions: ActionTree<AuthState, RootState> = {
             }
           }
         `, { email })
-
-        console.log('USER', user)
 
         commit('setUser', user)
 
