@@ -12,8 +12,9 @@ export interface AuthState {
 }
 
 const state: AuthState = {
-  user: null,
-  token: null
+  // @ts-ignore
+  user: JSON.parse(window.localStorage.getItem('parker:user')),
+  token: window.localStorage.getItem('parker:token')
 }
 
 const getters: GetterTree<AuthState, RootState> = {
@@ -25,10 +26,19 @@ const getters: GetterTree<AuthState, RootState> = {
 const mutations: MutationTree<AuthState> = {
   setUser (state, user) {
     state.user = user
+    if (!user) {
+      window.localStorage.removeItem('parker:user')
+    } else {
+      window.localStorage.setItem('parker:user', JSON.stringify(user))
+    }
   },
   setToken (state, token) {
     state.token = token
-    window.localStorage.setItem('token', token)
+    if (!token) {
+      window.localStorage.removeItem('parker:token')
+    } else {
+      window.localStorage.setItem('parker:token', token)
+    }
   }
 }
 
@@ -66,8 +76,8 @@ const actions: ActionTree<AuthState, RootState> = {
 
   async logout ({ commit, state }): Promise<void> {
     const user = state.user
-    window.localStorage.removeItem('token')
     commit('setUser', null)
+    commit('setToken', null)
     bus.emit('user-logged-out', user)
   }
 }
