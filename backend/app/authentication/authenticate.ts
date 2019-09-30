@@ -6,27 +6,27 @@ import jwt from 'jsonwebtoken';
 import { db } from '../db'
 import { logger } from '../logger'
 import { UnauthenticatedError } from '../customErrors'
-import { User } from '../graphql/users/typedefs'
-import { UserService } from '../graphql/users/service'
+import { User } from '../graphql/users'
+import { UserService } from '../graphql/users'
 
 export class Authenticator {
   authenticate = async (req: Request, res: Response) => {
     try {
       this.validateParams(req);
-      const user: User = await UserService.getUseByUsername(req.body.username)
+      const user: User = await UserService.getUserByEmail(req.body.email)
       await this.assertPasswordsMatching(req.body.password, user.password)
       const token: string = await this.getJSONToken(user.id, user.email);
       await this.saveSession(token);
-      res.send(token);
+      res.end(token);
     } catch (e) {
       logger.error(e)
       const status = this.getErrorStatus(e)
-      res.status(status).send(e.message)
+      res.status(status).end(e.message)
     }
   }
 
   private validateParams(req: Request): void | UnauthenticatedError {
-    if (!req.body || !req.body.username || !req.body.password) throw new UnauthenticatedError('Credentials not provided.')
+    if (!req.body || !req.body.email || !req.body.password) throw new UnauthenticatedError('Credentials not provided.')
   }
 
   private async assertPasswordsMatching(password: string, hash: string): Promise<void | UnauthenticatedError>  {
