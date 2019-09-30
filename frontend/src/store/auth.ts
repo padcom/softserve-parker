@@ -43,7 +43,16 @@ const actions: ActionTree<AuthState, RootState> = {
 
         commit('setToken', token)
 
-        const { user } = await query('query User($email: String!) { user(email: $email) { email } }', { email: username })
+        const { user } = await query(`query
+          User($email: String!) {
+            user(email: $email) {
+              email
+              rank
+              enabled
+              created
+            }
+          }
+        `, { email: username })
         commit('setUser', user)
 
         bus.emit('user-logged-in', user)
