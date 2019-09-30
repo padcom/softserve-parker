@@ -1,8 +1,8 @@
 import Component from './Component'
 
 export default class LoginForm extends Component {
-  get username () {
-    return this.root.find('[name="username"]')
+  get email () {
+    return this.root.find('[name="email"]')
   }
 
   get password () {
@@ -13,8 +13,8 @@ export default class LoginForm extends Component {
     return this.root.find('[name="login"]')
   }
 
-  login (username: string, password: string) {
-    this.username.clear().type(username)
+  login (email: string, password: string) {
+    this.email.clear().type(email)
     this.password.clear().type(password)
     this.submit.click()
   }

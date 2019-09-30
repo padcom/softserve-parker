@@ -1,23 +1,19 @@
-export async function query (query: string, variables: object) {
+import axios from 'axios'
+
+export async function query (query: string, variables: object = {}) {
   const store = require('@/store').default
 
-  return fetch('/graphql', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': `Bearer ${store.state.auth.token}`
-    },
-    body: JSON.stringify({
+  return axios.post('/graphql', {
       query,
       variables
-    })
-  }).then(response => {
-    if (response.ok) return response.json()
-    else throw new Error(response.statusText)
-  }).then(response => {
-    if (response.errors) {
-      const messages = response.errors.map((error: any) => JSON.stringify(error.message))
+    }, {
+      headers: {
+        'Authorization': `Bearer ${store.state.auth.token}`
+      }
+    }
+  ).then(response => {
+    if (response.data.errors) {
+      const messages = response.data.errors.map((error: any) => JSON.stringify(error.message))
       throw new Error(messages.join('\n'))
     } else {
       return response.data
