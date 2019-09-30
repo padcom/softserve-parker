@@ -2,25 +2,32 @@
 
 describe('Login', () => {
   beforeEach(() => {
-    cy.server()
+    cy.server({ force404: true })
+    cy.mockSockJsResponse()
   })
 
   it("won't login to the application with incorrect data", () => {
-    cy.login('johndoe', 'supersecret')
-    cy.location('pathname').should('not.eq', '/')
+    cy.route({
+      url: '/login',
+      method: 'POST',
+      status: 403,
+      response: 'Incorrect password'
+    })
+    .as('login')
+
+    cy.login('johndoe', 'supersecret', { mockLoginRequest: false })
+    cy.wait('@login')
+    cy.assertRoute('login')
   })
 
   it('will login to the application', () => {
-    cy.route('POST', '/login', 'token')
-
     cy.login('johndoe', 'supersecret')
-    cy.location('pathname').should('eq', '/')
+    cy.assertRoute('home')
   })
 
   it('will logout from the application', () => {
-    cy.route('POST', '/login', 'token')
     cy.login('johndoe', 'supersecret')
     cy.goto('logout')
-    cy.location('pathname').should('eq', '/login')
+    cy.assertRoute('login')
   })
 })

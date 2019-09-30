@@ -1,10 +1,10 @@
 <template>
   <form @submit.prevent="submit">
     <TextField
-      name="username"
-      label="Username"
-      placeholder="Username"
-      v-model="username"
+      name="email"
+      label="Email"
+      placeholder="Email"
+      v-model="email"
       fullWidth
     />
 
@@ -27,6 +27,7 @@ import { Component } from 'vue-property-decorator'
 import { AuthAction } from '@/store/auth'
 import Btn from './Btn'
 import TextField from './TextField'
+import logger from '../logger'
 
 @Component({
   components: {
@@ -35,17 +36,17 @@ import TextField from './TextField'
   }
 })
 export default class LoginForm extends Vue {
-  username = ''
+  email = ''
   password = ''
 
   @AuthAction login
 
   async submit () {
     try {
-      await this.login({ username: this.username, password: this.password })
+      await this.login({ email: this.email, password: this.password })
       this.$router.push('/')
     } catch (error) {
-      // TODO
+      logger.error('Error while submitting login form', error)
     }
   }
 }

@@ -43,15 +43,17 @@ const mutations: MutationTree<AuthState> = {
 }
 
 const actions: ActionTree<AuthState, RootState> = {
-  async login ({ commit }, { username, password }): Promise<any> {
+  async login ({ commit }, { email, password }): Promise<any> {
     return new Promise(async (resolve, reject) => {
       try {
         const { data: token } = await axios.post('/login', {
-          email: username,
+          email,
           password
         })
 
         commit('setToken', token)
+
+        console.log('TOKEN', token)
 
         const { user } = await query(`query
           User($email: String!) {
@@ -62,7 +64,9 @@ const actions: ActionTree<AuthState, RootState> = {
               created
             }
           }
-        `, { email: username })
+        `, { email })
+
+        console.log('USER', user)
 
         commit('setUser', user)
 
