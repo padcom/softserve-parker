@@ -17,13 +17,11 @@ async function main () {
   app.use(cookieParser())
   app.use(cors())
   app.use(express.json())
-  app.use(express.static('public'))
+
   app.use(authentication);
 
   const server = await graphql
-  app.use(isAuthorized)
-  server.applyMiddleware({ app, path: '/graphql' })
-
+  app.use('/graphql', isAuthorized, server.getMiddleware({ path: '/' }))
   app.use(baibulo({ root: '/tmp/parker-frontend', download: true, upload: false }))
 
   try {

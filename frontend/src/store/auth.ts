@@ -31,12 +31,12 @@ const actions: ActionTree<AuthState, RootState> = {
       const user = { name: username }
 
       try {
-        const { data } = await axios.post('http://localhost:3000/login', {
+        const { token } = await axios.post('/login', {
           username,
           password
         })
 
-        window.localStorage.setItem('token', data)
+        window.localStorage.setItem('token', token)
         bus.emit('user-logged-in', user)
         commit('setUser', user)
         resolve(user)
