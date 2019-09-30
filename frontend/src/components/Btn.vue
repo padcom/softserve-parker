@@ -7,7 +7,8 @@
       'btn',
       `btn--${color}`,
       {
-        'btn--full-width': fullWidth
+        'btn--full-width': fullWidth,
+        'btn--outlined': outlined
       },
     ]"
   >{{ text }}</button>
@@ -23,6 +24,7 @@ export default class Btn extends Vue {
   @Prop(String) name
   @Prop({ type: String, default: 'button' }) type
   @Prop({ type: String, default: 'black' }) color
+  @Prop({ type: Boolean, default: false }) outlined
   @Prop({ type: Boolean, default: false }) fullWidth
 }
 </script>
@@ -38,6 +40,11 @@ export default class Btn extends Vue {
   line-height: 20px;
   text-transform: uppercase;
   border: none;
+  margin-bottom: 12px;
+
+  &:last-of-type {
+    margin-bottom: 0;
+  }
 
   &:focus {
     outline: none;
@@ -46,6 +53,12 @@ export default class Btn extends Vue {
   &--black {
     color: $white-text;
     background-color: $black;
+  }
+
+  &--outlined {
+    background-color: transparent;
+    border: 2px solid $black;
+    color: $black;
   }
 
   &--full-width {

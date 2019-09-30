@@ -20,7 +20,7 @@ export default class Header extends Vue {}
 </script>
 
 <style lang="scss" scoped>
-@import "../styles/variables";
+@import '../styles/variables';
 
 .header {
   border-bottom: 1px solid $gray;

@@ -1,12 +1,6 @@
 <template>
   <form @submit.prevent="submit">
-    <TextField
-      name="email"
-      label="Email"
-      placeholder="Email"
-      v-model="email"
-      fullWidth
-    />
+    <TextField name="email" label="Email" placeholder="Email" v-model="email" fullWidth />
 
     <TextField
       name="password"
