@@ -10,14 +10,27 @@ import { User } from '../graphql/users'
 import { UserService } from '../graphql/users'
 
 export class Authenticator {
+  cert: string  = fs.readFileSync(path.resolve(__dirname, '../../private.key'), 'utf8')
+
   authenticate = async (req: Request, res: Response) => {
     try {
       this.validateParams(req);
       const user: User = await UserService.getUserByEmail(req.body.email)
       await this.assertPasswordsMatching(req.body.password, user.password)
-      const token: string = await this.getJSONToken(user.id, user.email);
+      const token = await this.getJSONToken(user.id, user.email);
       await this.saveSession(token);
       res.end(token);
+    } catch (e) {
+      logger.error(e)
+      const status = this.getErrorStatus(e)
+      res.status(status).end(e.message)
+    }
+  }
+
+  logout = async (req: Request, res: Response) => {
+    try {
+      await this.deleteSession(this.getTokenFromRequest(req))
+      res.status(200).end('User logged out successfuly')
     } catch (e) {
       logger.error(e)
       const status = this.getErrorStatus(e)
@@ -35,12 +48,22 @@ export class Authenticator {
   }
 
   private async getJSONToken(userID: number, email: string): Promise<string> {
-    var cert: string  = fs.readFileSync(path.resolve(__dirname, '../../private.key'), 'utf8');
-    return jwt.sign({userID, email}, cert, {algorithm: 'RS256'});
+    return jwt.sign({ userID, email }, this.cert, { algorithm: 'RS256' });
   }
 
-  private async saveSession(token: string): Promise<void> {
-    await db.execute(`INSERT INTO sessions (token) VALUES (?)`, [token])
+  private async saveSession(token: string) {
+    await db.execute(`INSERT INTO sessions (token) VALUES (?)`, [ token ])
+  }
+
+  private getTokenFromRequest (req: Request): string {
+    const header = req.header('Authorization')
+    if (!header) throw new UnauthenticatedError('User not logged in')
+
+    return header.split(' ')[1]
+  }
+
+  private async deleteSession(token: string) {
+    await db.execute(`DELETE FROM sessions WHERE token=?`, [ token ])
   }
 
   private getErrorStatus(e: Error): number {

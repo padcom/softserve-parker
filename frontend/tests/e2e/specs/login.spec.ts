@@ -27,7 +27,7 @@ describe('Login', () => {
 
   it('will logout from the application', () => {
     cy.login('johndoe', 'supersecret')
-    cy.goto('logout')
+    cy.logout()
     cy.assertRoute('login')
   })
 })

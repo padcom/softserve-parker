@@ -42,28 +42,46 @@ const mutations: MutationTree<AuthState> = {
   }
 }
 
+async function getUserByEmail (email: string, fields: string[] = [ 'email' ]) {
+  const { user } = await query(`query
+    User($email: String!) {
+      user(email: $email) {
+        ${fields.join('\n')}
+      }
+    }`, { email })
+
+  return user
+}
+
+type Token = string
+
+class API {
+  async login (email: string, password: string): Promise<Token> {
+    const { data: token } = await axios.post('/login', {
+      email,
+      password
+    })
+
+    return token
+  }
+
+  async logout (token: Token) {
+    await axios.post('/logout', {}, {
+      headers: {
+        'Authorization': `Bearer ${token} `
+      }
+    })
+  }
+}
+
 const actions: ActionTree<AuthState, RootState> = {
   async login ({ commit }, { email, password }): Promise<any> {
     return new Promise(async (resolve, reject) => {
       try {
-        const { data: token } = await axios.post('/login', {
-          email,
-          password
-        })
-
+        const token = await (new API().login(email, password))
         commit('setToken', token)
 
-        const { user } = await query(`query
-          User($email: String!) {
-            user(email: $email) {
-              email
-              rank
-              enabled
-              created
-            }
-          }
-        `, { email })
-
+        const user = await getUserByEmail(email, [ 'email', 'rank', 'enabled' ])
         commit('setUser', user)
 
         bus.emit('user-logged-in', user)
@@ -77,6 +95,10 @@ const actions: ActionTree<AuthState, RootState> = {
 
   async logout ({ commit, state }): Promise<void> {
     const user = state.user
+    const token = state.token
+    logger.debug('actions:auth/logout user', user, ', token', token)
+
+    if (token) await (new API().logout(token))
     commit('setUser', null)
     commit('setToken', null)
     bus.emit('user-logged-out', user)
