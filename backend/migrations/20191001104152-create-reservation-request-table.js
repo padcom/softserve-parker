@@ -21,24 +21,27 @@ exports.up = function(db) {
       type: 'int', 
       notNull: true,
       foreignKey: {
-        name: 'userId',
+        name: 'reservation_request_user_id_fk',
         table: 'user',
         rules: {
           onDelete: 'CASCADE',
-        }
-
-      } 
+          onUpdate: 'RESTRICT'
+        },
+        mapping: 'id'
+      }
     },
-    status: { types: 'string', notNull: true },
-    date: { type: 'date', notNull: true },
+    status: { type: 'string', notNull: true },
+    date: { type: 'datetime', notNull: true },
     parkingSpotId: { 
-      types: 'int',
+      type: 'int',
       foreignKey: {
-        name: 'parkingSpotId',
+        name: 'reservation_request_parking_spot_id_fk',
         table: 'parkingspot',
         rules: {
-          onDelete: 'CASCADE'
-        }
+          onDelete: 'CASCADE',
+          onUpdate: 'RESTRICT'
+        },
+        mapping: 'id'
       }
     }
   })
@@ -53,3 +56,4 @@ exports.down = function(db) {
 exports._meta = {
   "version": 1
 };
+
