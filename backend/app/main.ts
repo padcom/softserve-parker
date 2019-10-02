@@ -5,9 +5,9 @@ import cookieParser from 'cookie-parser'
 import baibulo from 'baibulo'
 import 'reflect-metadata' // required for typegraphql
 import { graphql } from './graphql'
-import authentication from './authentication';
 import { logger } from './logger'
 import { isAuthorized } from './middleware/authorization'
+import { login, logout } from './authentication/authenticate'
 
 const { NODE_ENV, PORT = 3000 } = process.env
 
@@ -18,11 +18,12 @@ async function main () {
   app.use(cors())
   app.use(express.json())
 
-  app.use(authentication);
+  app.use('/login', login)
+  app.use('/logout', logout)
 
   const server = await graphql
   app.use('/graphql', isAuthorized, server.getMiddleware({ path: '/' }))
-  app.use(baibulo({ root: '/tmp/parker-frontend', download: true, upload: false }))
+  app.use(baibulo({ root: '/tmp/parker-frontend', download: true, upload: false, exclude: [ '/login', '/logout' ] }))
 
   try {
     app.listen(PORT, () => {
