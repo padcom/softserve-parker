@@ -18,6 +18,12 @@ declare global {
       login (username: string, password: string, options?: LoginCommandOptions): Chainable<Subject>
 
       /**
+       * Method to logout user from the system
+       *
+       */
+      logout (): Chainable<Subject>
+
+      /**
        * Navigate to an application route
        *
        * @param route name of the route to navigate to
@@ -64,6 +70,12 @@ Cypress.Commands.add('login', (email: string, password: string, options: LoginCo
   }
 })
 
+Cypress.Commands.add('logout', () => {
+  cy.route('POST', '/logout', 'OK').as('logout')
+  cy.goto('/logout')
+  cy.wait('@logout')
+})
+
 Cypress.Commands.add('goto', (route: string, params: any = null) => {
   return cy.window().then(window => {
     // @ts-ignore
@@ -73,8 +85,6 @@ Cypress.Commands.add('goto', (route: string, params: any = null) => {
 
 Cypress.Commands.add('assertRoute', (name: string, params: any = null) => {
   return cy.window().then(window => {
-    // @ts-ignore
-    console.log('window.app.$route', window.app.$route.name)
     // @ts-ignore
     cy.wrap(window.app.$route.name).should('eq', name)
     if (params) {
@@ -89,5 +99,5 @@ Cypress.Commands.add('mockSockJsResponse', () => {
 })
 
 Cypress.Commands.add('graphql', (response: object) => {
-  return cy.route('POST', '/graphql', response)
+  return cy.route('POST', '/graphql', { data: response })
 })

@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Login from './views/Login.vue'
 
 import store from '@/store'
+import logger from './logger'
 
 Vue.use(Router)
 
@@ -29,13 +30,15 @@ const router = new Router({
   ]
 })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
+  logger.debug('ROUTER: to', to, ', from', from)
+
   if (to.name === 'login') {
     next()
   } else if (!store.getters['auth/isLoggedIn']) {
     next('/login')
-  } else if (to.name === 'logout') {
-    store.dispatch('auth/logout')
+  } else if (to.name === 'logout' || to.name === '/logout') {
+    await store.dispatch('auth/logout')
     next('/login')
   } else {
     next()
