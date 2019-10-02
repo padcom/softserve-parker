@@ -1,28 +1,5 @@
-import {
-  Arg,
-  Field,
-  ID,
-  Int,
-  ObjectType,
-  Query,
-  Resolver,
-  Mutation,
-} from 'type-graphql'
-import { ParkingSpotService } from './service'
-
-@ObjectType({
-  description: 'Returns all parking spots.',
-})
-export class ParkingSpot {
-  @Field(() => ID)
-  id: number
-
-  @Field(() => Boolean)
-  reserved: boolean
-
-  @Field(() => Date)
-  created: Date
-}
+import { Arg, Int, Query, Resolver, Mutation } from 'type-graphql'
+import { ParkingSpot } from '../../domain/ParkingSpot'
 
 @Resolver(ParkingSpot)
 export class ParkingSpotsResolver {
@@ -40,7 +17,7 @@ export class ParkingSpotsResolver {
     })
     limit: number
   ) {
-    return ParkingSpotService.fetch(skip, limit)
+    return ParkingSpot.fetch(skip, limit)
   }
 
   @Mutation(() => ParkingSpot, {
@@ -57,6 +34,6 @@ export class ParkingSpotsResolver {
     })
     status: boolean
   ) {
-    return ParkingSpotService.setReservation(status, id)
+    return ParkingSpot.setReservation(status, id)
   }
 }
