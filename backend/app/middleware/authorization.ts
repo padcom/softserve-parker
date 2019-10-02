@@ -7,6 +7,11 @@ import { UnauthenticatedError } from '../customErrors'
 import { Session } from '../domain/Session'
 
 export async function isAuthorized(req: Request, res: Response, next: NextFunction) {
+  if (req.method === 'GET') {
+    // this is a quick fix to allow unauthorized access to graphql web client
+    return next()
+  }
+
   try {
     const userToken: string = getTokenFromRequest(req)
     const token: string = await Session.fetchToken(userToken)
