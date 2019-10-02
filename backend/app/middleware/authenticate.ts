@@ -1,4 +1,4 @@
-import { Router, Response, Request } from 'express';
+import { Response, Request } from 'express';
 import * as fs from 'fs';
 import * as path from 'path'
 import bcrypt from 'bcrypt'
@@ -12,7 +12,6 @@ const cert  = fs.readFileSync(path.resolve(__dirname, '../../private.key'), 'utf
 
 export async function login(req: Request, res: Response) {
   try {
-    console.log('Here!')
     validateParams(req);
     const user = await User.getByEmail(req.body.email)
     await assertPasswordsMatching(req.body.password, user.password)
