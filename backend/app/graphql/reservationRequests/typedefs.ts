@@ -7,17 +7,23 @@ import {
   Query,
   Resolver,
   Mutation,
+  registerEnumType
 } from 'type-graphql'
 import { ReservationRequestService } from './service'
 
 export enum RequestStatus {
-  pending = "rejected",
+  pending = "pending",
   approved = "approved",
   rejected = "rejected"
 }
 
+registerEnumType(RequestStatus, {
+  name: "RequestStatus",
+  description: "Request status types",
+});
+
 @ObjectType({
-  description: 'Returns all parking spots.',
+  description: 'Object representing reservation request.',
 })
 export class ReservationRequest {
   @Field(() => ID)

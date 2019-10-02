@@ -16,11 +16,11 @@ export async function isAuthorized(req: Request, res: Response, next: NextFuncti
     const userToken: string = getTokenFromRequest(req)
     const token: string = await Session.fetchToken(userToken)
     assertUserIsAuthorized(userToken, token)
+    return next()
   } catch (e) {
     logger.error(e)
     res.status(e.status || 500).send(e.message)
   }
-  return next()
 }
 
 function getTokenFromRequest(req: Request): string {
