@@ -2,9 +2,9 @@ import { namespace } from 'vuex-class'
 import { GetterTree, MutationTree, ActionTree } from 'vuex'
 import axios from 'axios'
 import { RootState } from './root-state'
-import { query } from '@/graphql'
 import bus from '@/bus'
 import logger from '@/logger'
+import { User } from '@/domain/User'
 
 export interface AuthState {
   user: any
@@ -42,21 +42,8 @@ const mutations: MutationTree<AuthState> = {
   }
 }
 
-async function getUserByEmail (email: string, fields: string[] = [ 'email' ]) {
-  const { user } = await query(`query
-    User($email: String!) {
-      user(email: $email) {
-        ${fields.join('\n')}
-      }
-    }`, { email })
-
-  return user
-}
-
-type Token = string
-
 class API {
-  async login (email: string, password: string): Promise<Token> {
+  static async login (email: string, password: string): Promise<string> {
     const { data: token } = await axios.post('/login', {
       email,
       password
@@ -65,7 +52,7 @@ class API {
     return token
   }
 
-  async logout (token: Token) {
+  static async logout (token: string) {
     await axios.post('/logout', {}, {
       headers: {
         'Authorization': `Bearer ${token} `
@@ -78,10 +65,10 @@ const actions: ActionTree<AuthState, RootState> = {
   async login ({ commit }, { email, password }): Promise<any> {
     return new Promise(async (resolve, reject) => {
       try {
-        const token = await (new API().login(email, password))
+        const token = await API.login(email, password)
         commit('setToken', token)
 
-        const user = await getUserByEmail(email, [ 'email', 'rank', 'enabled' ])
+        const user = await User.getByEmail(email, [ 'email', 'rank', 'enabled' ])
         commit('setUser', user)
 
         bus.emit('user-logged-in', user)
@@ -98,7 +85,7 @@ const actions: ActionTree<AuthState, RootState> = {
     const token = state.token
     logger.debug('actions:auth/logout user', user, ', token', token)
 
-    if (token) await (new API().logout(token))
+    if (token) await API.logout(token)
     commit('setUser', null)
     commit('setToken', null)
     bus.emit('user-logged-out', user)
