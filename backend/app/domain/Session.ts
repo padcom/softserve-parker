@@ -27,16 +27,16 @@ export class Session {
     return result.affectedRows
   }
 
-  static async fetch (token: string): Promise<Session | null> {
+  static async fetch (token: string) {
     const [ rows ]: [ RowDataPacket[], FieldPacket[] ] = await db.execute(
       'SELECT * FROM sessions WHERE token=?',
       [ token ]
     )
 
-    return rows.length ? rows[0] as Session : null
+    return rows.length >= 0 ? rows[0] as Session : null
   }
 
-  static async fetchToken (token: string): Promise<string> {
+  static async fetchToken (token: string) {
     const session = await this.fetch(token)
     return session ? session.token : null
   }

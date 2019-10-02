@@ -50,17 +50,17 @@ export class User {
     return result.affectedRows
   }
 
-  static async getByEmail(email: string): Promise<User> {
+  static async getByEmail(email: string) {
     const [ rows ]: [ RowDataPacket[], FieldPacket[] ] = await db.execute(
       'SELECT * FROM user WHERE email = ?',
       [ email ]
     )
-    this.assertUserIsFound(rows[0])
+    this.assertFound(rows[0])
 
     return rows[0] as User
   }
 
-  private static assertUserIsFound(user: RowDataPacket): void | Error {
+  private static assertFound(user: RowDataPacket) {
     if (!user) throw new Error(`User doesn't exist.`)
   }
 }
