@@ -4,12 +4,12 @@ import * as path from 'path'
 import jwt from 'jsonwebtoken';
 import { logger } from '../logger'
 import { UnauthenticatedError } from '../customErrors'
-import { Session } from '../db/Session'
+import { Session } from '../domain/Session'
 
 export async function isAuthorized(req: Request, res: Response, next: NextFunction) {
   try {
     const userToken: string = getTokenFromRequest(req)
-    const token: string = await (new Session().fetchToken(userToken))
+    const token: string = await Session.fetchToken(userToken)
     assertUserIsAuthorized(userToken, token)
   } catch (e) {
     logger.error(e)

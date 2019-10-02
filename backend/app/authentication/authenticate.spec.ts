@@ -1,14 +1,14 @@
 import httpMocks from 'node-mocks-http'
 import { Authenticator } from './authenticate'
-import { Session } from '../db/Session'
-import { User } from '../db/User'
+import { Session } from '../domain/Session'
+import { User } from '../domain/User'
 
 beforeEach(async () => {
-  await new User().create('fake@softserveinc.com', '$2b$10$RKJermYaezNSXeQK.osx8OOgIppGcd7CaVC4dCAcMRnhjrmnXeIG.')
+  await User.create('fake@softserveinc.com', '$2b$10$RKJermYaezNSXeQK.osx8OOgIppGcd7CaVC4dCAcMRnhjrmnXeIG.')
 })
 
 afterEach(async () => {
-  await new User().delete('fake@softserveinc.com')
+  await User.delete('fake@softserveinc.com')
 })
 
 describe('Authentication', () => {
@@ -73,9 +73,9 @@ describe('Authentication', () => {
 		await new Authenticator().authenticate(request, response)
 
 		expect(response.statusCode).toBe(200);
-		const token = await new Session().fetchToken(response._getData())
+		const token = await Session.fetchToken(response._getData())
 
 		expect(token).toBe(response._getData())
-		await (new Session().delete(response._getData()))
+		await Session.delete(response._getData())
 	});
 })

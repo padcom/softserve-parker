@@ -3,11 +3,10 @@ import * as fs from 'fs';
 import * as path from 'path'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken';
-import { db } from '../db'
 import { logger } from '../logger'
 import { UnauthenticatedError } from '../customErrors'
-import { User } from '../graphql/users'
-import { UserService } from '../graphql/users'
+import { User } from '../domain/User'
+import { Session } from '../domain/Session';
 
 export class Authenticator {
   cert: string  = fs.readFileSync(path.resolve(__dirname, '../../private.key'), 'utf8')
@@ -15,7 +14,7 @@ export class Authenticator {
   authenticate = async (req: Request, res: Response) => {
     try {
       this.validateParams(req);
-      const user: User = await UserService.getUserByEmail(req.body.email)
+      const user = await User.getByEmail(req.body.email)
       await this.assertPasswordsMatching(req.body.password, user.password)
       const token = await this.getJSONToken(user.id, user.email);
       await this.saveSession(token);
@@ -29,7 +28,7 @@ export class Authenticator {
 
   logout = async (req: Request, res: Response) => {
     try {
-      await this.deleteSession(this.getTokenFromRequest(req))
+      await Session.delete(this.getTokenFromRequest(req))
       res.status(200).end('User logged out successfuly')
     } catch (e) {
       logger.error(e)
@@ -52,7 +51,7 @@ export class Authenticator {
   }
 
   private async saveSession(token: string) {
-    await db.execute(`INSERT INTO sessions (token) VALUES (?)`, [ token ])
+    await Session.create(token)
   }
 
   private getTokenFromRequest (req: Request): string {
@@ -60,10 +59,6 @@ export class Authenticator {
     if (!header) throw new UnauthenticatedError('User not logged in')
 
     return header.split(' ')[1]
-  }
-
-  private async deleteSession(token: string) {
-    await db.execute(`DELETE FROM sessions WHERE token=?`, [ token ])
   }
 
   private getErrorStatus(e: Error): number {

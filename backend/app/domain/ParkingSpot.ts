@@ -1,8 +1,20 @@
-import { db } from '../../db'
-import { ParkingSpot } from './typedefs'
+import { db } from '../db'
+import { Field, ID, ObjectType } from 'type-graphql'
 import { OkPacket, FieldPacket, RowDataPacket } from 'mysql'
 
-class Service {
+@ObjectType({
+  description: 'Returns all parking spots.',
+})
+export class ParkingSpot {
+  @Field(() => ID)
+  id: number
+
+  @Field(() => Boolean)
+  reserved: boolean
+
+  @Field(() => Date)
+  created: Date
+
   /**
    * Returns parking spots. Will return as many parking spots as provided in the argument
    *
@@ -11,8 +23,7 @@ class Service {
    * @returns First X parking spots
    * @memberof Service
    */
-
-  async getOne(id: number) {
+  static async getOne(id: number) {
     const [rows]: [RowDataPacket[], FieldPacket[]] = await db.execute(
       `
       SELECT *
@@ -25,7 +36,7 @@ class Service {
     return rows as ParkingSpot[]
   }
 
-  async fetch(skip: number, limit: number): Promise<ParkingSpot[]> {
+  static async fetch(skip: number, limit: number): Promise<ParkingSpot[]> {
     const [rows] = await db.execute(
       `SELECT * FROM parkingspot
        ORDER BY id LIMIT ?,?`,
@@ -34,7 +45,7 @@ class Service {
     return rows as ParkingSpot[]
   }
 
-  async setReservation(status: boolean, id: number) {
+  static async setReservation(status: boolean, id: number) {
     const [rows]: [OkPacket, FieldPacket[]] = await db.execute(
       `
       UPDATE parkingspot
@@ -51,5 +62,3 @@ class Service {
     return updated
   }
 }
-
-export const ParkingSpotService = new Service()
