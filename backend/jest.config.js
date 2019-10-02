@@ -8,6 +8,7 @@ module.exports = {
     "modulePaths": ["<rootDir>/app/"],
     "testEnvironment": "node",
     "forceExit": true,
+    "setupFiles": ["./jest-setup-file.ts"],
     "coverageThreshold": {
       "global": {
         "branches": 85,

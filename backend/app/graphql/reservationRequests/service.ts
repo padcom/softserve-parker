@@ -1,6 +1,7 @@
 import { db } from '../../db'
-import { ReservationRequest, RequestStatus } from './typedefs'
 import { FieldPacket, RowDataPacket } from 'mysql'
+import { ReservationRequest, RequestStatus } from './'
+import { DateValidator } from '../../utilities'
 
 class Service {
   async fetchByUserId(userId: number, from: Date): Promise<ReservationRequest[]> {
@@ -14,10 +15,16 @@ class Service {
   }
 
   async createReservationRequest(userId: number, dates: Date[]): Promise<ReservationRequest[]> {
+    this.validateDates(dates)
     await this.assertRequestsDoesntExist(userId, dates)
     await db.query(`INSERT INTO reservationRequest (userId, date, status)
           VALUES ?`, [dates.map((date: Date) => [userId, date, RequestStatus.pending])])
     return this.fetchByUserIdAndDates(userId, dates)
+  }
+
+  validateDates(dates: Date[]): void | Error {
+    DateValidator.assertDatesIsntInThePast(dates)
+    DateValidator.assertDoesntContainsDuplicates(dates)
   }
 
   async assertRequestsDoesntExist(userId: number, dates: Date[]): Promise<void | Error> {

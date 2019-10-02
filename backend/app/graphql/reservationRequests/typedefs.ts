@@ -9,7 +9,7 @@ import {
   Mutation,
   registerEnumType
 } from 'type-graphql'
-import { ReservationRequestService } from './service'
+import { ReservationRequestService } from './'
 
 export enum RequestStatus {
   pending = "pending",

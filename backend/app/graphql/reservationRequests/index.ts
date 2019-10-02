@@ -1,1 +1,2 @@
-export { ReservationRequestResolver } from './typedefs'
+export { RequestStatus, ReservationRequestResolver, ReservationRequest } from './typedefs'
+export { ReservationRequestService } from './service'
