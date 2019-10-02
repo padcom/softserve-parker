@@ -7,7 +7,7 @@ import 'reflect-metadata' // required for typegraphql
 import { graphql } from './graphql'
 import { logger } from './logger'
 import { isAuthorized } from './middleware/authorization'
-import { login, logout } from './authentication/authenticate'
+import { login, logout } from './middleware/authenticate'
 
 const { NODE_ENV, PORT = 3000 } = process.env
 
