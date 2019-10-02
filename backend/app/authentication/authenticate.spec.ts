@@ -1,5 +1,6 @@
 import httpMocks from 'node-mocks-http'
-import { Authenticator } from './authenticate'
+import uuid from 'uuid'
+import { login, logout } from './authenticate'
 import { Session } from '../domain/Session'
 import { User } from '../domain/User'
 
@@ -13,14 +14,13 @@ afterEach(async () => {
 
 describe('Authentication', () => {
 	test('Responds with 403 code and lack of credentials message when credentials are not provided', async () => {
-		const authenticator = new Authenticator()
 		const request  = httpMocks.createRequest({
 			method: 'POST',
 			url: '/login',
 		});
 		
 		const response = httpMocks.createResponse()
-		await authenticator.authenticate(request, response)
+		await login(request, response)
 		expect(response.statusCode).toBe(403);
 		expect(response._getData()).toBe(`Credentials not provided.`);
 	});
@@ -36,7 +36,7 @@ describe('Authentication', () => {
 		});
 		
 		const response = httpMocks.createResponse()
-		await new Authenticator().authenticate(request, response)
+		await login(request, response)
 
 		expect(response.statusCode).toBe(403);
 		expect(response._getData()).toBe(`User doesn't exist.`);
@@ -53,7 +53,7 @@ describe('Authentication', () => {
 		});
 		const response = httpMocks.createResponse()
 
-		await new Authenticator().authenticate(request, response)
+		await login(request, response)
 
 		expect(response.statusCode).toBe(403);
 		expect(response._getData()).toBe(`Incorrect password.`);
@@ -70,7 +70,7 @@ describe('Authentication', () => {
 		});
 		
 		const response = httpMocks.createResponse()
-		await new Authenticator().authenticate(request, response)
+		await login(request, response)
 
 		expect(response.statusCode).toBe(200);
 		const token = await Session.fetchToken(response._getData())
@@ -78,4 +78,28 @@ describe('Authentication', () => {
 		expect(token).toBe(response._getData())
 		await Session.delete(response._getData())
 	});
+
+	test('Will logout logged in user', async () => {
+		const token = uuid()
+		await Session.create(token)
+
+		const request  = httpMocks.createRequest({
+			method: 'POST',
+			url: '/logout',
+			headers: {
+				Authorization: `Bearer ${token}`
+			},
+			body: {}
+		});
+
+		const response = httpMocks.createResponse()
+
+		await logout(request, response)
+
+		expect(response.statusCode).toBe(200)
+
+		const session = await Session.fetch(token)
+
+		expect(session).toBe(null)
+	})
 })

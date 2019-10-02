@@ -33,7 +33,7 @@ export class Session {
       [ token ]
     )
 
-    return rows.length >= 0 ? rows[0] as Session : null
+    return rows.length > 0 ? rows[0] as Session : null
   }
 
   static async fetchToken (token: string) {

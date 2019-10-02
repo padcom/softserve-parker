@@ -23,7 +23,7 @@ async function main () {
 
   const server = await graphql
   app.use('/graphql', isAuthorized, server.getMiddleware({ path: '/' }))
-  app.use(baibulo({ root: '/tmp/parker-frontend', download: true, upload: false, exclude: [ '/login', '/logout' ] }))
+  app.use(baibulo({ root: '/tmp/parker-frontend', download: true, upload: false }))
 
   try {
     app.listen(PORT, () => {
