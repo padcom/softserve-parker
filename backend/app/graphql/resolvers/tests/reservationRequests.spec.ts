@@ -1,6 +1,6 @@
-import { ReservationRequestResolver } from './'
-import { db } from '../../db'
-import { UserService, User } from '../users'
+import { ReservationRequestResolver } from '../../resolvers/ReservationRequestResolver'
+import { db } from '../../../db'
+import { User } from '../../../domain/User'
 
 const date = new Date()
 const date2 = new Date()
@@ -22,7 +22,7 @@ beforeAll(async () => {
     (email, password) VALUES (?, "supersecurepassword")`,
     [email]
   )
-  user = await UserService.getUserByEmail(email)
+  user = await User.getByEmail(email)
 })
 
 afterAll(async () => {

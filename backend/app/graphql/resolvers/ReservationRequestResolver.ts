@@ -1,47 +1,15 @@
 import {
   Arg,
-  Field,
-  ID,
   Int,
-  ObjectType,
   Query,
   Resolver,
   Mutation,
-  registerEnumType
 } from 'type-graphql'
-import { ReservationRequestService } from './'
+import { ReservationRequest } from '../../domain/ReservationRequest'
 
-export enum RequestStatus {
-  pending = "pending",
-  approved = "approved",
-  rejected = "rejected"
-}
-
-registerEnumType(RequestStatus, {
-  name: "RequestStatus",
-  description: "Request status types",
-});
-
-@ObjectType({
-  description: 'Object representing reservation request.',
-})
-export class ReservationRequest {
-  @Field(() => ID)
-  id: number
-
-  @Field(() => Number)
-  userId: number
-
-  @Field(() => Date)
-  date: Date
-
-  @Field(() => RequestStatus)
-  status: RequestStatus
-
-  @Field(() => Number)
-  parkingSpotId: number
-}
   
+  
+    
 @Resolver(ReservationRequest)
 export class ReservationRequestResolver {
   @Query(() => [ReservationRequest], {
@@ -57,9 +25,9 @@ export class ReservationRequestResolver {
     })
     from: Date,
   ) {
-    return ReservationRequestService.fetchByUserId(userId, from)
+    return ReservationRequest.fetchByUserId(userId, from)
   }
-
+  
   @Mutation(() => [ReservationRequest], {
     description:
       'Creates reservation requests.',
@@ -74,7 +42,7 @@ export class ReservationRequestResolver {
     })
     dates: Date[]
   ) {
-    return ReservationRequestService.createReservationRequest(userId, dates)
+    return ReservationRequest.createReservationRequest(userId, dates)
   }
 }
-  
+    
