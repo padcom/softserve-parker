@@ -1,19 +1,28 @@
 import httpMocks from 'node-mocks-http'
+import * as fs from 'fs';
+import * as path from 'path'
+import jwt from 'jsonwebtoken';
 import { db } from '../db'
 import { isAuthorized } from './authorization'
 
-beforeEach(async () => {
+const cert: string  = fs.readFileSync(path.resolve(__dirname, '../../private.key'), 'utf8');
+const token = jwt.sign({userID: 1234, email: "email"}, cert, {algorithm: 'RS256'});
+
+
+beforeAll(async () => {
 	await db.execute(`
 		INSERT INTO sessions 
 		(token) 
-		VALUES ("faketoken.faketoken.faketoken")`
+    VALUES (?)`,
+    [token]
 	)
 })
 
-afterEach(async () => {
+afterAll(async () => {
 	await db.execute(`
 		DELETE from sessions
-		WHERE token = "faketoken.faketoken.faketoken"`
+    WHERE token = ?`,
+    [token]
 	)
 })
 
@@ -53,7 +62,7 @@ describe('Authorization middleware', () => {
 			method: 'POST',
       url: '/login',
       headers: {
-        Authorization: 'Bearer faketoken.faketoken.faketoken'
+        Authorization: `Bearer ${token}`
       }
     });
 		
