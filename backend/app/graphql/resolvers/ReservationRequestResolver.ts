@@ -42,7 +42,7 @@ export class ReservationRequestResolver {
     })
     dates: Date[]
   ) {
-    return ReservationRequest.createReservationRequest(userId, dates)
+    return ReservationRequest.create(userId, dates)
   }
 }
     

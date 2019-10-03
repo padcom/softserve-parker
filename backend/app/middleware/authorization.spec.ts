@@ -4,26 +4,18 @@ import * as path from 'path'
 import jwt from 'jsonwebtoken';
 import { db } from '../db'
 import { isAuthorized } from './authorization'
+import { Session } from '../domain/Session'
 
 const cert: string  = fs.readFileSync(path.resolve(__dirname, '../../private.key'), 'utf8');
 const token = jwt.sign({userID: 1234, email: "email"}, cert, {algorithm: 'RS256'});
 
 
 beforeAll(async () => {
-	await db.execute(`
-		INSERT INTO sessions 
-		(token) 
-    VALUES (?)`,
-    [token]
-	)
+  await Session.create(token)
 })
 
 afterAll(async () => {
-	await db.execute(`
-		DELETE from sessions
-    WHERE token = ?`,
-    [token]
-	)
+	await Session.delete(token)
 })
 
 describe('Authorization middleware', () => {
