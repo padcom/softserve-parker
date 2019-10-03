@@ -24,5 +24,6 @@ cp tsconfig.json $DEPLOYMENT_DIR/
 cp database.json $DEPLOYMENT_DIR/
 cp ecosystem.config.js $DEPLOYMENT_DIR/
 cp private.key $DEPLOYMENT_DIR/
+cp public.key $DEPLOYMENT_DIR/
 
 sudo pm2 restart parker
