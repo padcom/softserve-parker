@@ -16,9 +16,10 @@
   "dependencies": {
     "apollo-server-express": "^2.8.1",
     "baibulo": "1.0.12",
-    "cookie-parser": "^1.4.4",
     "bcrypt": "^3.0.6",
+    "cookie-parser": "^1.4.4",
     "cors": "^2.8.5",
+    "date-fns": "^2.4.1",
     "db-migrate": "^0.11.6",
     "db-migrate-mysql": "^1.1.10",
     "express": "^4.17.1",

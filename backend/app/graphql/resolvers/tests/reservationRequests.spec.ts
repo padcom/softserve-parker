@@ -1,54 +1,32 @@
 import { ReservationRequestResolver } from '../../resolvers/ReservationRequestResolver'
 import { db } from '../../../db'
 import { User } from '../../../domain/User'
+import { ReservationRequest } from '../../../domain/ReservationRequest'
 
 const date = new Date()
-const date2 = new Date()
-const date3 = new Date()
+date.setHours(23)
+date.setMinutes(59)
+date.setSeconds(59)
 date.setMilliseconds(0)
-date.setSeconds(10)
-date2.setMilliseconds(0)
-date2.setSeconds(20)
-date3.setMilliseconds(0)
-date3.setSeconds(30)
+const date2 = new Date(date.getTime())
+date2.setSeconds(58)
+const date3 = new Date(date.getTime())
+date3.setSeconds(57)
+
+
 
 
 let user: User;
 const email = "fakeemailfortesting@testing.fake.com"
 
 beforeAll(async () => {
-  await db.execute(`
-		INSERT INTO user
-    (email, password) VALUES (?, "supersecurepassword")`,
-    [email]
-  )
+  await User.create(email, "supersecurepassword")
   user = await User.getByEmail(email)
+  await ReservationRequest.create(user.id, [date, date2, date3])
 })
 
 afterAll(async () => {
-  await db.execute(`
-    DELETE from user
-    WHERE email = ?`,
-    [email]
-  )
-})
-
-
-beforeEach(async () => {
-	await db.execute(`
-		INSERT INTO reservationRequest
-		(userId, date, status) 
-    VALUES (?, ?, "pending"), (?, ?, "pending"), (?, ?, "pending")`,
-    [user.id, date, user.id, date2, user.id, date3]
-	)
-})
-
-afterEach(async () => {
-	await db.execute(`
-		DELETE from reservationRequest
-    WHERE userId = 4 AND date IN (?, ?, ?)`,
-    [date, date2, date3]
-	)
+  await User.delete(email)
 })
 
 const rr = new ReservationRequestResolver()
@@ -71,7 +49,7 @@ describe('Reservation Requests', () => {
     } catch (e) {
       error = e
     }
-    expect(error.message).toBe('Provided date is in the past. Wed Oct 03 2018 00:00:00 GMT+0200 (Central European Summer Time)');
+    expect(error.message).toBe('Provided date is in the past.');
   })
 
   test('Throws error when provided duplicate dates', async () => {
@@ -98,12 +76,8 @@ describe('Reservation Requests', () => {
 
     expect(result.length).toBe(1)
     expect(result[0].date.getTime()).toBe(localDate.getTime())
-
-    await db.execute(`
-      DELETE from reservationRequest
-      WHERE userId = 4 AND date = ?`,
-      [localDate]
-    )
+    
+    await ReservationRequest.delete(user.id, [localDate])
   })
 
   test('Returns reservation requests starting from given date', async () => {

@@ -4,9 +4,9 @@ import {
   ObjectType,
   registerEnumType
 } from 'type-graphql'
-import { FieldPacket, RowDataPacket } from 'mysql'
+import { FieldPacket, RowDataPacket, OkPacket } from 'mysql'
+import { isPast } from 'date-fns'
 import { db } from '../db'
-import { DateValidator } from '../utilities'
 
 export enum RequestStatus {
   pending = "pending",
@@ -48,7 +48,7 @@ export class ReservationRequest {
     return rows as ReservationRequest[]
   }
 
-  static async createReservationRequest(userId: number, dates: Date[]): Promise<ReservationRequest[]> {
+  static async create(userId: number, dates: Date[]): Promise<ReservationRequest[]> {
     this.validateDates(dates)
     await this.assertRequestsDoesntExist(userId, dates)
     await db.query(`INSERT INTO reservationRequest (userId, date, status)
@@ -56,9 +56,12 @@ export class ReservationRequest {
     return this.fetchByUserIdAndDates(userId, dates)
   }
 
-  static validateDates(dates: Date[]): void | Error {
-    DateValidator.assertDatesIsntInThePast(dates)
-    DateValidator.assertDoesntContainsDuplicates(dates)
+  private static validateDates(dates: Date[]): void | Error {
+    if (dates.some((date: Date) => isPast(date))) throw new Error(`Provided date is in the past.`)
+    const containsDuplicates = dates
+      .map((date: Date) => date.getTime())
+      .some((value: number, i: number, self: number[]) => self.indexOf(value) !== i)
+    if (containsDuplicates) throw new Error('Provided date range contains duplicates.')
   }
 
   static async assertRequestsDoesntExist(userId: number, dates: Date[]): Promise<void | Error> {
@@ -74,5 +77,16 @@ export class ReservationRequest {
       [userId, ...dates]
     )
     return rows as ReservationRequest[]
+  }
+
+  static async delete(userId: number, dates: Date[]) {
+    const [ result ] = await db.execute(`DELETE from reservationRequest WHERE userId = ? AND date IN (?)`,
+      [userId, ...dates]) as OkPacket[]
+
+      if (result.affectedRows == 0) {
+        throw new Error('Requests not found')
+      } 
+
+    return result.affectedRows
   }
 }
