@@ -1,18 +1,16 @@
 <template>
-  <div class="single-date">{{ parsedDate }}</div>
+  <div class="date">{{ formattedDate }}</div>
 </template>
 
 <script>
 import { Vue, Component, Prop } from 'vue-property-decorator'
 
 @Component()
-export default class SingleDate extends Vue {
+export default class ParkingDatesListItem extends Vue {
   @Prop({ type: Object, required: true }) date
 
-  get parsedDate () {
-    const { date } = this
-    if (date.from === date.to) return date.from
-    return `${date.from} - ${date.to}`
+  get formattedDate () {
+    return new Date(this.date.date).toLocaleDateString('pl-pl')
   }
 }
 </script>
@@ -20,8 +18,9 @@ export default class SingleDate extends Vue {
 <style lang="scss" scoped>
 @import '../../styles/variables';
 
-.single-date {
+.date {
   border-bottom: 1px solid rgb(216, 216, 216);
   padding: 12px 20px;
+  width: 100%;
 }
 </style>

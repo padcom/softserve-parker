@@ -25,7 +25,9 @@ const getters: GetterTree<AuthState, RootState> = {
 
 const mutations: MutationTree<AuthState> = {
   setUser(state, user) {
+    user.id = Number(user.id)
     state.user = user
+
     if (!user) {
       window.localStorage.removeItem('parker:user')
     } else {
@@ -68,7 +70,12 @@ const actions: ActionTree<AuthState, RootState> = {
         const token = await API.login(email, password)
         commit('setToken', token)
 
-        const user = await User.getByEmail(email, ['email', 'rank', 'enabled'])
+        const user = await User.getByEmail(email, [
+          'id',
+          'email',
+          'rank',
+          'enabled'
+        ])
         commit('setUser', user)
 
         bus.emit('user-logged-in', user)
@@ -105,7 +112,7 @@ export const AuthGetter = namespace('auth').Getter
 export const AuthAction = namespace('auth').Action
 
 bus.on('user-logged-in', user => {
-  // logger.info(`User ${user.email} logged in`)
+  logger.info(`User ${user.email} logged in`)
 })
 
 bus.on('user-login-error', error => {

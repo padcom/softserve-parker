@@ -7,17 +7,17 @@
       </p>
     </div>
 
-    <SingleDate v-for="date in dates" :key="date.id" :date="date" />
+    <ParkingDatesListItem v-for="date in dates" :key="date.id" :date="date" />
   </div>
 </template>
 
 <script>
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import SingleDate from './SingleDate'
+import ParkingDatesListItem from './ParkingDatesListItem'
 
 @Component({
   components: {
-    SingleDate
+    ParkingDatesListItem
   }
 })
 export default class ParkingDates extends Vue {
@@ -32,6 +32,7 @@ export default class ParkingDates extends Vue {
   display: flex;
   height: 100%;
   flex-direction: column;
+  width: 100%;
 
   &__empty-box {
     align-self: center;

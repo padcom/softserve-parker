@@ -54,7 +54,6 @@ declare global {
 
 Cypress.Commands.add('login', (email: string, password: string, options: LoginCommandOptions = { mockLoginRequest: true }) => {
   if (options.mockLoginRequest) {
-    console.log('Mocking login request')
     cy.route('POST', '/login', 'JSON-WEB-TOKEN').as('login')
     cy.graphql({ user: { email, rank: 10 } }).as('getLoggedInUser')
   }

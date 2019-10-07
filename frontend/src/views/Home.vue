@@ -2,8 +2,8 @@
   <div class="home-page">
     <Title text="Parking dates" borderBottom />
     <div class="home-page__content">
-      <div class="home-page__content__dates">
-        <ParkingDates :dates="dates" />
+      <div class="home-page__content__dates" v-if="loading === false">
+        <ParkingDates :dates="requests" />
       </div>
 
       <div class="container">
@@ -22,10 +22,12 @@ import { Component } from 'vue-property-decorator'
 
 import Title from '../components/Title'
 import Btn from '../components/Btn'
-import ParkingDates from '../components/ParkingDates'
+import ParkingDates from '../components/ParkingDates/ParkingDates'
 
-import { AuthState } from '@/store/auth'
-import { DatesState } from '@/store/dates'
+import {
+  ReservationRequestsState,
+  ReservationRequestsAction
+} from '@/store/reservationRequests'
 
 @Component({
   components: {
@@ -35,8 +37,19 @@ import { DatesState } from '@/store/dates'
   }
 })
 export default class Home extends Vue {
-  @DatesState dates
-  @AuthState user
+  loading = true
+
+  @ReservationRequestsState requests
+  @ReservationRequestsAction getOwnRequests
+
+  async mounted () {
+    try {
+      await this.getOwnRequests()
+      this.loading = false
+    } catch (error) {
+      this.loading = false
+    }
+  }
 }
 </script>
 
@@ -57,6 +70,7 @@ export default class Home extends Vue {
 
     &__dates {
       flex: 1;
+      width: 100%;
     }
 
     &__actions {

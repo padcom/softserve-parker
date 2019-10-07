@@ -3,13 +3,13 @@ import Vuex from 'vuex'
 
 import { RootState } from './root-state'
 import auth from './auth'
-import dates from './dates'
+import reservationRequests from './reservationRequests'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store<RootState>({
   modules: {
     auth,
-    dates
+    reservationRequests
   }
 })
