@@ -6,7 +6,7 @@
     "start": "ts-node-dev --no-notify app/main.ts",
     "build": "tsc",
     "db:migrate": "db-migrate up",
-    "db:back": "db-migrate down",
+    "db:migrate-down": "db-migrate down",
     "db:create-migration": "db-migrate create",
     "ci:lint": "eslint \"app/**/*.ts\" --max-warnings 1",
     "ci:prettier": "prettier \"app/**/*.ts\" --check",
