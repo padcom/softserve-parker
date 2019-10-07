@@ -13,7 +13,7 @@ describe('Login', () => {
       status: 403,
       response: 'Incorrect password'
     })
-    .as('login')
+      .as('login')
 
     cy.login('johndoe', 'supersecret', { mockLoginRequest: false })
     cy.wait('@login')
