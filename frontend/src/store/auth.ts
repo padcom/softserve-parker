@@ -24,7 +24,7 @@ const getters: GetterTree<AuthState, RootState> = {
 }
 
 const mutations: MutationTree<AuthState> = {
-  setUser(state, user) {
+  setUser (state, user) {
     user.id = Number(user.id)
     state.user = user
 
@@ -34,7 +34,7 @@ const mutations: MutationTree<AuthState> = {
       window.localStorage.setItem('parker:user', JSON.stringify(user))
     }
   },
-  setToken(state, token) {
+  setToken (state, token) {
     state.token = token
     if (!token) {
       window.localStorage.removeItem('parker:token')
@@ -45,12 +45,12 @@ const mutations: MutationTree<AuthState> = {
 }
 
 class API {
-  static async login(email: string, password: string): Promise<string> {
+  static async login (email: string, password: string): Promise<string> {
     const { data: token } = await axios.post('/login', { email, password })
     return token
   }
 
-  static async logout(token: string) {
+  static async logout (token: string) {
     await axios.post(
       '/logout',
       {},
@@ -64,7 +64,7 @@ class API {
 }
 
 const actions: ActionTree<AuthState, RootState> = {
-  async login({ commit }, { email, password }): Promise<any> {
+  async login ({ commit }, { email, password }): Promise<any> {
     return new Promise(async (resolve, reject) => {
       try {
         const token = await API.login(email, password)
@@ -87,7 +87,7 @@ const actions: ActionTree<AuthState, RootState> = {
     })
   },
 
-  async logout({ commit, state }): Promise<void> {
+  async logout ({ commit, state }): Promise<void> {
     const user = state.user
     const token = state.token
     logger.debug('actions:auth/logout user', user, ', token', token)
