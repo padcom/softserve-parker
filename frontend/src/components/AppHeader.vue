@@ -1,7 +1,7 @@
 <template>
   <header class="header container">
     <figure class="header__menu-wrapper">
-      <img src="/img/menu.png" />
+      <img src="/img/menu.png" v-if="isLoggedIn"/>
     </figure>
 
     <figure class="header__logo-wrapper">
