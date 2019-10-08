@@ -18,11 +18,11 @@ import moment from 'moment'
 export default class WeekDays extends Vue {
   weekdays = this._getWeekdayNames()
 
-  _rotateArrayLeft (a) {
+  _rotateArrayLeft(a) {
     a.push(a.shift())
   }
 
-  _getWeekdayNames () {
+  _getWeekdayNames() {
     const names = moment.localeData()._weekdaysMin.slice(0)
     this._rotateArrayLeft(names)
     return names
@@ -31,13 +31,18 @@ export default class WeekDays extends Vue {
 </script>
 
 <style lang="scss">
+@import '../../styles/variables';
+
 .week-days {
   border-collapse: collapse;
+  width: 100%;
 
   &__day {
     text-align: center;
-    color: #009FEA;
-    line-height: 30px;
+    color: $black;
+    font-size: 12px;
+    line-height: 24px;
+    font-weight: $open-sans-semi-bold;
     text-align: center;
     cursor: default;
     padding: 0;

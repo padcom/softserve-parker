@@ -1,21 +1,28 @@
 <template>
   <div class="month-navigator">
-    <a type="button" @click="prevViewMonth" :class="{
+    <a
+      type="button"
+      @click="prevViewMonth"
+      :class="{
       btn: true,
       'month-navigator__navigator': true,
       'month-navigator__navigator--left': true,
       'month-navigator__navigator--enabled': canNavigatePrevMonth,
-    }">
+    }"
+    >
       <span class="figure figure--v" />
     </a>
-    <MonthName class="month-navigator__name month-navigator__name--left" :value="value.start" />
-    <MonthName class="month-navigator__name month-navigator__name--right" :value="value.end" />
-    <a type="button" @click="nextViewMonth" :class="{
+    <MonthName class="month-navigator__name" :value="value.start" />
+    <a
+      type="button"
+      @click="nextViewMonth"
+      :class="{
       btn: true,
       'month-navigator__navigator': true,
       'month-navigator__navigator--right': true,
       'month-navigator__navigator--enabled': canNavigateNextMonth,
-    }">
+    }"
+    >
       <span class="figure figure--v" />
     </a>
   </div>
@@ -33,45 +40,48 @@ import MonthName from './MonthName.vue'
   props: {
     value: {
       type: Object,
-      required: true,
+      required: true
     },
     valid: {
       type: Object, // moment.range
       required: false,
-      default: () => moment.range(null, null),
-    },
+      default: () => moment.range(null, null)
+    }
   },
   components: {
-    MonthName,
-  },
+    MonthName
+  }
 })
 export default class MonthNavigator extends Vue {
-  get monthViewStart () {
+  get monthViewStart() {
     return this.value.start.format('MMMM YYYY')
   }
-  get monthViewEnd () {
+  get monthViewEnd() {
     return this.value.end.format('MMMM YYYY')
   }
 
-  get canNavigatePrevMonth () {
-    return moment(this.value.start).subtract(1, 'day').isAfter(this.valid.start)
+  get canNavigatePrevMonth() {
+    return moment(this.value.start)
+      .subtract(1, 'day')
+      .isAfter(this.valid.start)
   }
 
-  get canNavigateNextMonth () {
-    return moment(this.value.end).add(1, 'day').isBefore(this.valid.end)
+  get canNavigateNextMonth() {
+    return moment(this.value.end)
+      .add(1, 'day')
+      .isBefore(this.valid.end)
   }
 
-  prevViewMonth () {
+  prevViewMonth() {
     this.$emit('previous')
   }
-  nextViewMonth () {
+  nextViewMonth() {
     this.$emit('next')
   }
 }
 </script>
 
 <style lang="scss">
-@import '../consts';
 @import './consts';
 
 .month-navigator {
@@ -80,35 +90,24 @@ export default class MonthNavigator extends Vue {
 
   font-size: 14px;
   font-weight: 400;
-  text-transform: uppercase;
   text-size-adjust: 100%;
 
   -webkit-tap-highlight-color: transparent;
 
   &__name {
     flex: 1 1 50%;
-
-    &--left {
-      margin-left: -$navigator-width;
-      padding-right: $margin*$middle-section-scale;
-    }
-
-    &--right {
-      margin-right: -$navigator-width;
-      padding-left: $margin*$middle-section-scale;
-    }
   }
 
   &__navigator {
-    color: #A9A9A9;
+    color: #a9a9a9;
     padding: 4px 2px;
-    text-transform: uppercase;
-    z-index: $dialog-z-index + 1;
+    /* z-index: $dialog-z-index + 1; */
     cursor: pointer;
     font-size: 12px;
 
-    &:hover, &:visited {
-      color: #A9A9A9;
+    &:hover,
+    &:visited {
+      color: #a9a9a9;
     }
 
     &--left {
@@ -122,12 +121,19 @@ export default class MonthNavigator extends Vue {
     }
 
     &--enabled {
-      color: #009FEA;
+      color: #009fea;
     }
 
-    &--enabled:hover, &--enabled:visited {
-      color: #009FEA;
+    &--enabled:hover,
+    &--enabled:visited {
+      color: #009fea;
     }
+  }
+}
+
+.figure {
+  &:before {
+    content: '\F122';
   }
 }
 </style>
