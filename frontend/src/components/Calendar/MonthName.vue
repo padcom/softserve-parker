@@ -13,24 +13,24 @@ import moment from 'moment'
     value: {
       type: Object,
       required: false,
-      default: () => moment(),
-    },
-  },
+      default: () => moment()
+    }
+  }
 })
 export default class MonthName extends Vue {
-  get month () {
+  get month() {
     return this.value.format('MMMM YYYY')
   }
 }
 </script>
 
 <style lang="scss">
+@import '../../styles/variables';
+
 .month-name {
-  color: #535353;
-  font-size: 14px;
-  font-weight: bold;
+  color: $black;
+  font-size: 20px;
   line-height: 24px;
   text-align: center;
-  text-transform: uppercase;
 }
 </style>

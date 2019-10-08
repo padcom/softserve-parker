@@ -6,6 +6,18 @@ import './registerServiceWorker'
 
 Vue.config.productionTip = false
 
+import * as Moment from 'moment'
+import { extendMoment } from 'moment-range'
+
+const moment = extendMoment(Moment)
+
+moment.updateLocale('en', {
+  week: {
+    dow: 1,
+    doy: 4
+  }
+})
+
 // @ts-ignore
 window.app = new Vue({
   router,

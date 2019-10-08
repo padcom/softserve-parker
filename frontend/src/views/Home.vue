@@ -7,6 +7,7 @@
       </div>
 
       <div class="container">
+        <Calendar :show="true" bottom />
         <div class="home-page__content__actions">
           <Btn outlined text="pick tomorrow" fullWidth />
           <Btn text="pick a parking date" fullWidth />
@@ -23,7 +24,7 @@ import { Component } from 'vue-property-decorator'
 import Title from '../components/Title'
 import Btn from '../components/Btn'
 import ParkingDates from '../components/ParkingDates/ParkingDates'
-
+import Calendar from '../components/Calendar/Calendar'
 import {
   ReservationRequestsState,
   ReservationRequestsAction
@@ -33,7 +34,8 @@ import {
   components: {
     Btn,
     Title,
-    ParkingDates
+    ParkingDates,
+    Calendar
   }
 })
 export default class Home extends Vue {
@@ -42,7 +44,7 @@ export default class Home extends Vue {
   @ReservationRequestsState requests
   @ReservationRequestsAction getOwnRequests
 
-  async mounted () {
+  async mounted() {
     try {
       await this.getOwnRequests()
       this.loading = false
