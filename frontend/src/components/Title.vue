@@ -1,10 +1,7 @@
 <template>
-  <h1 :class="[
-    'title',
-    {
-      'title--border-bottom': borderBottom
-    }
-  ]">{{ text }}</h1>
+  <h1 class="title" :class="{ 'title--border-bottom': borderBottom }">
+    <slot />
+  </h1>
 </template>
 
 <script>
@@ -12,7 +9,6 @@ import { Vue, Component, Prop } from 'vue-property-decorator'
 
 @Component()
 export default class Title extends Vue {
-  @Prop({ type: String, default: '' }) text
   @Prop({ type: Boolean, default: false }) borderBottom
 }
 </script>

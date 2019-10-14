@@ -4,13 +4,16 @@
 
 <script>
 import { Vue, Component, Prop } from 'vue-property-decorator'
+import moment from 'moment'
 
 @Component()
 export default class ParkingDatesListItem extends Vue {
   @Prop({ type: Object, required: true }) date
 
   get formattedDate () {
-    return new Date(this.date.date).toLocaleDateString('pl-pl')
+    return moment(this.date.date)
+      .format('DD.MM.YYYY')
+      .toString()
   }
 }
 </script>
