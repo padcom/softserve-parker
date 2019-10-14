@@ -21,4 +21,16 @@ export class ReservationRequest {
 
     return reservationRequests
   }
+
+  static async cancel (requestId: number): Promise<number | Error> {
+    return query(
+      `mutation
+      cancelReservationRequest($id: Int!) {
+        cancelReservationRequest(id: $id)
+      }`,
+      {
+        id: requestId
+      }
+    )
+  }
 }
