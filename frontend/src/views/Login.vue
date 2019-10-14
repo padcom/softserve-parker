@@ -41,7 +41,7 @@ export default class Login extends Vue {}
 
   &__avatar {
     margin-top: 72px;
-    margin-bottom: 102px;
+    margin-bottom: 82px;
   }
 
   &__form {

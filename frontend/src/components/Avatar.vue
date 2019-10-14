@@ -21,8 +21,8 @@ export default class Avatar extends Vue {}
 
   &__photo {
     background-color: $gray;
-    width: 150px;
-    height: 150px;
+    width: 70vmin;
+    height: 70vmin;
     border-radius: 100%;
   }
 }
