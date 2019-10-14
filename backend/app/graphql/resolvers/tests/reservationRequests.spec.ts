@@ -77,13 +77,30 @@ describe('Reservation Requests', () => {
     expect(result.length).toBe(1)
     expect(result[0].date.getTime()).toBe(localDate.getTime())
     
-    await ReservationRequest.delete(user.id, [localDate])
+    await ReservationRequest.delete(user.id, localDate)
   })
 
   test('Returns reservation requests starting from given date', async () => {
     const result = await rr.reservationRequests(user.id, date)
     expect(result.length).toBeTruthy()
     expect(result[0].date.getTime()).toBe(date.getTime())
+  })
+
+  test('Deletes request for given id', async () => {
+    let result
+    let deletionResult
+    const localDate = new Date()
+    localDate.setMilliseconds(0)
+    localDate.setSeconds(400)
+
+    try {
+      result = await rr.createReservationRequest(user.id, [localDate])
+      deletionResult = await rr.cancelReservationRequest(result[0].id)
+    } catch (e) {
+      console.log(e)
+    }
+
+    expect(deletionResult).toBe(1)
   })
 })
 

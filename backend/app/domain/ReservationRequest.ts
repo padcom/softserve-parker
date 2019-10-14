@@ -79,9 +79,20 @@ export class ReservationRequest {
     return rows as ReservationRequest[]
   }
 
-  static async delete(userId: number, dates: Date[]) {
-    const [ result ] = await db.execute(`DELETE from reservationRequest WHERE userId = ? AND date IN (?)`,
-      [userId, ...dates]) as OkPacket[]
+  static async delete(userId: number, date: Date) {
+    const [ result ] = await db.execute(`DELETE from reservationRequest WHERE userId = ? AND date = ?`,
+      [userId, date]) as OkPacket[]
+
+      if (result.affectedRows == 0) {
+        throw new Error('Requests not found')
+      } 
+
+    return result.affectedRows
+  }
+
+  static async deleteById(id: number) {
+    const [ result ] = await db.execute(`DELETE from reservationRequest WHERE id = ?`,
+      [id]) as OkPacket[]
 
       if (result.affectedRows == 0) {
         throw new Error('Requests not found')

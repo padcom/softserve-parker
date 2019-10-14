@@ -9,7 +9,8 @@ export interface ReservationRequestsState {
   requests: {
     date: Date
     to: Date
-    status: string
+    status: string,
+    id: number
   }[]
 }
 
@@ -20,6 +21,9 @@ const state: ReservationRequestsState = {
 const mutations: MutationTree<ReservationRequestsState> = {
   setRequests (state, requests) {
     state.requests = requests
+  },
+  cancelRequest (state, id) {
+    state.requests = state.requests.filter(request => request.id !== id)
   }
 }
 
@@ -39,6 +43,14 @@ const actions: ActionTree<ReservationRequestsState, RootState> = {
         reject(error)
       }
     })
+  },
+  async cancelRequest ({ commit }, id) {
+    try {
+      await ReservationRequest.cancel(Number(id))
+      commit('cancelRequest', id)
+    } catch (error) {
+      bus.emit('reservation-requests-error', error)
+    }
   }
 }
 

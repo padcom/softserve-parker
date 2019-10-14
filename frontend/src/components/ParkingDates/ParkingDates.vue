@@ -1,13 +1,13 @@
 <template>
   <div class="parking-dates">
-    <div v-if="dates.length === 0" class="parking-dates__empty-box">
+    <div v-if="requests.length === 0" class="parking-dates__empty-box">
       <p class="parking-dates__empty-box__text">
         Parking dates picked by you,
         will appear here.
       </p>
     </div>
 
-    <ParkingDatesListItem v-for="date in dates" :key="date.id" :date="date" />
+    <ParkingDatesListItem v-for="request in requests" :key="request.id" :request="request" />
   </div>
 </template>
 
@@ -21,7 +21,7 @@ import ParkingDatesListItem from './ParkingDatesListItem'
   }
 })
 export default class ParkingDates extends Vue {
-  @Prop({ type: Array, default: () => [] }) dates
+  @Prop({ type: Array, default: () => [] }) requests
 }
 </script>
 
@@ -33,6 +33,7 @@ export default class ParkingDates extends Vue {
   height: 100%;
   flex-direction: column;
   width: 100%;
+  overflow: hidden;
 
   &__empty-box {
     align-self: center;

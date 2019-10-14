@@ -44,5 +44,14 @@ export class ReservationRequestResolver {
   ) {
     return ReservationRequest.create(userId, dates)
   }
+  @Mutation(() => Number)
+  async cancelReservationRequest(
+    @Arg('id', () => Int!, {
+      description: 'Id of request for cancelation'
+    })
+    id: number
+  ) {
+    return ReservationRequest.deleteById(id)
+  }
 }
     
