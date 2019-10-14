@@ -1,6 +1,6 @@
 <template>
   <div class="home-page">
-    <Title text="Parking dates" borderBottom />
+    <Title borderBottom>Parking dates</Title>
     <div class="home-page__content">
       <div class="home-page__content__dates" v-if="loading === false">
         <ParkingDates :dates="requests" />
