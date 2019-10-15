@@ -7,10 +7,10 @@
       </div>
 
       <div class="container">
-        <Calendar :show="true" bottom />
+        <Calendar :show="showCalendar" bottom @save="calendarPickDate" />
         <div class="home-page__content__actions">
-          <Btn outlined text="pick tomorrow" fullWidth />
-          <Btn text="pick a parking date" fullWidth />
+          <Btn outlined text="pick tomorrow" fullWidth @click="pickTomorrow" />
+          <Btn text="pick a parking date" fullWidth @click="openCalendar(true)" />
         </div>
       </div>
     </div>
@@ -18,17 +18,18 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import { Component } from 'vue-property-decorator'
+import { Vue, Component } from 'vue-property-decorator'
+import moment from 'moment'
+
+import {
+  ReservationRequestsState,
+  ReservationRequestsAction
+} from '@/store/reservationRequests'
 
 import Title from '../components/Title'
 import Btn from '../components/Btn'
 import ParkingDates from '../components/ParkingDates/ParkingDates'
 import Calendar from '../components/Calendar/Calendar'
-import {
-  ReservationRequestsState,
-  ReservationRequestsAction
-} from '@/store/reservationRequests'
 
 @Component({
   components: {
@@ -40,9 +41,11 @@ import {
 })
 export default class Home extends Vue {
   loading = true
+  showCalendar = false
 
   @ReservationRequestsState requests
   @ReservationRequestsAction getOwnRequests
+  @ReservationRequestsAction createRequest
 
   async mounted() {
     try {
@@ -51,6 +54,31 @@ export default class Home extends Vue {
     } catch (error) {
       this.loading = false
     }
+  }
+
+  openCalendar(value) {
+    this.showCalendar = value
+  }
+
+  async pickDate(date) {
+    try {
+      await this.createRequest(date)
+      await this.getOwnRequests()
+    } catch (error) {
+      // TODO
+      console.log('error')
+    }
+  }
+
+  async calendarPickDate(date) {
+    this.pickDate(date)
+    this.openCalendar(false)
+  }
+
+  async pickTomorrow() {
+    const tomorrowDate = moment().add(1, 'days')
+
+    this.pickDate(tomorrowDate)
   }
 }
 </script>
@@ -78,6 +106,7 @@ export default class Home extends Vue {
     &__actions {
       width: 100%;
       align-self: flex-end;
+      margin-top: 20px;
     }
   }
 }
