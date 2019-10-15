@@ -30,6 +30,6 @@ import { AuthGetter } from '@/store/auth'
 @Component({
 })
 export default class App extends Vue {
-  @AuthGetter isLoggedIn
+  @AuthGetter isLoggedIn: any
 }
 </script>
