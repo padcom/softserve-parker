@@ -5,3 +5,4 @@ echo "Current folder: $(pwd); GIT_DIR=$GIT_DIR; DEPLOYMENT_DIR=$DEPLOYMENT_DIR; 
 $GIT_DIR/../deployment/deploy-backend.sh
 $GIT_DIR/../deployment/deploy-apache-conf.sh
 $GIT_DIR/../deployment/deploy-frontend.sh $@
+$GIT_DIR/../deployment/deploy-admin.sh $@
