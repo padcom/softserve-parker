@@ -12,7 +12,7 @@
     >
       <span class="figure figure--v" />
     </a>
-    <MonthName class="month-navigator__name" :value="value.start" />
+    <MonthName class="month-navigator__name" :value="value" />
     <a
       type="button"
       @click="nextViewMonth"
@@ -29,45 +29,33 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import Component from 'vue-class-component'
-
+import { Vue, Component, Prop } from 'vue-property-decorator'
 import moment from 'moment'
 
 import MonthName from './MonthName.vue'
 
 @Component({
-  props: {
-    value: {
-      type: Object,
-      required: true
-    },
-    valid: {
-      type: Object, // moment.range
-      required: false,
-      default: () => moment.range(null, null)
-    }
-  },
   components: {
     MonthName
   }
 })
 export default class MonthNavigator extends Vue {
-  get monthViewStart() {
-    return this.value.start.format('MMMM YYYY')
-  }
-  get monthViewEnd() {
-    return this.value.end.format('MMMM YYYY')
-  }
+  @Prop({ type: Object, required: true }) value
+  @Prop({
+    type: Object,
+    required: false,
+    default: () => moment.range(null, null)
+  })
+  valid
 
   get canNavigatePrevMonth() {
-    return moment(this.value.start)
+    return moment(this.value)
       .subtract(1, 'day')
       .isAfter(this.valid.start)
   }
 
   get canNavigateNextMonth() {
-    return moment(this.value.end)
+    return moment(this.value)
       .add(1, 'day')
       .isBefore(this.valid.end)
   }

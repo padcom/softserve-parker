@@ -2,23 +2,22 @@
   <div v-if="show" :class="['calendar', {
     'calendar--bottom': bottom
   }]">
-    <MonthNavigator :value="selectedDay" />
+    <MonthNavigator :value="date" @next="nextMonth" @previous="previousMonth" />
     <WeekDays />
     <Month :date="date" @change="daySelected" :selected="selectedDay" />
 
-    <Btn outlined text="add this date" fullWidth />
+    <Btn outlined text="add this date" fullWidth @click="saveDate" />
   </div>
 </template>
 
 <script>
 import { Vue, Component, Prop } from 'vue-property-decorator'
+import moment from 'moment'
 
 import WeekDays from './WeekDays'
 import MonthNavigator from './MonthNavigator'
 import Month from './Month'
 import Btn from '../Btn'
-
-import moment from 'moment'
 
 @Component({
   components: {
@@ -32,19 +31,23 @@ export default class Calendar extends Vue {
   @Prop({ type: Boolean, required: true }) show
   @Prop({ type: Boolean, required: false, default: false }) bottom
 
-  date = moment()
-  selectedDay = moment.range(moment(), moment())
+  date = moment().startOf('month')
+  selectedDay = moment.range(moment().add(1, 'day'), moment().add(1, 'day'))
+
+  saveDate() {
+    this.$emit('save', this.selectedDay.start)
+  }
 
   daySelected(day) {
-    const { selectedDay } = this
+    this.selectedDay = moment.range(day, day)
+  }
 
-    if (!selectedDay.start.isSame(selectedDay.end)) {
-      this.selectedDay = moment.range(day, day)
-    } else if (selectedDay.start.isBefore(day)) {
-      this.selectedDay.end = day
-    } else {
-      this.selectedDay.start = day
-    }
+  nextMonth() {
+    this.date = moment(this.date).add(1, 'month')
+  }
+
+  previousMonth() {
+    this.date = moment(this.date).subtract(1, 'month')
   }
 }
 </script>

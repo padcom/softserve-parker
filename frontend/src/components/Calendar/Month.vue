@@ -11,10 +11,9 @@
           @mouseenter="dayHovered(day)"
           :class="{ 
               'month__day': true,
-              'month__day--othermonth': !day.isSame(date, 'month'),
-              'month__day--disabled': day.isBefore(date, 'day'),
+              'month__day--disabled': day.isBefore(today) || isWeekend(day),
               'month__day--highlighted': day.within(highlighted) && day.isSame(date, 'month'),
-              'month__day--selected': (day.isSame(selected.start, 'day') || day.isSame(selected.end, 'day')) && day.isSame(date, 'month'),
+              'month__day--selected': day.isSame(selected.start, 'day') || day.isSame(selected.end, 'day'),
               'month__day--selected-start': day.isSame(selected.start, 'day') && day.isSame(date, 'month'),
               'month__day--selected-end': day.isSame(selected.end, 'day') && day.isSame(date, 'month'),
               'month__day--in-range': day.within(selected) && day.isSame(date, 'month'),
@@ -30,7 +29,6 @@
 <script>
 import Vue from 'vue'
 import Component from 'vue-class-component'
-
 import moment from 'moment'
 
 import WeekDays from './WeekDays.vue'
@@ -63,12 +61,16 @@ import logger from '@/logger'
   }
 })
 export default class Month extends Vue {
+  get today() {
+    return moment()
+  }
+
   get weeks() {
     const result = []
     const dayOfMonth = moment(this.date)
       .startOf('month')
       .startOf('week')
-    console.log('dayofMonth', dayOfMonth)
+
     while (this.isWeekWithinMonth(dayOfMonth, this.date)) {
       const week = []
       for (
@@ -81,7 +83,7 @@ export default class Month extends Vue {
       result.push(week)
       dayOfMonth.add(1, 'week')
     }
-    console.log(result)
+
     return result
   }
 
@@ -96,13 +98,22 @@ export default class Month extends Vue {
     return moment(day).isSame(date, 'month')
   }
 
+  isWeekend(date) {
+    return date.day() === 6 || date.day() === 0
+  }
+
   daySelected(day) {
     logger.debug('Month.daySelected', day.format('YYYY-MM-DD'))
+    console.log(
+      day,
+      day.isAfter(this.today) && day.within(this.valid) && !this.isWeekend(day)
+    )
     if (
-      day.isSameOrAfter(this.date, 'day') &&
+      day.isAfter(this.today) &&
       day.within(this.valid) &&
-      this.isSameMonth(day, this.weeks[2][0])
+      !this.isWeekend(day)
     ) {
+      console.log(day)
       this.$emit('change', day)
     }
   }
@@ -143,11 +154,6 @@ export default class Month extends Vue {
     padding: 0;
     outline: 0;
     padding: 8px;
-
-    &--othermonth {
-      color: #787878;
-      cursor: default;
-    }
 
     &--disabled {
       color: #787878;

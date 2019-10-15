@@ -28,16 +28,14 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 
 @Component({
-  props: [ 'selectionMode', 'valid', 'highlighted', 'selected', 'display' ],
+  props: ['selectionMode', 'valid', 'highlighted', 'selected', 'display']
 })
-export default class Debugger extends Vue {
-
-}
+export default class Debugger extends Vue {}
 </script>
 
 <style lang="scss">
 .debugger {
-//  display: none;
+  //  display: none;
   & td {
     padding: 2px 10px;
   }
