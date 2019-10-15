@@ -3,21 +3,13 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import Component from 'vue-class-component'
-
+import { Vue, Component, Prop } from 'vue-property-decorator'
 import moment from 'moment'
 
-@Component({
-  props: {
-    value: {
-      type: Object,
-      required: false,
-      default: () => moment()
-    }
-  }
-})
+@Component()
 export default class MonthName extends Vue {
+  @Prop({ type: Object, required: false, default: () => moment() }) value
+
   get month() {
     return this.value.format('MMMM YYYY')
   }
