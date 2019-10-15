@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar app>
+    <v-app-bar app v-if="isLoggedIn">
       <v-toolbar-title class="headline text-uppercase">
         <span>PARKER</span>
         <span class="font-weight-light">ADMIN PANEL</span>
@@ -16,7 +16,7 @@
     </v-app-bar>
 
     <v-content>
-      <h1>Content...</h1>
+      <router-view />
     </v-content>
   </v-app>
 </template>
@@ -25,8 +25,11 @@
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 
+import { AuthGetter } from '@/store/auth'
+
 @Component({
 })
 export default class App extends Vue {
+  @AuthGetter isLoggedIn
 }
 </script>

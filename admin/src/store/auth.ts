@@ -13,8 +13,8 @@ export interface AuthState {
 
 const state: AuthState = {
   // @ts-ignore because JSON.parse(null) => null
-  user: JSON.parse(window.localStorage.getItem('parker:user')),
-  token: window.localStorage.getItem('parker:token')
+  user: JSON.parse(window.localStorage.getItem('parker-admin:user')),
+  token: window.localStorage.getItem('parker-admin:token')
 }
 
 const getters: GetterTree<AuthState, RootState> = {
@@ -27,23 +27,24 @@ const mutations: MutationTree<AuthState> = {
   setUser (state, user) {
     state.user = user
     if (!user) {
-      window.localStorage.removeItem('parker:user')
+      window.localStorage.removeItem('parker-admin:user')
     } else {
-      window.localStorage.setItem('parker:user', JSON.stringify(user))
+      window.localStorage.setItem('parker-admin:user', JSON.stringify(user))
     }
   },
   setToken (state, token) {
     state.token = token
     if (!token) {
-      window.localStorage.removeItem('parker:token')
+      window.localStorage.removeItem('parker-admin:token')
     } else {
-      window.localStorage.setItem('parker:token', token)
+      window.localStorage.setItem('parker-admin:token', token)
     }
   }
 }
 
 class API {
   static async login (email: string, password: string): Promise<string> {
+    console.log('email', email, 'password', password)
     const { data: token } = await axios.post('/login', { email, password })
     return token
   }

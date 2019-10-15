@@ -1,11 +1,25 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+
 import Home from './views/Home.vue'
+import Login from './views/Login.vue'
+
+import store from '@/store'
+import logger from '@/logger'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   routes: [
+    {
+      path: '/login',
+      name: 'login',
+      component: Login
+    },
+    {
+      path: '/logout',
+      name: 'logout'
+    },
     {
       path: '/',
       name: 'home',
@@ -21,3 +35,20 @@ export default new Router({
     }
   ]
 })
+
+router.beforeEach(async (to, from, next) => {
+  logger.debug('ROUTER: to', to, ', from', from)
+
+  if (to.name === 'login') {
+    next()
+  } else if (!store.getters['auth/isLoggedIn']) {
+    next('/login')
+  } else if (to.name === 'logout' || to.name === '/logout') {
+    await store.dispatch('auth/logout')
+    next('/login')
+  } else {
+    next()
+  }
+})
+
+export default router
