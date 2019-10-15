@@ -11,6 +11,7 @@
             <v-form>
               <v-text-field id="email" label="Email" name="email" type="text" v-model="email" />
               <v-text-field id="password" label="Password" name="password" type="password" v-model="password" />
+              <div class="error">{{ error }}</div>
             </v-form>
           </v-card-text>
           <v-card-actions>
@@ -25,21 +26,36 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { Component } from 'vue-property-decorator'
+import { Component, Watch } from 'vue-property-decorator'
 
 import { AuthAction } from '@/store/auth'
 
-@Component
+@Component({
+})
 export default class Login extends Vue {
   @AuthAction login: any
 
   email = ''
   password = ''
+  error = ''
+
+  @Watch('email') onEmailChanged () {
+    this.error = ''
+  }
+
+  @Watch('password') onPasswordChanged () {
+    this.error = ''
+  }
 
   async submit () {
     console.log(this.email, this.password)
-    await this.login({ email: this.email, password: this.password })
-    this.$router.push('/')
+    try {
+      await this.login({ email: this.email, password: this.password })
+      this.$router.push('/')
+    } catch (e) {
+      console.log(JSON.stringify(e))
+      this.error = e.response.data
+    }
   }
 }
 </script>
