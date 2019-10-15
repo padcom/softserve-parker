@@ -25,14 +25,13 @@ const getters: GetterTree<AuthState, RootState> = {
 
 const mutations: MutationTree<AuthState> = {
   setUser (state, user) {
-    user.id = Number(user.id)
-    state.user = user
-
     if (!user) {
       window.localStorage.removeItem('parker:user')
     } else {
+      user.id = Number(user.id)
       window.localStorage.setItem('parker:user', JSON.stringify(user))
     }
+    state.user = user
   },
   setToken (state, token) {
     state.token = token
