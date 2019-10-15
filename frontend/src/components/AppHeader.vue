@@ -14,9 +14,12 @@
 
 <script>
 import { Component, Vue } from 'vue-property-decorator'
+import { AuthGetter } from '@/store/auth'
 
 @Component()
-export default class Header extends Vue {}
+export default class AppHeader extends Vue {
+  @AuthGetter isLoggedIn
+}
 </script>
 
 <style lang="scss" scoped>
