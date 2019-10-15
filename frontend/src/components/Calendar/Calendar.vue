@@ -59,8 +59,8 @@ export default class Calendar extends Vue {
   padding: 16px;
 
   &--bottom {
-    position: absolute;
-    width: calc(100% - 30px);
+    position: fixed;
+    width: calc(100% - 60px);
     bottom: 15px;
     left: 15px;
   }
