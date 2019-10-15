@@ -18,11 +18,11 @@ import moment from 'moment'
 export default class WeekDays extends Vue {
   weekdays = this._getWeekdayNames()
 
-  _rotateArrayLeft(a) {
+  _rotateArrayLeft (a) {
     a.push(a.shift())
   }
 
-  _getWeekdayNames() {
+  _getWeekdayNames () {
     const names = moment.localeData()._weekdaysMin.slice(0)
     this._rotateArrayLeft(names)
     return names

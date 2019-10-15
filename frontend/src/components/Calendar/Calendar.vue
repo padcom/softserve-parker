@@ -1,12 +1,12 @@
 <template>
-  <div v-if="show" :class="['calendar', {
+  <div v-if="show" class="calendar" :class="{
     'calendar--bottom': bottom
-  }]">
+  }">
     <MonthNavigator :value="date" @next="nextMonth" @previous="previousMonth" />
     <WeekDays />
     <Month :date="date" @change="daySelected" :selected="selectedDay" />
 
-    <Btn outlined text="add this date" fullWidth @click="saveDate" />
+    <Btn class="calendar__button" outlined text="add this date" fullWidth @click="saveDate" />
   </div>
 </template>
 
@@ -63,6 +63,10 @@ export default class Calendar extends Vue {
     width: calc(100% - 60px);
     bottom: 15px;
     left: 15px;
+  }
+
+  &__button {
+    margin-top: 40px;
   }
 }
 </style>

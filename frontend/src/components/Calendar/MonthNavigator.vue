@@ -48,30 +48,28 @@ export default class MonthNavigator extends Vue {
   })
   valid
 
-  get canNavigatePrevMonth() {
+  get canNavigatePrevMonth () {
     return moment(this.value)
       .subtract(1, 'day')
       .isAfter(this.valid.start)
   }
 
-  get canNavigateNextMonth() {
+  get canNavigateNextMonth () {
     return moment(this.value)
       .add(1, 'day')
       .isBefore(this.valid.end)
   }
 
-  prevViewMonth() {
+  prevViewMonth () {
     this.$emit('previous')
   }
-  nextViewMonth() {
+  nextViewMonth () {
     this.$emit('next')
   }
 }
 </script>
 
 <style lang="scss">
-@import './consts';
-
 .month-navigator {
   display: flex;
   align-content: center;

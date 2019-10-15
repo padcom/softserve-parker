@@ -10,7 +10,7 @@ import moment from 'moment'
 export default class MonthName extends Vue {
   @Prop({ type: Object, required: false, default: () => moment() }) value
 
-  get month() {
+  get month () {
     return this.value.format('MMMM YYYY')
   }
 }

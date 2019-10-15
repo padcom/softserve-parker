@@ -19,16 +19,16 @@ const state: ReservationRequestsState = {
 }
 
 const mutations: MutationTree<ReservationRequestsState> = {
-  setRequests(state, requests) {
+  setRequests (state, requests) {
     state.requests = requests
   },
-  cancelRequest(state, id) {
+  cancelRequest (state, id) {
     state.requests = state.requests.filter(request => request.id !== id)
   }
 }
 
 const actions: ActionTree<ReservationRequestsState, RootState> = {
-  async getOwnRequests({ commit, rootState }): Promise<any> {
+  async getOwnRequests ({ commit, rootState }): Promise<any> {
     return new Promise(async (resolve, reject) => {
       try {
         const reservationRequests = await ReservationRequest.fetchByUserId(
@@ -45,7 +45,7 @@ const actions: ActionTree<ReservationRequestsState, RootState> = {
     })
   },
 
-  async cancelRequest({ commit }, id) {
+  async cancelRequest ({ commit }, id) {
     try {
       await ReservationRequest.cancel(Number(id))
       commit('cancelRequest', id)
@@ -54,7 +54,7 @@ const actions: ActionTree<ReservationRequestsState, RootState> = {
     }
   },
 
-  async createRequest({ rootState }, date): Promise<any> {
+  async createRequest ({ rootState }, date): Promise<any> {
     return new Promise(async (resolve, reject) => {
       try {
         const reservationRequests = await ReservationRequest.createRequest(
