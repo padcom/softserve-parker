@@ -47,7 +47,7 @@ export default class Home extends Vue {
   @ReservationRequestsAction getOwnRequests
   @ReservationRequestsAction createRequest
 
-  async mounted() {
+  async mounted () {
     try {
       await this.getOwnRequests()
       this.loading = false
@@ -56,26 +56,25 @@ export default class Home extends Vue {
     }
   }
 
-  openCalendar(value) {
+  openCalendar (value) {
     this.showCalendar = value
   }
 
-  async pickDate(date) {
+  async pickDate (date) {
     try {
       await this.createRequest(date)
       await this.getOwnRequests()
     } catch (error) {
       // TODO
-      console.log('error')
     }
   }
 
-  async calendarPickDate(date) {
+  calendarPickDate (date) {
     this.pickDate(date)
     this.openCalendar(false)
   }
 
-  async pickTomorrow() {
+  pickTomorrow () {
     const tomorrowDate = moment().add(1, 'days')
 
     this.pickDate(tomorrowDate)

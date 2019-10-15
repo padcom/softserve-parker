@@ -9,7 +9,7 @@
           tabindex="-1"
           @click="daySelected(day)"
           @mouseenter="dayHovered(day)"
-          :class="{ 
+          :class="{
               'month__day': true,
               'month__day--disabled': day.isBefore(today) || isWeekend(day),
               'month__day--highlighted': day.within(highlighted) && day.isSame(date, 'month'),
@@ -27,45 +27,43 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import Component from 'vue-class-component'
+import { Vue, Component, Prop } from 'vue-property-decorator'
 import moment from 'moment'
 
 import WeekDays from './WeekDays.vue'
 import logger from '@/logger'
 
 @Component({
-  props: {
-    date: {
-      type: Object,
-      required: true
-    },
-    valid: {
-      type: Object,
-      required: false,
-      default: () => moment.range('0001-01-01', '9999-12-31')
-    },
-    selected: {
-      type: Object,
-      required: false,
-      default: () => moment.range('0001-01-01', '0001-01-01')
-    },
-    highlighted: {
-      type: Object,
-      required: false,
-      default: () => moment.range('0001-01-01', '0001-01-01')
-    }
-  },
   components: {
     WeekDays
   }
 })
 export default class Month extends Vue {
-  get today() {
+  @Prop({ type: Object, required: true }) date
+  @Prop({
+    type: Object,
+    required: false,
+    default: () => moment.range('0001-01-01', '9999-12-31')
+  })
+  valid
+  @Prop({
+    type: Object,
+    required: false,
+    default: () => moment.range('0001-01-01', '0001-01-01')
+  })
+  selected
+  @Prop({
+    type: Object,
+    required: false,
+    default: () => moment.range('0001-01-01', '0001-01-01')
+  })
+  highlighted
+
+  get today () {
     return moment()
   }
 
-  get weeks() {
+  get weeks () {
     const result = []
     const dayOfMonth = moment(this.date)
       .startOf('month')
@@ -87,38 +85,33 @@ export default class Month extends Vue {
     return result
   }
 
-  isWeekWithinMonth(day, date) {
+  isWeekWithinMonth (day, date) {
     return (
       this.isSameMonth(moment(day).endOf('week'), date) ||
       this.isSameMonth(moment(day).startOf('week'), date)
     )
   }
 
-  isSameMonth(day, date) {
+  isSameMonth (day, date) {
     return moment(day).isSame(date, 'month')
   }
 
-  isWeekend(date) {
+  isWeekend (date) {
     return date.day() === 6 || date.day() === 0
   }
 
-  daySelected(day) {
+  daySelected (day) {
     logger.debug('Month.daySelected', day.format('YYYY-MM-DD'))
-    console.log(
-      day,
-      day.isAfter(this.today) && day.within(this.valid) && !this.isWeekend(day)
-    )
     if (
       day.isAfter(this.today) &&
       day.within(this.valid) &&
       !this.isWeekend(day)
     ) {
-      console.log(day)
       this.$emit('change', day)
     }
   }
 
-  dayHovered(day) {
+  dayHovered (day) {
     if (day.within(this.valid) && this.isSameMonth(day, this.weeks[2][0])) {
       this.$emit('hover', day)
     } else {

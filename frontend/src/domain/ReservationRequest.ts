@@ -1,7 +1,7 @@
 import { query } from '@/graphql'
 
 export class ReservationRequest {
-  static async fetchByUserId(
+  static async fetchByUserId (
     userId: number,
     from: Date = new Date(),
     fields: string[] = ['id', 'date', 'status']
@@ -22,7 +22,7 @@ export class ReservationRequest {
     return reservationRequests
   }
 
-  static async cancel(requestId: number): Promise<number | Error> {
+  static async cancel (requestId: number): Promise<number | Error> {
     return query(
       `mutation
       cancelReservationRequest($id: Int!) {
@@ -34,7 +34,7 @@ export class ReservationRequest {
     )
   }
 
-  static async createRequest(
+  static async createRequest (
     userId: number,
     dates: Date[],
     fields: string[] = ['id', 'date', 'status']
