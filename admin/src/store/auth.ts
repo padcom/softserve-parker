@@ -44,7 +44,6 @@ const mutations: MutationTree<AuthState> = {
 
 class API {
   static async login (email: string, password: string): Promise<string> {
-    console.log('email', email, 'password', password)
     const { data: token } = await axios.post('/login', { email, password })
     return token
   }

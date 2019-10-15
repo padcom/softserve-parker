@@ -48,12 +48,11 @@ export default class Login extends Vue {
   }
 
   async submit () {
-    console.log(this.email, this.password)
+    this.error = ''
     try {
       await this.login({ email: this.email, password: this.password })
       this.$router.push('/')
     } catch (e) {
-      console.log(JSON.stringify(e))
       this.error = e.response.data
     }
   }
