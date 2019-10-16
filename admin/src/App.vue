@@ -3,7 +3,7 @@
     <v-navigation-drawer app clipped v-if="isLoggedIn" v-model="drawer">
       <v-list dense>
         <template v-for="item in items">
-          <v-list-item :key="item.text" @click="navigateTo(item.url)">
+          <v-list-item :key="item.text" :to="item.url">
             <v-list-item-action>
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-item-action>
@@ -56,11 +56,5 @@ export default class App extends Vue {
   ]
 
   drawer = null
-
-  navigateTo (url: string) {
-    if (url !== this.$route.path) {
-      this.$router.push(url)
-    }
-  }
 }
 </script>
