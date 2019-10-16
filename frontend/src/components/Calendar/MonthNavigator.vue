@@ -4,26 +4,26 @@
       type="button"
       @click="prevViewMonth"
       :class="{
-      btn: true,
-      'month-navigator__navigator': true,
-      'month-navigator__navigator--left': true,
-      'month-navigator__navigator--enabled': canNavigatePrevMonth,
-    }"
+        btn: true,
+        'month-navigator__navigator': true,
+        'month-navigator__navigator--left': true,
+        'month-navigator__navigator--enabled': canNavigatePrevMonth
+      }"
     >
-      <span class="figure figure--v" />
+      <img :src="icons.left" />
     </a>
     <MonthName class="month-navigator__name" :value="value" />
     <a
       type="button"
       @click="nextViewMonth"
       :class="{
-      btn: true,
-      'month-navigator__navigator': true,
-      'month-navigator__navigator--right': true,
-      'month-navigator__navigator--enabled': canNavigateNextMonth,
-    }"
+        btn: true,
+        'month-navigator__navigator': true,
+        'month-navigator__navigator--right': true,
+        'month-navigator__navigator--enabled': canNavigateNextMonth
+      }"
     >
-      <span class="figure figure--v" />
+      <img :src="icons.right" />
     </a>
   </div>
 </template>
@@ -47,6 +47,11 @@ export default class MonthNavigator extends Vue {
     default: () => moment.range(null, null)
   })
   valid
+
+  icons = {
+    left: '/img/chevron-left.png',
+    right: '/img/chevron-right.png'
+  }
 
   get canNavigatePrevMonth () {
     return moment(this.value)
@@ -98,12 +103,10 @@ export default class MonthNavigator extends Vue {
 
     &--left {
       margin: -5px -7px 0 14px;
-      transform: rotate(90deg);
     }
 
     &--right {
       margin: -3px 16px 0 -6px;
-      transform: rotate(-90deg);
     }
 
     &--enabled {

@@ -9,9 +9,12 @@
       {
         'btn--full-width': fullWidth,
         'btn--outlined': outlined
-      },
+      }
     ]"
-  >{{ text }}</button>
+  >
+    <img class="btn__icon" v-if="icon" :src="icon" />
+    {{ text }}
+  </button>
 </template>
 
 <script>
@@ -26,6 +29,7 @@ export default class Btn extends Vue {
   @Prop({ type: String, default: 'black' }) color
   @Prop({ type: Boolean, default: false }) outlined
   @Prop({ type: Boolean, default: false }) fullWidth
+  @Prop({ type: [String, Boolean], default: false }) icon
 }
 </script>
 
@@ -64,6 +68,12 @@ export default class Btn extends Vue {
   &--full-width {
     display: block;
     width: 100%;
+  }
+
+  &__icon {
+    height: 20px;
+    vertical-align: middle;
+    margin-right: 5px;
   }
 }
 </style>

@@ -7,10 +7,20 @@
       </div>
 
       <div class="container">
-        <Calendar :show="showCalendar" bottom @save="calendarPickDate" />
+        <Calendar
+          v-if="showCalendar"
+          bottom
+          @save="calendarPickDate"
+          @close="openCalendar(false)"
+        />
         <div class="home-page__content__actions">
           <Btn outlined text="pick tomorrow" fullWidth @click="pickTomorrow" />
-          <Btn text="pick a parking date" fullWidth @click="openCalendar(true)" />
+          <Btn
+            icon="/img/calendar.png"
+            text="pick a parking date"
+            fullWidth
+            @click="openCalendar(true)"
+          />
         </div>
       </div>
     </div>
@@ -76,7 +86,6 @@ export default class Home extends Vue {
 
   pickTomorrow () {
     const tomorrowDate = moment().add(1, 'days')
-
     this.pickDate(tomorrowDate)
   }
 }
