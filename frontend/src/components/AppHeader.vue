@@ -8,7 +8,11 @@
       <img class="header__logo" src="/img/logo.jpg" alt="SoftServe Logo" />
     </figure>
 
-    <div class="header__right" />
+    <div class="header__right">
+      <button class="header__user-menu" title="user.email">
+        <Avatar />
+      </button>
+    </div>
   </header>
 </template>
 
@@ -16,7 +20,13 @@
 import { Component, Vue } from 'vue-property-decorator'
 import { AuthGetter } from '@/store/auth'
 
-@Component()
+import Avatar from '@/components/Avatar.vue'
+
+@Component({
+  components: {
+    Avatar
+  }
+})
 export default class AppHeader extends Vue {
   @AuthGetter isLoggedIn
 }
@@ -53,6 +63,11 @@ export default class AppHeader extends Vue {
 
   &__right {
     width: 20%;
+  }
+
+  &__user-menu {
+    background-color: white;
+    border: none;
   }
 }
 </style>
