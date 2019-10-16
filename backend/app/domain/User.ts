@@ -13,8 +13,17 @@ export class User {
   @Field(() => String)
   email: string
 
-  @Field(() => Boolean)
-  reserved: boolean
+  @Field(() => String)
+  firstName: string 
+
+  @Field(() => String)
+  lastName: string 
+
+  @Field(() => String)
+  plate: string 
+
+  @Field(() => Number)
+  phone?: number
 
   @Field(() => Date)
   created: Date
@@ -30,16 +39,26 @@ export class User {
   @Field(() => Boolean)
   enabled: boolean
 
-  roles: string
-
-  static async create (email: string, password: string) {
-    const [ result ] = await db.execute('INSERT INTO user (email, password) VALUES (?, ?)', [ email, password ]) as OkPacket[]
+  static async create (email: string, password: string, firstName: string, lastName: string, plate: string, phone: number = null) {
+    this.validateEmail(email)
+    const [ result ] = await db.execute(
+      `INSERT INTO user (email, password, firstName, lastName, plate, phone) 
+      VALUES (?, ?, ?, ?, ?, ?)`, [ email, password, firstName, lastName, plate, phone ]
+    ) as OkPacket[]
 
     if (result.affectedRows !== 1) {
       throw new Error('Unable to create new user - reason unknown')
     }
-
+    this.sendConfirmationEmail(email)
     return result.insertId
+  }
+
+  private static validateEmail (email: string): Boolean | Error{
+    return true;
+  }
+
+  private static sendConfirmationEmail (email: string) {
+
   }
 
   static async delete (email: string) {
