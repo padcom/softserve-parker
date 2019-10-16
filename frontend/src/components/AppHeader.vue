@@ -9,7 +9,7 @@
     </figure>
 
     <div class="header__right">
-      <button class="header__user-menu">
+      <button class="header__user-menu" v-if="isLoggedIn">
         <Avatar />
       </button>
     </div>
