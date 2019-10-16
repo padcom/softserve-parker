@@ -1,18 +1,29 @@
 <template>
-  <div v-if="show" class="calendar" :class="{
-    'calendar--bottom': bottom
-  }">
+  <div
+    class="calendar"
+    :class="{
+      'calendar--bottom': bottom
+    }"
+  >
     <MonthNavigator :value="date" @next="nextMonth" @previous="previousMonth" />
     <WeekDays />
     <Month :date="date" @change="daySelected" :selected="selectedDay" />
 
-    <Btn class="calendar__button" outlined text="add this date" fullWidth @click="saveDate" />
+    <Btn
+      class="calendar__button"
+      icon="/img/plus.png"
+      outlined
+      text="add this date"
+      fullWidth
+      @click="saveDate"
+    />
   </div>
 </template>
 
 <script>
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import moment from 'moment'
+import Defocuser from 'defocuser'
 
 import WeekDays from './WeekDays'
 import MonthNavigator from './MonthNavigator'
@@ -28,25 +39,37 @@ import Btn from '../Btn'
   }
 })
 export default class Calendar extends Vue {
-  @Prop({ type: Boolean, required: true }) show
   @Prop({ type: Boolean, required: false, default: false }) bottom
 
   date = moment().startOf('month')
   selectedDay = moment.range(moment().add(1, 'day'), moment().add(1, 'day'))
 
-  saveDate() {
+  mounted () {
+    const defocuser = new Defocuser()
+    let iteration = 0
+    defocuser.addElement(this.$el, 'bubbling', () => {
+      if (iteration > 0) this.closeCalendar()
+      iteration++
+    })
+  }
+
+  closeCalendar () {
+    this.$emit('close')
+  }
+
+  saveDate () {
     this.$emit('save', this.selectedDay.start)
   }
 
-  daySelected(day) {
+  daySelected (day) {
     this.selectedDay = moment.range(day, day)
   }
 
-  nextMonth() {
+  nextMonth () {
     this.date = moment(this.date).add(1, 'month')
   }
 
-  previousMonth() {
+  previousMonth () {
     this.date = moment(this.date).subtract(1, 'month')
   }
 }
