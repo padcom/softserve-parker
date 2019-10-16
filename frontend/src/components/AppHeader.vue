@@ -9,8 +9,9 @@
     </figure>
 
     <div class="header__right">
-      <button class="header__user-menu" v-if="isLoggedIn">
+      <button class="header__user-menu" v-if="isLoggedIn" @click="userMenu = true">
         <Avatar />
+        <PopupMenu v-if="userMenu" @close="userMenu = false" :links="userMenuLinks" />
       </button>
     </div>
   </header>
@@ -20,15 +21,24 @@
 import { Component, Vue } from 'vue-property-decorator'
 import { AuthGetter } from '@/store/auth'
 
+import Defocuser from 'defocuser'
+
 import Avatar from '@/components/Avatar.vue'
+import PopupMenu from '@/components/PopupMenu.vue'
 
 @Component({
   components: {
-    Avatar
+    Avatar,
+    PopupMenu
   }
 })
 export default class AppHeader extends Vue {
   @AuthGetter isLoggedIn
+
+  userMenu = false
+  userMenuLinks = [
+    { url: '/logout', title: 'Logout' }
+  ]
 }
 </script>
 
@@ -69,6 +79,8 @@ export default class AppHeader extends Vue {
   &__user-menu {
     background-color: white;
     border: none;
+    margin: 0;
+    padding: 0;
   }
 }
 </style>
