@@ -9,7 +9,7 @@
     </figure>
 
     <div class="header__right">
-      <button class="header__user-menu" title="user.email">
+      <button class="header__user-menu">
         <Avatar />
       </button>
     </div>
