@@ -10,11 +10,19 @@
         <Calendar
           v-if="showCalendar"
           bottom
+          :disabledDates="requestsDate"
+          :tomorrowAlreadyRequested="tomorrowAlreadyRequested"
           @save="calendarPickDate"
           @close="openCalendar(false)"
         />
         <div class="home-page__content__actions">
-          <Btn outlined text="pick tomorrow" fullWidth @click="pickTomorrow" />
+          <Btn
+            outlined
+            text="pick tomorrow"
+            fullWidth
+            @click="pickTomorrow"
+            :disabled="tomorrowAlreadyRequested"
+          />
           <Btn
             icon="/img/calendar.png"
             text="pick a parking date"
@@ -33,6 +41,7 @@ import moment from 'moment'
 
 import {
   ReservationRequestsState,
+  ReservationRequestsGetter,
   ReservationRequestsAction
 } from '@/store/reservationRequests'
 
@@ -56,6 +65,8 @@ export default class Home extends Vue {
   @ReservationRequestsState requests
   @ReservationRequestsAction getOwnRequests
   @ReservationRequestsAction createRequest
+  @ReservationRequestsGetter requestsDate
+  @ReservationRequestsGetter tomorrowAlreadyRequested
 
   async mounted () {
     try {
