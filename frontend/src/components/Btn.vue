@@ -1,5 +1,6 @@
 <template>
   <button
+    :disabled="disabled"
     :name="name"
     :type="type"
     @click="$emit('click')"
@@ -8,7 +9,8 @@
       `btn--${color}`,
       {
         'btn--full-width': fullWidth,
-        'btn--outlined': outlined
+        'btn--outlined': outlined,
+        'btn--disabled': disabled
       }
     ]"
   >
@@ -29,6 +31,7 @@ export default class Btn extends Vue {
   @Prop({ type: String, default: 'black' }) color
   @Prop({ type: Boolean, default: false }) outlined
   @Prop({ type: Boolean, default: false }) fullWidth
+  @Prop({ type: Boolean, default: false }) disabled
   @Prop({ type: [String, Boolean], default: false }) icon
 }
 </script>
@@ -68,6 +71,11 @@ export default class Btn extends Vue {
   &--full-width {
     display: block;
     width: 100%;
+  }
+
+  &--disabled {
+    color: $gray;
+    border-color: $gray;
   }
 
   &__icon {

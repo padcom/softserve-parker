@@ -1,5 +1,6 @@
 import { namespace } from 'vuex-class'
 import { GetterTree, MutationTree, ActionTree } from 'vuex'
+import moment from 'moment'
 import { RootState } from './root-state'
 import bus from '@/bus'
 import logger from '@/logger'
@@ -16,6 +17,19 @@ export interface ReservationRequestsState {
 
 const state: ReservationRequestsState = {
   requests: []
+}
+
+const getters: GetterTree<ReservationRequestsState, RootState> = {
+  requestsDate: state => {
+    return state.requests.map(request => request.date)
+  },
+  tomorrowAlreadyRequested: (_, getters) => {
+    return getters.requestsDate.some((disabledDate: Date) =>
+      moment()
+        .add(1, 'day')
+        .isSame(disabledDate, 'day')
+    )
+  }
 }
 
 const mutations: MutationTree<ReservationRequestsState> = {
@@ -75,11 +89,13 @@ const actions: ActionTree<ReservationRequestsState, RootState> = {
 export default {
   namespaced: true,
   state,
+  getters,
   mutations,
   actions
 }
 
 export const ReservationRequestsState = namespace('reservationRequests').State
+export const ReservationRequestsGetter = namespace('reservationRequests').Getter
 export const ReservationRequestsAction = namespace('reservationRequests').Action
 
 bus.on('reservation-requests-fetched', requests => {

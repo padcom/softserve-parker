@@ -10,14 +10,21 @@
           @click="daySelected(day)"
           @mouseenter="dayHovered(day)"
           :class="{
-              'month__day': true,
-              'month__day--disabled': day.isBefore(today) || isWeekend(day),
-              'month__day--highlighted': day.within(highlighted) && day.isSame(date, 'month'),
-              'month__day--selected': day.isSame(selected.start, 'day') || day.isSame(selected.end, 'day'),
-              'month__day--selected-start': day.isSame(selected.start, 'day') && day.isSame(date, 'month'),
-              'month__day--selected-end': day.isSame(selected.end, 'day') && day.isSame(date, 'month'),
-              'month__day--in-range': day.within(selected) && day.isSame(date, 'month'),
-              }"
+            month__day: true,
+            'month__day--disabled':
+              day.isBefore(today) || isWeekend(day) || isInDisabledDates(day),
+            'month__day--highlighted':
+              day.within(highlighted) && day.isSame(date, 'month'),
+            'month__day--selected':
+              day.isSame(selected.start, 'day') ||
+              day.isSame(selected.end, 'day'),
+            'month__day--selected-start':
+              day.isSame(selected.start, 'day') && day.isSame(date, 'month'),
+            'month__day--selected-end':
+              day.isSame(selected.end, 'day') && day.isSame(date, 'month'),
+            'month__day--in-range':
+              day.within(selected) && day.isSame(date, 'month')
+          }"
         >
           <span>{{ day.format('D') }}</span>
         </td>
@@ -58,6 +65,12 @@ export default class Month extends Vue {
     default: () => moment.range('0001-01-01', '0001-01-01')
   })
   highlighted
+  @Prop({
+    type: Array,
+    required: false,
+    default: () => []
+  })
+  disabledDates
 
   get today () {
     return moment()
@@ -92,6 +105,12 @@ export default class Month extends Vue {
     )
   }
 
+  isInDisabledDates (day) {
+    return this.disabledDates.some(disabledDate =>
+      day.isSame(disabledDate, 'day')
+    )
+  }
+
   isSameMonth (day, date) {
     return moment(day).isSame(date, 'month')
   }
@@ -105,7 +124,8 @@ export default class Month extends Vue {
     if (
       day.isAfter(this.today) &&
       day.within(this.valid) &&
-      !this.isWeekend(day)
+      !this.isWeekend(day) &&
+      !this.isInDisabledDates(day)
     ) {
       this.$emit('change', day)
     }

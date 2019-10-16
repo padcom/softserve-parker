@@ -7,7 +7,12 @@
   >
     <MonthNavigator :value="date" @next="nextMonth" @previous="previousMonth" />
     <WeekDays />
-    <Month :date="date" @change="daySelected" :selected="selectedDay" />
+    <Month
+      :date="date"
+      @change="daySelected"
+      :selected="selectedDay !== null ? selectedDay : undefined"
+      :disabledDates="disabledDates"
+    />
 
     <Btn
       class="calendar__button"
@@ -40,9 +45,12 @@ import Btn from '../Btn'
 })
 export default class Calendar extends Vue {
   @Prop({ type: Boolean, required: false, default: false }) bottom
+  @Prop({ type: Array, required: false, default: () => [] }) disabledDates
+  @Prop({ type: Boolean, required: false, default: false })
+  tomorrowAlreadyRequested
 
   date = moment().startOf('month')
-  selectedDay = moment.range(moment().add(1, 'day'), moment().add(1, 'day'))
+  selectedDay = null
 
   mounted () {
     const defocuser = new Defocuser()
@@ -51,6 +59,13 @@ export default class Calendar extends Vue {
       if (iteration > 0) this.closeCalendar()
       iteration++
     })
+
+    if (this.tomorrowAlreadyRequested === false) {
+      this.selectedDay = moment.range(
+        moment().add(1, 'day'),
+        moment().add(1, 'day')
+      )
+    }
   }
 
   closeCalendar () {
