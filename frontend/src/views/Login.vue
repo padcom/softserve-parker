@@ -1,7 +1,6 @@
 <template>
   <div class="login-page container">
     <section class="login-page__avatar">
-      <Avatar />
     </section>
 
     <section class="login-page__form">
