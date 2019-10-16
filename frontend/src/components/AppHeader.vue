@@ -1,7 +1,9 @@
 <template>
   <header class="header container">
     <figure class="header__menu-wrapper">
-      <img src="/img/menu.png" v-if="isLoggedIn"/>
+      <router-link :to="menuUrl">
+        <img :src="menuIcon" v-if="isLoggedIn"/>
+      </router-link>
     </figure>
 
     <figure class="header__logo-wrapper">
@@ -39,6 +41,19 @@ export default class AppHeader extends Vue {
   userMenuLinks = [
     { url: '/logout', title: 'Logout' }
   ]
+
+  icons = {
+    'home': { icon: '/img/faq.png', route: 'faq' },
+    'faq': { icon: '/img/menu.png', route: '/' }
+  }
+
+  get menuIcon () {
+    return this.icons[this.$route.name] ? this.icons[this.$route.name].icon : '/img/menu.png'
+  }
+
+  get menuUrl () {
+    return this.icons[this.$route.name] ? this.icons[this.$route.name].route : '/'
+  }
 }
 </script>
 
