@@ -43,8 +43,8 @@ export default class AppHeader extends Vue {
   ]
 
   icons = {
-    'home': { icon: '/img/faq.png', route: 'faq' },
-    'faq': { icon: '/img/menu.png', route: '/' }
+    'home': { icon: '/img/menu.png', route: 'faq' },
+    'faq': { icon: '/img/faq.png', route: '/' }
   }
 
   get menuIcon () {
