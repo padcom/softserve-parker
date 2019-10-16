@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import md5 from 'md5'
 import { Vue, Component } from 'vue-property-decorator'
 import { AuthState } from '@/store/auth'
 
@@ -13,7 +14,8 @@ export default class Avatar extends Vue {
   @AuthState user
 
   get avatar () {
-    return 'https://secure.gravatar.com/avatar/b02561c95ce6ce7c56547ca98f8f4c66?d=https://app.zeplin.io/img/emotars/emotarRobotFace.png'
+    const hash = md5(this.user.email.trim().toLowerCase())
+    return `https://secure.gravatar.com/avatar/${hash}?d=https://app.zeplin.io/img/emotars/emotarRobotFace.png`
   }
 }
 </script>

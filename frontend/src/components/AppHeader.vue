@@ -63,6 +63,7 @@ export default class AppHeader extends Vue {
 
   &__right {
     width: 20%;
+    text-align: right;
   }
 
   &__user-menu {
