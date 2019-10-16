@@ -11,6 +11,7 @@
     "release": "baibulo deploy --dir dist --version release --url http://localhost:3001/admin/"
   },
   "dependencies": {
+    "@mdi/font": "^4.5.95",
     "baibulo-deploy": "^1.0.6",
     "core-js": "^2.6.5",
     "vue": "^2.6.10",

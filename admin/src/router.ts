@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import Home from './views/Home.vue'
 import Login from './views/Login.vue'
+import ParkingStatus from './views/ParkingStatus.vue'
 
 import store from '@/store'
 import logger from '@/logger'
@@ -22,16 +22,40 @@ const router = new Router({
     },
     {
       path: '/',
-      name: 'home',
-      component: Home
+      name: 'parking-status',
+      component: ParkingStatus
     },
     {
-      path: '/about',
-      name: 'about',
+      path: '/parking-history',
+      name: 'parking-history',
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
+      component: () => import(/* webpackChunkName: "empty" */ './views/Empty.vue')
+    },
+    {
+      path: '/users',
+      name: 'users',
+      // route level code-splitting
+      // this generates a separate chunk (about.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import(/* webpackChunkName: "empty" */ './views/Empty.vue')
+    },
+    {
+      path: '/users-history',
+      name: 'users-history',
+      // route level code-splitting
+      // this generates a separate chunk (about.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import(/* webpackChunkName: "empty" */ './views/Empty.vue')
+    },
+    {
+      path: '/settings',
+      name: 'settings',
+      // route level code-splitting
+      // this generates a separate chunk (about.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import(/* webpackChunkName: "empty" */ './views/Empty.vue')
     }
   ]
 })
