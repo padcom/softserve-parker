@@ -34,6 +34,11 @@ const router = new Router({
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import(/* webpackChunkName: "faq" */ './views/Faq.vue')
+    },
+    {
+      path: '/singup',
+      name: 'singup',
+      component: () => import('./views/SingUp.vue')
     }
   ]
 })
@@ -45,7 +50,7 @@ router.beforeEach(async (to, from, next) => {
   if (to.name === 'login') {
     if (isLoggedIn) next('/')
     next()
-  } else if (!isLoggedIn) {
+  } else if (!isLoggedIn && to.name !== 'singup') {
     next('/login')
   } else if (to.name === 'logout' || to.name === '/logout') {
     await store.dispatch('auth/logout')

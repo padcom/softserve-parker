@@ -11,9 +11,10 @@
       fullWidth
     />
 
-    <div v-if="error" class="error">{{ error }}</div>
+    <p v-if="error" class="error">{{ error }}</p>
 
     <Btn name="login" type="submit" text="sign in" fullWidth />
+    <p class="signup-link text-center">No account? <router-link to="/singup">Sing up here</router-link></p>
   </form>
 </template>
 
@@ -60,9 +61,14 @@ export default class LoginForm extends Vue {
 </script>
 
 <style lang="scss">
-.error {
-  color: red;
-  margin: 20px 0;
-  font-weight: bold;
-}
+  .error {
+    color: red;
+    margin: 20px 0;
+    font-weight: bold;
+  }
+
+  .signup-link {
+    margin-top: 2rem;
+    margin-bottom: 0;
+  }
 </style>

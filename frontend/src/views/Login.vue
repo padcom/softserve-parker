@@ -1,14 +1,10 @@
 <template>
-  <div class="login-page container">
+  <section class="login-page container">
     <section class="login-page__avatar">
     </section>
-
-    <section class="login-page__form">
-      <LoginForm id="login" />
-    </section>
-
-    <router-link class="login-page__forgot-password-link" to="/forgot">Forgot password?</router-link>
-  </div>
+    <LoginForm id="login" class="login-page__form"/>
+    <router-link class="text-center" to="/forgot">Forgot password?</router-link>
+  </section>
 </template>
 
 <script>
