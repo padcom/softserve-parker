@@ -22,6 +22,7 @@
 </template>
 
 <script lang="ts">
+import moment from 'moment'
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 
@@ -50,7 +51,7 @@ export default class ParkingStatus extends Vue {
   search = ''
 
   get date () {
-    return new Date().toLocaleDateString('en')
+    return moment(new Date()).format('YYYY-MM-DD')
   }
 }
 </script>
