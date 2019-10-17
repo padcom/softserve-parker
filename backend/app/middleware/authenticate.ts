@@ -21,7 +21,7 @@ export async function login(req: Request, res: Response) {
   } catch (e) {
     logger.error(e)
     const status = getErrorStatus(e)
-    res.status(status).end(e.message)
+    res.status(status).end(getErrorMessage(e))
   }
 }
 
@@ -62,4 +62,17 @@ function getErrorStatus(e: Error): number {
   } else {
     return 500
   }
+}
+
+/**
+ * Filter messages like "incorrect password" and "User doesn't exist" and return secure message to frontend
+ * @param {Error} e
+ * @returns {string}
+ */
+function getErrorMessage(e: Error): string {
+    if (e.message === `User doesn't exist.` || e.message === `Incorrect password.`) {
+        return "Incorrect email or password."
+    } else {
+        return e.message;
+    }
 }
