@@ -1,8 +1,23 @@
 <template>
   <v-container fluid>
-    <h2>Parking status for {{ date }}; Places 68/70</h2>
-    <br/>
-    <v-data-table :headers="headers" :items="drivers" :items-per-page="10" class="elevation-1" />
+    <v-card>
+      <v-card-title>
+        Parking status for {{ date }}; Places 68/70
+        <v-spacer />
+        <v-text-field
+          v-model="search"
+          append-icon="mdi-filter"
+          label="Search"
+          single-line
+          hide-details />
+      </v-card-title>
+      <v-data-table class="elevation-1"
+        :headers="headers"
+        :items="drivers"
+        :search="search"
+        disable-pagination
+        hide-default-footer />
+    </v-card>
   </v-container>
 </template>
 
@@ -31,6 +46,8 @@ export default class ParkingStatus extends Vue {
     { id: 10, name: 'FirstName LastName', plate: 'Text value', phone: '1000' },
     { id: 11, name: 'FirstName LastName', plate: 'Text value', phone: '1000' }
   ]
+
+  search = ''
 
   get date () {
     return new Date().toLocaleDateString('en')
