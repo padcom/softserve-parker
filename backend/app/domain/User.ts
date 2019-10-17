@@ -2,6 +2,7 @@ import { Field, ID, ObjectType } from 'type-graphql'
 import { OkPacket, FieldPacket, RowDataPacket } from 'mysql'
 import { db } from '../db'
 import { logger } from '../logger'
+import { mailer } from '../mailer'
 
 @ObjectType({
   description: 'Object representing user.',
@@ -49,16 +50,25 @@ export class User {
     if (result.affectedRows !== 1) {
       throw new Error('Unable to create new user - reason unknown')
     }
-    this.sendConfirmationEmail(email)
+    await this.sendConfirmationEmail(email)
     return result.insertId
   }
-
-  private static validateEmail (email: string): Boolean | Error{
-    return true;
+ 
+  private static validateEmail (email: string): Error | void {
+    var re = /@softserveinc.com\s*$/;
+    if (!re.test(email.toLowerCase())) throw new Error('Invalid email address.')
   }
 
-  private static sendConfirmationEmail (email: string) {
+  private static async sendConfirmationEmail (email: string) {
+    const transporter = mailer()
+    let info = await transporter.sendMail({
+          from: 'ssparkertesting@gmail.com',
+          to: email,
+          subject: 'Email Confirmation', 
+          html: '<p>please confirm your email<p/>'
+      });
 
+      console.log(info)
   }
 
   static async delete (email: string) {
