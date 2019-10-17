@@ -36,6 +36,7 @@ export default class Login extends Vue {}
 
   &__forgot-password-link {
     text-align: center;
+    display: none;
   }
 
   &__avatar {
@@ -46,7 +47,7 @@ export default class Login extends Vue {}
   &__form {
     width: 100%;
     align-self: flex-end;
-    border-bottom: 1px solid $gray;
+    // border-bottom: 1px solid $gray;
     padding-bottom: 16px;
     margin-bottom: 16px;
   }
