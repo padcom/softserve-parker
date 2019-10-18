@@ -1,5 +1,9 @@
 <template>
   <div class="home-page">
+    <Modal v-if="showError" :actions="errorActions" @close="openError(false)">{{
+      errorMessage
+    }}</Modal>
+
     <Title borderBottom>Parking dates</Title>
     <div class="home-page__content">
       <div class="home-page__content__dates" v-if="loading === false">
@@ -49,18 +53,31 @@ import Title from '../components/Title'
 import Btn from '../components/Btn'
 import ParkingDates from '../components/ParkingDates/ParkingDates'
 import Calendar from '../components/Calendar/Calendar'
+import Modal from '../components/Modal'
 
 @Component({
   components: {
     Btn,
     Title,
     ParkingDates,
-    Calendar
+    Calendar,
+    Modal
   }
 })
 export default class Home extends Vue {
   loading = true
   showCalendar = false
+  showError = false
+  errorMessage = ''
+
+  errorActions = [
+    {
+      outlined: true,
+      fullWidth: true,
+      emitType: 'close',
+      text: 'close'
+    }
+  ]
 
   @ReservationRequestsState requests
   @ReservationRequestsAction getOwnRequests
@@ -81,12 +98,21 @@ export default class Home extends Vue {
     this.showCalendar = value
   }
 
+  openError (value) {
+    this.showError = value
+  }
+
+  setError (message) {
+    this.errorMessage = message
+    this.openError(true)
+  }
+
   async pickDate (date) {
     try {
       await this.createRequest(date)
       await this.getOwnRequests()
     } catch (error) {
-      // TODO
+      this.setError(error.message)
     }
   }
 
