@@ -1,8 +1,5 @@
 #!/bin/bash -e
 
-#GIT_DIR=/home/ubuntu/parker/.git
-#DEPLOYMENT_DIR=/var/lib/parker
-
 function deploy() {
   echo "================================================================"
   echo "Deploying admin branch $1 in version $2"
