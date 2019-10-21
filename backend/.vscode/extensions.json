@@ -1,6 +1,5 @@
 {
   "recommendations": [
-    "ms-vsliveshare.vsliveshare",
     "esbenp.prettier-vscode",
     "ms-vscode.vscode-typescript-tslint-plugin"
   ]
