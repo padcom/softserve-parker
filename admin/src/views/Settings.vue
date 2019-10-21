@@ -16,7 +16,7 @@
             v-model="cancelHour"
             label="Time when system closes the window for opportunity to cancel reservation and taking cancelled parking reservation" />
           <v-text-field type="number"
-            v-model.number="daysForCalclation"
+            v-model.number="daysForCalculation"
             label="The period of time that is taken into account when calculating the ranking" />
           <v-text-field type="number"
             v-model.number="daysForRequests"
@@ -33,6 +33,7 @@
 import { Vue, Component } from 'vue-property-decorator'
 
 import TimePicker from '@/components/TimePicker.vue'
+import { query } from '../graphql'
 
 @Component({
   components: {
@@ -43,8 +44,28 @@ export default class Settings extends Vue {
   numberOfParkingSpots = 50
   deadlineHour = '18:00'
   cancelHour = '07:00'
-  daysForCalclation = 90
+  daysForCalculation = 90
   daysForRequests = 30
+
+  async mounted () {
+    const { settings } = await query(`query {
+      settings {
+        numberOfParkingSpots
+        deadlineHour
+        cancelHour
+        daysForCalculation
+        daysForRequests
+      }
+    }`)
+
+    console.log('SETTINGS:', settings)
+
+    this.numberOfParkingSpots = settings.numberOfParkingSpots
+    this.deadlineHour = settings.deadlineHour
+    this.cancelHour = settings.cancelHour
+    this.daysForCalculation = settings.daysForCalculation
+    this.daysForRequests = settings.daysForRequests
+  }
 
   submit () {
     console.log('Saving settings..')
