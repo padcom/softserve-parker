@@ -6,6 +6,13 @@ body {
   font-family: $open-sans;
 }
 
+#app {
+  @media (min-width: $md-viewport) {
+    max-width: $desktop-width;
+    margin: 0 auto;
+  }
+}
+
 .container {
   padding: 0 15px;
   width: 100%;

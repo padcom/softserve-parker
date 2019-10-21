@@ -1,10 +1,7 @@
 <template>
-  <div
-    class="calendar"
-    :class="{
+  <div class="calendar" :class="{
       'calendar--bottom': bottom
-    }"
-  >
+    }">
     <MonthNavigator :value="date" @next="nextMonth" @previous="previousMonth" />
     <WeekDays />
     <Month
@@ -52,7 +49,7 @@ export default class Calendar extends Vue {
   date = moment().startOf('month')
   selectedDay = null
 
-  mounted () {
+  mounted() {
     const defocuser = new Defocuser()
     let iteration = 0
     defocuser.addElement(this.$el, 'bubbling', () => {
@@ -68,29 +65,31 @@ export default class Calendar extends Vue {
     }
   }
 
-  closeCalendar () {
+  closeCalendar() {
     this.$emit('close')
   }
 
-  saveDate () {
+  saveDate() {
     this.$emit('save', this.selectedDay.start)
   }
 
-  daySelected (day) {
+  daySelected(day) {
     this.selectedDay = moment.range(day, day)
   }
 
-  nextMonth () {
+  nextMonth() {
     this.date = moment(this.date).add(1, 'month')
   }
 
-  previousMonth () {
+  previousMonth() {
     this.date = moment(this.date).subtract(1, 'month')
   }
 }
 </script>
 
 <style lang="scss" scoped>
+@import '../../styles/variables';
+
 .calendar {
   background-color: white;
   box-shadow: 0 8px 16px rgba(65, 64, 69, 0.3);
@@ -100,7 +99,10 @@ export default class Calendar extends Vue {
     position: fixed;
     width: calc(100% - 60px);
     bottom: 15px;
-    left: 15px;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    max-width: $desktop-width;
   }
 
   &__button {
