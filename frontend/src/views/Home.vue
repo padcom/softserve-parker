@@ -54,6 +54,7 @@ import Btn from '../components/Btn'
 import ParkingDates from '../components/ParkingDates/ParkingDates'
 import Calendar from '../components/Calendar/Calendar'
 import Modal from '../components/Modal'
+// import FreeParkingSpot from '../components/FreeParkingSpot'
 
 @Component({
   components: {
@@ -62,6 +63,7 @@ import Modal from '../components/Modal'
     ParkingDates,
     Calendar,
     Modal
+    // FreeParkingSpot
   }
 })
 export default class Home extends Vue {
@@ -84,7 +86,7 @@ export default class Home extends Vue {
   @ReservationRequestsGetter requestsDate
   @ReservationRequestsGetter tomorrowAlreadyRequested
 
-  async mounted () {
+  async mounted() {
     try {
       await this.getOwnRequests()
       this.loading = false
@@ -93,23 +95,23 @@ export default class Home extends Vue {
     }
   }
 
-  openCalendar () {
+  openCalendar() {
     this.showCalendar = true
   }
 
-  closeCalendar () {
+  closeCalendar() {
     this.showCalendar = false
   }
 
-  clearError () {
+  clearError() {
     this.error = ''
   }
 
-  setError (error) {
+  setError(error) {
     this.error = error
   }
 
-  async pickDate (date) {
+  async pickDate(date) {
     try {
       this.clearError()
       await this.createRequest(date)
@@ -119,12 +121,12 @@ export default class Home extends Vue {
     }
   }
 
-  calendarPickDate (date) {
+  calendarPickDate(date) {
     this.pickDate(date)
     this.closeCalendar()
   }
 
-  pickTomorrow () {
+  pickTomorrow() {
     const tomorrowDate = moment().add(1, 'days')
     this.pickDate(tomorrowDate)
   }
