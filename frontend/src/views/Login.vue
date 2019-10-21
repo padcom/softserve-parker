@@ -47,7 +47,6 @@ export default class Login extends Vue {}
   &__form {
     width: 100%;
     align-self: flex-end;
-    // border-bottom: 1px solid $gray;
     padding-bottom: 16px;
     margin-bottom: 16px;
   }

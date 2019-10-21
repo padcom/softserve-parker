@@ -46,8 +46,5 @@ export default class Faq extends Vue {
     margin-top: 0;
     margin-bottom: 0;
   }
-
-  &__paragraph {
-  }
 }
 </style>

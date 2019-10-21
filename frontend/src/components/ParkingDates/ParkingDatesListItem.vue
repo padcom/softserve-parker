@@ -82,7 +82,7 @@ export default class ParkingDatesListItem extends Vue {
 @import '../../styles/variables';
 
 .reservation {
-  background-color: $darkHotPink;
+  background-color: $color-danger;
   position: relative;
 
   &__background {

@@ -78,11 +78,9 @@ export default class MonthNavigator extends Vue {
 .month-navigator {
   display: flex;
   align-content: center;
-
   font-size: 14px;
   font-weight: 400;
   text-size-adjust: 100%;
-
   -webkit-tap-highlight-color: transparent;
 
   &__name {
@@ -92,7 +90,6 @@ export default class MonthNavigator extends Vue {
   &__navigator {
     color: #a9a9a9;
     padding: 4px 2px;
-    /* z-index: $dialog-z-index + 1; */
     cursor: pointer;
     font-size: 12px;
 
