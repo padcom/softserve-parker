@@ -1,12 +1,8 @@
 <template>
   <div id="app">
     <AppHeader />
-    <!-- <div id="nav" v-if="isLoggedIn">
-      <router-link to="/">Home</router-link>|
-      <router-link to="/logout">Logout</router-link>
-    </div>-->
-
     <router-view />
+    <img v-if="!loading" src="/img/loading.gif">
   </div>
 </template>
 
@@ -16,6 +12,7 @@ import { Component } from 'vue-property-decorator'
 
 import AppHeader from './components/AppHeader'
 import { AuthGetter } from '@/store/auth'
+import { UIState, UIAction } from '@/store/ui'
 
 @Component({
   components: {
@@ -24,6 +21,18 @@ import { AuthGetter } from '@/store/auth'
 })
 export default class App extends Vue {
   @AuthGetter isLoggedIn
+  @UIState loading
+  @UIAction startLoading
+  @UIAction stopLoading
+
+  mounted() {
+    this.$bus.on('request-begin', () => {
+      this.startLoading()
+    })
+    this.$bus.on('request-end', () => {
+      this.stopLoading()
+    })
+  }
 }
 </script>
 
