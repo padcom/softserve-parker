@@ -1,13 +1,19 @@
 <template>
-  <div class="parking-dates">
+  <div
+    class="parking-dates"
+    :class="{ 'parking-dates--empty': requests.length === 0 }"
+  >
     <div v-if="requests.length === 0" class="parking-dates__empty-box">
       <p class="parking-dates__empty-box__text">
-        Parking dates picked by you,
-        will appear here.
+        Parking dates picked by you, will appear here.
       </p>
     </div>
 
-    <ParkingDatesListItem v-for="request in requests" :key="request.id" :request="request" />
+    <ParkingDatesListItem
+      v-for="request in requests"
+      :key="request.id"
+      :request="request"
+    />
   </div>
 </template>
 
@@ -35,8 +41,11 @@ export default class ParkingDates extends Vue {
   width: 100%;
   overflow: hidden;
 
+  &--empty {
+    justify-content: center;
+  }
+
   &__empty-box {
-    align-self: center;
     margin: 0 auto;
     max-width: 70%;
 
