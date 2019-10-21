@@ -28,34 +28,22 @@ const router = new Router({
     {
       path: '/parking-history',
       name: 'parking-history',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import(/* webpackChunkName: "empty" */ './views/Empty.vue')
     },
     {
       path: '/users',
       name: 'users',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import(/* webpackChunkName: "empty" */ './views/Empty.vue')
     },
     {
       path: '/users-history',
       name: 'users-history',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import(/* webpackChunkName: "empty" */ './views/Empty.vue')
     },
     {
       path: '/settings',
       name: 'settings',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "empty" */ './views/Empty.vue')
+      component: () => import(/* webpackChunkName: "settings" */ './views/Settings.vue')
     }
   ]
 })
