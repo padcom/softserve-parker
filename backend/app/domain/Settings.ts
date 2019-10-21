@@ -24,15 +24,12 @@ export class Settings {
   static async retrieve () {
     const [ results ] = await db.execute(`SELECT name, value FROM settings`) as RowDataPacket[][]
     const settings = results.reduce((acc, value) => Object.assign({}, acc, { [value.name]: value.value }), {})
-    console.log('settings: ', settings)
 
     return settings
   }
 
   static async update (setting, value) {
     const [ result ] = await db.execute('UPDATE settings SET value=? WHERE name=?', [ value.toString(), setting ]) as OkPacket[]
-
-    console.log('RESULT', result)
 
     if (result.affectedRows !== 1) {
       throw new Error('Unable to update setting - reason unknown')

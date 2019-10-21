@@ -22,6 +22,7 @@ const pool = mysql.createPool({
   port: (MYSQL_PORT as unknown) as number,
 })
 
+// @ts-ignore
 export const db = pool.promise()
 
 // Test for common db connection errors then quit

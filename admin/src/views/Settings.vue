@@ -35,6 +35,8 @@ import { Vue, Component } from 'vue-property-decorator'
 import TimePicker from '@/components/TimePicker.vue'
 import { query } from '../graphql'
 
+import { Settings as SettingsInterface, SettingsAPI } from '@/domain/Settings'
+
 @Component({
   components: {
     TimePicker
@@ -48,16 +50,7 @@ export default class Settings extends Vue {
   daysForRequests = 30
 
   async mounted () {
-    const { settings } = await query(`query {
-      settings {
-        numberOfParkingSpots
-        deadlineHour
-        cancelHour
-        daysForCalculation
-        daysForRequests
-      }
-    }`)
-
+    const settings = await (new SettingsAPI().fetchSettings())
     console.log('SETTINGS:', settings)
 
     this.numberOfParkingSpots = settings.numberOfParkingSpots
@@ -68,7 +61,14 @@ export default class Settings extends Vue {
   }
 
   submit () {
-    console.log('Saving settings..')
+    const api = new SettingsAPI()
+    Promise.all([
+      api.updateNumberOfParkingSpots(this.numberOfParkingSpots),
+      api.updateDeadlineHour(this.deadlineHour),
+      api.updateCancelHour(this.cancelHour),
+      api.updateDaysForCalculation(this.daysForCalculation),
+      api.updateDaysForRequests(this.daysForRequests)
+    ])
   }
 }
 </script>

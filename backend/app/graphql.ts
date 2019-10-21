@@ -38,7 +38,6 @@ export const graphql = schema.then((resolvedSchema): ApolloServer => {
     },
 
     async context ({ req }) {
-      console.log('CONTEXT', req.headers.authorization)
       const [ , token ] = req.headers.authorization.split(' ')
       const data = jwt.decode(token) as TokenData
 

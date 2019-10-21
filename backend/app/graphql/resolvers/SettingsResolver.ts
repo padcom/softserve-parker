@@ -18,17 +18,17 @@ export class SettingsResolver {
   }
 
   @Authorized('admin')
-  @Mutation(() => Number)
+  @Mutation(() => String)
   async setDeadlineHour(
-    @Arg('hour', () => Int!) hour: string
+    @Arg('hour', () => String!) hour: string
   ) {
     return Settings.update('deadlineHour', hour)
   }
 
   @Authorized('admin')
-  @Mutation(() => Number)
+  @Mutation(() => String)
   async setCancelHour(
-    @Arg('hour', () => Int!) hour: string
+    @Arg('hour', () => String!) hour: string
   ) {
     return Settings.update('cancelHour', hour)
   }
