@@ -1,11 +1,18 @@
 import lodashGet from 'lodash.get'
+import jwt from 'jsonwebtoken'
 import { ApolloServer } from 'apollo-server-express'
 import { GraphQLFormattedError } from 'graphql'
 
 import { schema } from './graphql/schema'
 import { logger } from './logger'
+import { GraphQLContext } from './graphql/context'
 
 const { NODE_ENV } = process.env
+
+export interface TokenData {
+  userID: string
+  email: string
+}
 
 export const graphql = schema.then((resolvedSchema): ApolloServer => {
   const server = new ApolloServer({
@@ -29,6 +36,14 @@ export const graphql = schema.then((resolvedSchema): ApolloServer => {
       logger.error(error)
       return error
     },
+
+    async context ({ req }) {
+      console.log('CONTEXT', req.headers.authorization)
+      const [ , token ] = req.headers.authorization.split(' ')
+      const data = jwt.decode(token) as TokenData
+
+      return { user: data.email } as GraphQLContext
+    }
   })
 
   return server

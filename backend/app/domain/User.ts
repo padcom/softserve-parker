@@ -28,6 +28,8 @@ export class User {
   @Field(() => Boolean)
   enabled: boolean
 
+  roles: string
+
   static async create (email: string, password: string) {
     const [ result ] = await db.execute('INSERT INTO user (email, password) VALUES (?, ?)', [ email, password ]) as OkPacket[]
 
@@ -50,7 +52,7 @@ export class User {
     return result.affectedRows
   }
 
-  static async getByEmail(email: string) {
+  static async getByEmail(email: string): Promise<User> {
     const [ rows ]: [ RowDataPacket[], FieldPacket[] ] = await db.execute(
       'SELECT * FROM user WHERE email = ?',
       [ email ]

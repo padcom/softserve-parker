@@ -1,4 +1,5 @@
 import { buildSchema } from 'type-graphql'
+import { authChecker } from './authChecker'
 import { ParkingSpotsResolver } from './resolvers/ParkingSpotsResolver'
 import { UserResolver } from './resolvers/UserResolver'
 import { ReservationRequestResolver } from './resolvers/ReservationRequestResolver'
@@ -11,4 +12,4 @@ const resolvers = [
   ReservationRequestResolver
 ]
 
-export const schema = buildSchema({ resolvers })
+export const schema = buildSchema({ resolvers, authChecker })
