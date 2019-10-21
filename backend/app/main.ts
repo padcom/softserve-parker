@@ -22,11 +22,13 @@ async function main () {
   app.use('/logout', logout)
 
   const server = await graphql
+  // @ts-ignore
   app.use('/graphql', isAuthorized, server.getMiddleware({ path: '/' }))
   app.use(baibulo({ root: '/tmp/parker-frontend', download: true, upload: false }))
 
   try {
     app.listen(PORT, () => {
+      // @ts-ignore
       logger.info(`Success! Parker backend started in ${NODE_ENV.toUpperCase()} mode at http://127.0.0.1:${PORT}${server.graphqlPath }`)
     })
   } catch (e) {

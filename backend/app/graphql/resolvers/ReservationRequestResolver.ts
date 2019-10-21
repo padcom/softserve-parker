@@ -7,9 +7,6 @@ import {
 } from 'type-graphql'
 import { ReservationRequest } from '../../domain/ReservationRequest'
 
-  
-  
-    
 @Resolver(ReservationRequest)
 export class ReservationRequestResolver {
   @Query(() => [ReservationRequest], {
@@ -54,4 +51,3 @@ export class ReservationRequestResolver {
     return ReservationRequest.deleteById(id)
   }
 }
-    

@@ -33,3 +33,4 @@ export const graphql = schema.then((resolvedSchema): ApolloServer => {
 
   return server
 })
+.catch(e => console.error(e))
