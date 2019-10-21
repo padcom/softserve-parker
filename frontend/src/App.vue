@@ -25,7 +25,7 @@ export default class App extends Vue {
   @UIAction startLoading
   @UIAction stopLoading
 
-  mounted() {
+  mounted () {
     this.$bus.on('request-begin', () => {
       this.startLoading()
     })
