@@ -72,11 +72,11 @@ export default class Month extends Vue {
   })
   disabledDates
 
-  get today () {
+  get today() {
     return moment()
   }
 
-  get weeks () {
+  get weeks() {
     const result = []
     const dayOfMonth = moment(this.date)
       .startOf('month')
@@ -98,28 +98,28 @@ export default class Month extends Vue {
     return result
   }
 
-  isWeekWithinMonth (day, date) {
+  isWeekWithinMonth(day, date) {
     return (
       this.isSameMonth(moment(day).endOf('week'), date) ||
       this.isSameMonth(moment(day).startOf('week'), date)
     )
   }
 
-  isInDisabledDates (day) {
+  isInDisabledDates(day) {
     return this.disabledDates.some(disabledDate =>
       day.isSame(disabledDate, 'day')
     )
   }
 
-  isSameMonth (day, date) {
+  isSameMonth(day, date) {
     return moment(day).isSame(date, 'month')
   }
 
-  isWeekend (date) {
+  isWeekend(date) {
     return date.day() === 6 || date.day() === 0
   }
 
-  daySelected (day) {
+  daySelected(day) {
     logger.debug('Month.daySelected', day.format('YYYY-MM-DD'))
     if (
       day.isAfter(this.today) &&
@@ -131,7 +131,7 @@ export default class Month extends Vue {
     }
   }
 
-  dayHovered (day) {
+  dayHovered(day) {
     if (day.within(this.valid) && this.isSameMonth(day, this.weeks[2][0])) {
       this.$emit('hover', day)
     } else {
@@ -169,7 +169,7 @@ export default class Month extends Vue {
     padding: 8px;
 
     &--disabled {
-      color: #787878;
+      color: #e0e0e0;
       font-weight: 300;
       cursor: not-allowed;
     }
