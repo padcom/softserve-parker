@@ -1,8 +1,8 @@
 <template>
   <div class="home-page">
-    <Modal v-if="showError" :actions="errorActions" @close="openError(false)">{{
-      errorMessage
-    }}</Modal>
+    <Modal v-if="error" :actions="errorActions" @close="clearError">
+      {{ errorMessage }}
+    </Modal>
 
     <Title borderBottom>Parking dates</Title>
     <div class="home-page__content">
@@ -17,7 +17,7 @@
           :disabledDates="requestsDate"
           :tomorrowAlreadyRequested="tomorrowAlreadyRequested"
           @save="calendarPickDate"
-          @close="openCalendar(false)"
+          @close="closeCalendar"
         />
         <div class="home-page__content__actions">
           <Btn
@@ -31,7 +31,7 @@
             icon="/img/calendar.png"
             text="pick a parking date"
             fullWidth
-            @click="openCalendar(true)"
+            @click="openCalendar"
           />
         </div>
       </div>
@@ -67,15 +67,14 @@ import Modal from '../components/Modal'
 export default class Home extends Vue {
   loading = true
   showCalendar = false
-  showError = false
-  errorMessage = ''
+  error = ''
 
   errorActions = [
     {
       outlined: true,
       fullWidth: true,
       emitType: 'close',
-      text: 'close'
+      text: 'Close'
     }
   ]
 
@@ -89,26 +88,30 @@ export default class Home extends Vue {
     try {
       await this.getOwnRequests()
       this.loading = false
-    } catch (error) {
+    } catch (e) {
       this.loading = false
     }
   }
 
-  openCalendar (value) {
-    this.showCalendar = value
+  openCalendar () {
+    this.showCalendar = true
   }
 
-  openError (value) {
-    this.showError = value
+  closeCalendar () {
+    this.showCalendar = false
   }
 
-  setError (message) {
-    this.errorMessage = message
-    this.openError(true)
+  clearError () {
+    this.error = ''
+  }
+
+  setError (error) {
+    this.error = error
   }
 
   async pickDate (date) {
     try {
+      this.clearError()
       await this.createRequest(date)
       await this.getOwnRequests()
     } catch (error) {
@@ -118,7 +121,7 @@ export default class Home extends Vue {
 
   calendarPickDate (date) {
     this.pickDate(date)
-    this.openCalendar(false)
+    this.closeCalendar()
   }
 
   pickTomorrow () {
