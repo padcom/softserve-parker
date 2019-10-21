@@ -51,7 +51,6 @@ export default class Settings extends Vue {
 
   async mounted () {
     const settings = await (new SettingsAPI().fetchSettings())
-    console.log('SETTINGS:', settings)
 
     this.numberOfParkingSpots = settings.numberOfParkingSpots
     this.deadlineHour = settings.deadlineHour
