@@ -1,6 +1,5 @@
 <template>
   <div class="faq-page">
-    <p>Your ranking: <strong>{{ ranking }}</strong></p>
     <h5>FAQ</h5>
     <h5 class="faq-page__header">1. How does Parker work?</h5>
     <p class="faq-page__paragraph">
@@ -32,9 +31,7 @@ import { Vue, Component } from 'vue-property-decorator'
   components: {
   }
 })
-export default class Faq extends Vue {
-  ranking = 'unknown'
-}
+export default class Faq extends Vue {}
 </script>
 
 <style lang="scss">
