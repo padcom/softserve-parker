@@ -26,6 +26,7 @@
         </v-form>
       </v-card-text>
     </v-card>
+    <Information ref="info" />
   </v-container>
 </template>
 
@@ -33,13 +34,15 @@
 import { Vue, Component } from 'vue-property-decorator'
 
 import TimePicker from '@/components/TimePicker.vue'
+import Information from '@/components/Information.vue'
 import { query } from '../graphql'
 
 import { Settings as SettingsInterface, SettingsAPI } from '@/domain/Settings'
 
 @Component({
   components: {
-    TimePicker
+    TimePicker,
+    Information
   }
 })
 export default class Settings extends Vue {
@@ -59,15 +62,22 @@ export default class Settings extends Vue {
     this.daysForRequests = settings.daysForRequests
   }
 
-  submit () {
+  async submit () {
     const api = new SettingsAPI()
-    Promise.all([
-      api.updateNumberOfParkingSpots(this.numberOfParkingSpots),
-      api.updateDeadlineHour(this.deadlineHour),
-      api.updateCancelHour(this.cancelHour),
-      api.updateDaysForCalculation(this.daysForCalculation),
-      api.updateDaysForRequests(this.daysForRequests)
-    ])
+    try {
+      await Promise.all([
+        api.updateNumberOfParkingSpots(this.numberOfParkingSpots),
+        api.updateDeadlineHour(this.deadlineHour),
+        api.updateCancelHour(this.cancelHour),
+        api.updateDaysForCalculation(this.daysForCalculation),
+        api.updateDaysForRequests(this.daysForRequests)
+      ])
+      // @ts-ignore
+      this.$refs.info.showInfo('Settings saved')
+    } catch (e) {
+      // @ts-ignore
+      this.$refs.info.showError(e.message as string)
+    }
   }
 }
 </script>
