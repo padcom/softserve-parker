@@ -22,7 +22,7 @@ export default class Title extends Vue {
   font-weight: $proxima-nova-extra-bold;
   font-size: 14px;
   text-transform: uppercase;
-  padding: 15px;
+  padding: 15px 15px 15px 20px;
   margin: 0;
 
   &--border-bottom {
