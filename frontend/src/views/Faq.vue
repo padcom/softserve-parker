@@ -39,7 +39,7 @@ export default class Faq extends Vue {
 
 <style lang="scss">
 .faq-page {
-  margin: 12px;
+  margin: 15px;
   font-size: 13px;
 
   &__header {
