@@ -1,5 +1,6 @@
 <template>
   <div class="popup-menu">
+    <Ranking :userRank="259" :totalRank="5381" />
     <router-link v-for="link in links" :key="link.url" :to="link.url" @click.native.stop="closePopup">
       {{ link.title }}
     </router-link>
@@ -10,7 +11,13 @@
 import { Component, Vue, Prop } from 'vue-property-decorator'
 import Defocuser from 'defocuser'
 
-@Component()
+import Ranking from '@/components/Ranking.vue'
+
+@Component({
+  components: {
+    Ranking
+  }
+})
 export default class PopupMenu extends Vue {
   @Prop({ type: Array, required: true }) links
 
@@ -37,9 +44,7 @@ export default class PopupMenu extends Vue {
   font-size: 12pt;
   box-shadow: 0 -8pt 20pt 0 rgba(0,0,0,0.1);
   height: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  min-width: 120px;
   margin-right: 15px;
   margin-top: 5px;
   background-color: #fff;
@@ -47,6 +52,6 @@ export default class PopupMenu extends Vue {
   z-index: 1;
   right: 0;
   line-height: 20pt;
-  padding: 5px 15px;
+  padding: 12px 15px;
 }
 </style>
