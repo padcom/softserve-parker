@@ -8,6 +8,7 @@ import { graphql } from './graphql'
 import { logger } from './logger'
 import { isAuthorized } from './middleware/authorization'
 import { login, logout } from './middleware/authenticate'
+import { delay } from './middleware/delay'
 
 const { NODE_ENV, PORT = 3000 } = process.env
 
@@ -21,9 +22,11 @@ async function main () {
   app.use('/login', login)
   app.use('/logout', logout)
 
+  const graphQlDelay = NODE_ENV === 'production' ? 100 : 1000
+
   const server = await graphql
   // @ts-ignore
-  app.use('/graphql', isAuthorized, server.getMiddleware({ path: '/' }))
+  app.use('/graphql', isAuthorized, delay(graphQlDelay), server.getMiddleware({ path: '/' }))
   app.use(baibulo({ root: '/tmp/parker-frontend', download: true, upload: false }))
 
   try {
