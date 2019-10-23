@@ -14,7 +14,7 @@
     <p v-if="error" class="error">{{ error }}</p>
 
     <Btn name="login" type="submit" text="sign in" fullWidth />
-    <p class="signup-link text-center">No account? <router-link to="/singup">Sing up here</router-link></p>
+    <p class="signup-link text-center">No account? <router-link to="/signup">Sign up here</router-link></p>
   </form>
 </template>
 

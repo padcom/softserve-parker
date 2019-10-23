@@ -27,7 +27,7 @@ export class UserResolver {
     lastName: string, 
     @Arg('plate', () => String!)
     plate: string,
-    @Arg('phone', () => Int, {nullable: true})
+    @Arg('phone', () => Int!)
     phone: number
   ) {
     return User.create(email, password, firstName, lastName, plate, phone)

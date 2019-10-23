@@ -25,6 +25,18 @@ export async function login(req: Request, res: Response) {
   }
 }
 
+export async function signUp(req: Request, res: Response) {
+  try {
+    const { firstName, lastName, email, plate, phone, password } = req.body
+    const result = await User.create(email, password, firstName, lastName, plate, phone)
+    res.send({data: { userId: result}})
+  } catch (e) {
+    logger.error(e)
+    const status = getErrorStatus(e)
+    res.status(status).end(e.message)
+  }
+}
+
 export async function logout (req: Request, res: Response) {
   try {
     await Session.delete(getTokenFromRequest(req))

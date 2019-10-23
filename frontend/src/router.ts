@@ -36,9 +36,9 @@ const router = new Router({
       component: () => import(/* webpackChunkName: "faq" */ './views/Faq.vue')
     },
     {
-      path: '/singup',
-      name: 'singup',
-      component: () => import('./views/SingUp.vue')
+      path: '/signup',
+      name: 'signup',
+      component: () => import('./views/SignUp.vue')
     }
   ]
 })
@@ -50,7 +50,7 @@ router.beforeEach(async (to, from, next) => {
   if (to.name === 'login') {
     if (isLoggedIn) next('/')
     next()
-  } else if (!isLoggedIn && to.name !== 'singup') {
+  } else if (!isLoggedIn && to.name !== 'signup') {
     next('/login')
   } else if (to.name === 'logout' || to.name === '/logout') {
     await store.dispatch('auth/logout')

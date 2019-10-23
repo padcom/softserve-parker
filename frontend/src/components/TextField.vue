@@ -6,13 +6,16 @@
       :class="[
       'text-field__input',
       {
-        'text-field--full-width': fullWidth
+        'text-field--full-width': fullWidth,
+        'text-field__input--empty': isEmpty,
+        'text-field__input--invalid': isInvalid
       }
     ]"
       :placeholder="placeholder"
       :value="value"
       @input="$emit('input', $event.target.value)"
     />
+    <img :src="iconSrc" v-if="iconSrc" v-on:click="iconClb" class="text-field__icon"/>
   </div>
 </template>
 
@@ -28,6 +31,10 @@ export default class TextField extends Vue {
   @Prop(String) name
   @Prop(String) label
   @Prop({ type: Boolean, default: false }) fullWidth
+  @Prop({ type: Boolean, default: false }) isEmpty
+  @Prop({ type: Boolean, default: false }) isInvalid
+  @Prop({ type: String }) iconSrc
+  @Prop({ type: Function, default: () => {} }) iconClb
   @Model('input', { type: String }) value
 }
 </script>
@@ -38,6 +45,9 @@ export default class TextField extends Vue {
 .text-field {
   margin-bottom: 20px;
   width: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
 
   &__input {
     padding: 16px;
@@ -52,6 +62,19 @@ export default class TextField extends Vue {
     &:focus {
       outline: none;
     }
+
+    &--empty {
+      border-color: gray;
+    }
+
+    &--invalid {
+      border-color: red;
+    }
+  }
+
+  &__icon {
+    position: absolute;
+    right: 1.3rem;
   }
 }
 </style>

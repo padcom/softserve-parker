@@ -7,8 +7,8 @@ import 'reflect-metadata' // required for typegraphql
 import { graphql } from './graphql'
 import { logger } from './logger'
 import { isAuthorized } from './middleware/authorization'
-import { login, logout } from './middleware/authenticate'
 import { delay } from './middleware/delay'
+import { login, logout, signUp } from './middleware/authenticate'
 
 const { NODE_ENV, PORT = 3000 } = process.env
 
@@ -21,6 +21,7 @@ async function main () {
 
   app.use('/login', login)
   app.use('/logout', logout)
+  app.use('/signup', signUp)
 
   const graphQlDelay = NODE_ENV === 'production' ? 100 : 1000
 

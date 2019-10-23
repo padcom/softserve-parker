@@ -11,6 +11,7 @@ module.exports = {
     proxy: {
       '/login': { target: 'http://localhost:3000/login' },
       '/logout': { target: 'http://localhost:3000/logout' },
+      '/signup': { target: 'http://localhost:3000/signup' },
       '/graphql': { target: 'http://localhost:3000/graphql' }
     }
   }
