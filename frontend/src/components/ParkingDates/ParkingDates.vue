@@ -52,7 +52,7 @@ export default class ParkingDates extends Vue {
     &__text {
       font-size: 16px;
       line-height: 24px;
-      color: $light-gray;
+      color: $color-light-gray;
       text-align: center;
     }
   }

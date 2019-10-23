@@ -40,7 +40,7 @@ export default class PopupMenu extends Vue {
 @import '../styles/variables';
 
 .popup-menu {
-  font-family: $proxima-nova;
+  font-family: $font-family-proxima-nova;
   font-size: 12pt;
   box-shadow: 0 -8pt 20pt 0 rgba(0,0,0,0.1);
   height: auto;

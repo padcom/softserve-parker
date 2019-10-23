@@ -41,8 +41,8 @@ export default class Btn extends Vue {
 
 .btn {
   padding: 14px;
-  font-family: $proxima-nova;
-  font-weight: $proxima-nova-extra-bold;
+  font-family: $font-family-proxima-nova;
+  font-weight: $font-weight-extra-bold;
   font-size: 16px;
   line-height: 20px;
   text-transform: uppercase;
@@ -58,14 +58,14 @@ export default class Btn extends Vue {
   }
 
   &--black {
-    color: $white-text;
-    background-color: $black;
+    color: $color-white-text;
+    background-color: $color-black;
   }
 
   &--outlined {
     background-color: transparent;
-    border: 2px solid $black;
-    color: $black;
+    border: 2px solid $color-black;
+    color: $color-black;
   }
 
   &--full-width {
@@ -74,8 +74,8 @@ export default class Btn extends Vue {
   }
 
   &--disabled {
-    color: $gray;
-    border-color: $gray;
+    color: $color-gray;
+    border-color: $color-gray;
   }
 
   &__icon {

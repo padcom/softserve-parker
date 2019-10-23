@@ -45,9 +45,9 @@ export default class TextField extends Vue {
     box-sizing: border-box;
     font-size: 16px;
     line-height: 24px;
-    color: $black;
-    border: 2px solid $black;
-    font-family: $open-sans;
+    color: $color-black;
+    border: 2px solid $color-black;
+    font-family: $font-family-open-sans;
 
     &:focus {
       outline: none;

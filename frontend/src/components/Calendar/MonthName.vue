@@ -20,7 +20,7 @@ export default class MonthName extends Vue {
 @import '../../styles/variables';
 
 .month-name {
-  color: $black;
+  color: $color-black;
   font-size: 20px;
   line-height: 24px;
   text-align: center;

@@ -32,7 +32,7 @@ export default class Ranking extends Vue {
     margin: 0;
     font-size: 12px;
     line-height: 12px;
-    font-weight: $proxima-nova-medium;
+    font-weight: $font-weight-semi-bold;
   }
 
   &__score-box {
@@ -41,7 +41,7 @@ export default class Ranking extends Vue {
     margin: 8px auto 12px;
     font-size: 36px;
     line-height: 36px;
-    font-family: $open-sans;
+    font-family: $font-family-open-sans;
   }
 
   &__total {
@@ -52,7 +52,7 @@ export default class Ranking extends Vue {
     margin: 0;
     font-size: 12px;
     line-height: 12px;
-    font-family: $open-sans;
+    font-family: $font-family-open-sans;
   }
 }
 </style>
