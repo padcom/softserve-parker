@@ -40,8 +40,9 @@ export class User {
   @Field(() => Boolean)
   enabled: boolean
 
-  static async create (email: string, password: string, firstName: string, lastName: string, plate: string, phone: number = null) {
+  static async create (email: string, password: string, firstName: string, lastName: string, plate: string, phone: number) {
     this.validateEmail(email)
+
     const [ result ] = await db.execute(
       `INSERT INTO user (email, password, firstName, lastName, plate, phone) 
       VALUES (?, ?, ?, ?, ?, ?)`, [ email, password, firstName, lastName, plate, phone ]
