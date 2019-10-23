@@ -23,7 +23,9 @@ export class User {
   password: string
 
   @Field(() => Number)
-  rank: number
+  rank (): number {
+    return Math.round(Math.random() * 200)
+  }
 
   @Field(() => Boolean)
   enabled: boolean
