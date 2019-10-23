@@ -1,18 +1,17 @@
-$open-sans: 'Open Sans', sans-serif;
-$proxima-nova: 'ProximaNova';
+$font-family-open-sans: 'Open Sans', sans-serif;
+$font-family-proxima-nova: 'ProximaNova';
 
-$proxima-nova-medium: 600;
-$proxima-nova-extra-bold: 800;
-$open-sans-regular: 400;
-$open-sans-semi-bold: 600;
+$font-weight-normal: 400;
+$font-weight-semi-bold: 600;
+$font-weight-extra-bold: 800;
 
-$black: #000;
-$white: #fff;
-$white-text: #fff;
-$gray: #d4d4d4;
-$light-gray: rgba(0, 0, 0, 0.34);
-$color-primary: $black;
-$color-secondary: $gray;
+$color-black: #000;
+$color-white: #fff;
+$color-white-text: #fff;
+$color-gray: #d4d4d4;
+$color-light-gray: rgba(0, 0, 0, 0.34);
+$color-primary: $color-black;
+$color-secondary: $color-gray;
 $color-danger: rgb(216, 0, 86);
 $color-info: #009fea;
 $color-success: #42b983;
@@ -20,4 +19,7 @@ $color-success: #42b983;
 $header-height: 65px;
 $desktop-width: 1060px;
 
-$md-viewport: 960px;
+$sm-viewport: 576px;
+$md-viewport: 768px;
+$lg-viewport: 992px;
+$xl-viewport: 1200px;

@@ -39,10 +39,10 @@ export default class WeekDays extends Vue {
 
   &__day {
     text-align: center;
-    color: $black;
+    color: $color-black;
     font-size: 12px;
     line-height: 24px;
-    font-weight: $open-sans-semi-bold;
+    font-weight: $font-weight-semi-bold;
     text-align: center;
     cursor: default;
     padding: 0;

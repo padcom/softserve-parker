@@ -150,7 +150,7 @@ export default class Month extends Vue {
   user-select: none;
 
   font-size: 20px;
-  font-weight: $open-sans-regular;
+  font-weight: $font-weight-normal;
 
   text-transform: uppercase;
 
@@ -160,7 +160,7 @@ export default class Month extends Vue {
   }
 
   &__day {
-    color: $black;
+    color: $color-black;
     line-height: 30px;
     text-align: center;
     cursor: pointer;
@@ -184,7 +184,7 @@ export default class Month extends Vue {
 
     &--selected {
       color: white;
-      background-color: $black;
+      background-color: $color-black;
     }
 
     &--selected-start {
