@@ -2,7 +2,7 @@
   <div id="app">
     <AppHeader />
     <router-view />
-    <img v-if="false" src="/img/loading.gif">
+    <Loader :loading="loading" />
   </div>
 </template>
 
@@ -11,12 +11,14 @@ import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 
 import AppHeader from './components/AppHeader'
+import Loader from './components/Loader'
 import { AuthGetter } from '@/store/auth'
 import { UIState, UIAction } from '@/store/ui'
 
 @Component({
   components: {
-    AppHeader
+    AppHeader,
+    Loader
   }
 })
 export default class App extends Vue {
@@ -38,6 +40,15 @@ export default class App extends Vue {
 
 <style lang="scss">
 @import './styles';
+
+#app {
+  position: relative;
+
+  @media (min-width: $md-viewport) {
+    max-width: $desktop-width;
+    margin: 0 auto;
+  }
+}
 
 #nav {
   padding: 30px;
