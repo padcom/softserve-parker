@@ -2,7 +2,7 @@
   <div id="app">
     <AppHeader />
     <router-view />
-    <img v-if="!loading" src="/img/loading.gif">
+    <img v-if="false" src="/img/loading.gif">
   </div>
 </template>
 

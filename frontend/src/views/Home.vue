@@ -138,6 +138,7 @@ export default class Home extends Vue {
   display: flex;
   flex-direction: column;
   height: calc(100vh - #{$header-height});
+  position: relative;
 
   &__content {
     padding-bottom: 20px;
