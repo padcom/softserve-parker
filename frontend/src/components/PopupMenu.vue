@@ -1,6 +1,6 @@
 <template>
   <div class="popup-menu">
-    <Ranking :userRank="259" :totalRank="5381" />
+    <Ranking :userRank="user.rank" :totalRank="5381" />
     <router-link v-for="link in links" :key="link.url" :to="link.url" @click.native.stop="closePopup">
       {{ link.title }}
     </router-link>
@@ -9,6 +9,7 @@
 
 <script>
 import { Component, Vue, Prop } from 'vue-property-decorator'
+import { AuthState } from '@/store/auth'
 import Defocuser from 'defocuser'
 
 import Ranking from '@/components/Ranking.vue'
@@ -19,6 +20,8 @@ import Ranking from '@/components/Ranking.vue'
   }
 })
 export default class PopupMenu extends Vue {
+  @AuthState user
+
   @Prop({ type: Array, required: true }) links
 
   mounted () {
