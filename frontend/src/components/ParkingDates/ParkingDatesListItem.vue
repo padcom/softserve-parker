@@ -17,6 +17,11 @@
     >
       {{ formattedDate }}
     </p>
+    <button
+      class="reservation__cancel-desktop-btn"
+      v-on:click="removeItem">
+      <img src="/img/close-black.png" alt="">
+    </button>
   </div>
 </template>
 
@@ -101,6 +106,24 @@ export default class ParkingDatesListItem extends Vue {
 
     &--active {
       width: 6%;
+    }
+  }
+
+  &__cancel-desktop-btn {
+    display: none;
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    background: transparent;
+    border: 0;
+    margin: 0;
+    padding: 0;
+    outline: none;
+    cursor: pointer;
+
+    @media (min-width: $lg-viewport) {
+      display: block;
     }
   }
 
