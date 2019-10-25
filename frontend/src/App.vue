@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <OfflineInfo />
     <AppHeader />
     <router-view />
     <Loader :loading="loading" />
@@ -12,13 +13,15 @@ import { Component } from 'vue-property-decorator'
 
 import AppHeader from './components/AppHeader'
 import Loader from './components/Loader'
+import OfflineInfo from './components/OfflineInfo'
 import { AuthGetter } from '@/store/auth'
 import { UIState, UIAction } from '@/store/ui'
 
 @Component({
   components: {
     AppHeader,
-    Loader
+    Loader,
+    OfflineInfo
   }
 })
 export default class App extends Vue {
