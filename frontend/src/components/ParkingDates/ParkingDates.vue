@@ -13,7 +13,7 @@
       v-for="request in requests"
       :key="request.id"
       :request="request"
-      :action="onRemoveStart"
+      @action="onRemoveStart"
     />
 
     <Modal

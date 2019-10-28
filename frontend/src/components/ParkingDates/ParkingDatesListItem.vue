@@ -35,7 +35,6 @@ const CANCELABLE_POSITION = -125
 @Component()
 export default class ParkingDatesListItem extends Vue {
   @Prop({ type: Object, required: true }) request
-  @Prop({ type: Function, required: true }) action
   leftPosition = 0
   positionUnit = 'px'
   animetedMovementActive = false
@@ -74,12 +73,12 @@ export default class ParkingDatesListItem extends Vue {
     this.positionUnit = '%'
     this.leftPosition = -100
     setTimeout(() => {
-      this.action(this)
+      this.$emit('action', this)
     }, 100)
   }
 
   removeItemByClick () {
-    this.action(this)
+    this.$emit('action', this)
   }
 }
 </script>
