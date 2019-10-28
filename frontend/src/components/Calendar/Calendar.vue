@@ -4,7 +4,7 @@
     }">
     <MonthNavigator
       :value="date"
-      :close="closeCalendar"
+      @close="closeCalendar"
       @next="nextMonth"
       @previous="previousMonth"
     />

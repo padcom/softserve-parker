@@ -28,7 +28,7 @@
     <a
       type="button"
       class="month-navigator__close"
-      @click="close"
+      @click="$emit('close')"
     >
       <img src="/img/close-black.png" alt="Close" />
     </a>
@@ -48,7 +48,6 @@ import MonthName from './MonthName.vue'
 })
 export default class MonthNavigator extends Vue {
   @Prop({ type: Object, required: true }) value
-  @Prop({ type: Function, required: true }) close
   @Prop({
     type: Object,
     required: false,
