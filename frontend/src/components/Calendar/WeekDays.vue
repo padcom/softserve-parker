@@ -38,6 +38,7 @@ export default class WeekDays extends Vue {
   width: 100%;
 
   &__day {
+    width: 14.7%;
     text-align: center;
     color: $color-black;
     font-size: 12px;
@@ -45,7 +46,7 @@ export default class WeekDays extends Vue {
     font-weight: $font-weight-semi-bold;
     text-align: center;
     cursor: default;
-    padding: 0;
+    padding: 0 8px;
     text-transform: uppercase;
   }
 }

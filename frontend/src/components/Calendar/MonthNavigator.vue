@@ -25,6 +25,13 @@
     >
       <img :src="icons.right" />
     </a>
+    <a
+      type="button"
+      class="month-navigator__close"
+      @click="close"
+    >
+      <img src="/img/close-black.png" alt="Close" />
+    </a>
   </div>
 </template>
 
@@ -41,6 +48,7 @@ import MonthName from './MonthName.vue'
 })
 export default class MonthNavigator extends Vue {
   @Prop({ type: Object, required: true }) value
+  @Prop({ type: Function, required: true }) close
   @Prop({
     type: Object,
     required: false,
@@ -84,6 +92,7 @@ export default class MonthNavigator extends Vue {
   -webkit-tap-highlight-color: transparent;
 
   &__name {
+    padding-top: 3px;
     flex: 1 1 50%;
   }
 
@@ -114,6 +123,10 @@ export default class MonthNavigator extends Vue {
     &--enabled:visited {
       color: #009fea;
     }
+  }
+
+  &__close {
+    cursor: pointer;
   }
 }
 
