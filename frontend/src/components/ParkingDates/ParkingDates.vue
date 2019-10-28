@@ -29,7 +29,7 @@
 
 <script>
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import { get } from 'lodash'
+import lodashGet from 'lodash.get'
 import {
   ReservationRequestsAction
 } from '@/store/reservationRequests'
@@ -69,14 +69,14 @@ export default class ParkingDates extends Vue {
   }
 
   removeItem() {
-    const id = get(this, 'activeElement.request.id')
+    const id = lodashGet(this, 'activeElement.request.id')
     if (id) this.cancelRequest(id)
     this.isModalVisible = false
     this.activeElement = null
   }
 
   closeModal() {
-    if (get(this, 'activeElement.leftPosition')) this.activeElement.leftPosition = 0
+    if (lodashGet(this, 'activeElement.leftPosition')) this.activeElement.leftPosition = 0
     this.isModalVisible = false
   }
 }

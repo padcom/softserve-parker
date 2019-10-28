@@ -41,7 +41,7 @@
     "defocuser": "^0.1.4",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.2.3",
-    "lodash": "^4.17.15",
+    "lodash.get": "^4.4.2",
     "node-sass": "^4.9.0",
     "sass-loader": "^7.1.0",
     "style-resources-loader": "^1.2.1",
