@@ -148,10 +148,8 @@ export default class Month extends Vue {
   display: flex;
   flex: 1 0 auto;
   user-select: none;
-
   font-size: 20px;
   font-weight: $font-weight-normal;
-
   text-transform: uppercase;
 
   & table {
@@ -160,6 +158,7 @@ export default class Month extends Vue {
   }
 
   &__day {
+    width: 14.7%;
     color: $color-black;
     line-height: 30px;
     text-align: center;

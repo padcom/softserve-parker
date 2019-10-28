@@ -2,7 +2,12 @@
   <div class="calendar" :class="{
       'calendar--bottom': bottom
     }">
-    <MonthNavigator :value="date" @next="nextMonth" @previous="previousMonth" />
+    <MonthNavigator
+      :value="date"
+      :close="closeCalendar"
+      @next="nextMonth"
+      @previous="previousMonth"
+    />
     <WeekDays />
     <Month
       :date="date"
