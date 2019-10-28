@@ -19,7 +19,7 @@
     </p>
     <button
       class="reservation__cancel-desktop-btn"
-      v-on:click="removeItem">
+      v-on:click="removeItemByClick">
       <img src="/img/close-black.png" alt="">
     </button>
   </div>
@@ -28,17 +28,14 @@
 <script>
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import moment from 'moment'
-import {
-  ReservationRequestsAction
-} from '@/store/reservationRequests'
 
-var initialX = 0
+let initialX = 0
 const CANCELABLE_POSITION = -125
 
 @Component()
 export default class ParkingDatesListItem extends Vue {
   @Prop({ type: Object, required: true }) request
-  @ReservationRequestsAction cancelRequest
+  @Prop({ type: Function, required: true }) action
   leftPosition = 0
   positionUnit = 'px'
   animetedMovementActive = false
@@ -77,8 +74,12 @@ export default class ParkingDatesListItem extends Vue {
     this.positionUnit = '%'
     this.leftPosition = -100
     setTimeout(() => {
-      this.cancelRequest(this.request.id)
-    }, 1000)
+      this.action(this)
+    }, 100)
+  }
+
+  removeItemByClick () {
+    this.action(this)
   }
 }
 </script>
