@@ -53,8 +53,21 @@ export default class Modal extends Vue {
   &__wrapper {
     padding: 16px;
     width: calc(100% - 62px);
+    max-width: ($md-viewport - 62px);
     background-color: $color-white;
     box-shadow: 0 8px 16px rgba(65, 64, 69, 0.3);
+  }
+
+  &__actions {
+    display: flex;
+
+    button {
+      margin: 0 10px 0 0;
+
+      &:nth-last-of-type(1) {
+        margin-right: 0;
+      }
+    }
   }
 }
 </style>
