@@ -90,6 +90,14 @@ export default class ParkingDatesListItem extends Vue {
   background-color: $color-danger;
   position: relative;
 
+  &:hover {
+    .reservation__cancel-desktop-btn {
+      @media (min-width: $lg-viewport) {
+        display: block;
+      }
+    }
+  }
+
   &__background {
     display: flex;
     justify-content: flex-end;
@@ -121,10 +129,6 @@ export default class ParkingDatesListItem extends Vue {
     padding: 0;
     outline: none;
     cursor: pointer;
-
-    @media (min-width: $lg-viewport) {
-      display: block;
-    }
   }
 
   &__date {
