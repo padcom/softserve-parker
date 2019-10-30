@@ -99,6 +99,12 @@ export default class Calendar extends Vue {
   background-color: white;
   box-shadow: 0 8px 16px rgba(65, 64, 69, 0.3);
   padding: 16px;
+  z-index: 3;
+
+  @media (max-height: 500px) {
+    max-height: 70vh;
+    overflow: auto;
+  }
 
   &--bottom {
     position: fixed;

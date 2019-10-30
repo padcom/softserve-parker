@@ -23,5 +23,6 @@ export default class Loader extends Vue {
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 10;
 }
 </style>

@@ -68,6 +68,7 @@ export default class Home extends Vue {
   loading = true
   showCalendar = false
   error = ''
+  htmlBody = document.querySelector('body')
 
   errorActions = [
     {
@@ -94,10 +95,12 @@ export default class Home extends Vue {
   }
 
   openCalendar () {
+    this.htmlBody.classList.add('no-scroll')
     this.showCalendar = true
   }
 
   closeCalendar () {
+    this.htmlBody.classList.remove('no-scroll')
     this.showCalendar = false
   }
 
