@@ -42,7 +42,7 @@ export default class ParkingDatesListItem extends Vue {
 
   get formattedDate () {
     return moment(this.request.date)
-      .format('DD.MM.YYYY')
+      .format('DD.MM.YYYY, ddd')
       .toString()
   }
 
