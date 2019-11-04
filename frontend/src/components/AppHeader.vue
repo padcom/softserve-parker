@@ -97,6 +97,7 @@ export default class AppHeader extends Vue {
     margin: 0;
     padding: 0;
     position: relative;
+    outline: none;
   }
 }
 </style>
