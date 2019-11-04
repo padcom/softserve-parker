@@ -1,6 +1,6 @@
 <template>
   <section class="registration-confirmation">
-    <p v-if="!confirmed && !isFailed">Loader</p>
+    <Loader :loading="!confirmed && !isFailed" />
     <p class="registration-confirmation__text" v-if="isFailed">Something went wrong.</p>
     <p class="registration-confirmation__text" v-if="confirmed">You'r account has been activeted</p>
     <Btn v-if="confirmed" name="ok" text="ok" v-on:click="redirectToLoginPage" outlined fullWidth/>
@@ -11,11 +11,13 @@
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 import Btn from '../components/Btn'
+import Loader from './components/Loader'
 import { AuthAction } from '@/store/auth'
 
 @Component({
   components: {
-    Btn
+    Btn,
+    Loader
   }
 })
 export default class ConfirmRegistration extends Vue {

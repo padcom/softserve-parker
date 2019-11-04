@@ -57,7 +57,7 @@
         <router-link to="/login">Log in here</router-link>
       </p>
     </form>
-    <div v-if="loading && !success">Loader</div>
+    <Loader :loading="loading && !success" />
     <div v-if="success" class="singup__success">
       <p class="singup__success__text">Almost there! We've just sent an<br /> email with activation link.</p>
       <Btn name="ok" text="ok" v-on:click="redirectToLoginPage" outlined fullWidth/>
@@ -68,12 +68,14 @@
 <script>
 import { Vue, Component } from 'vue-property-decorator'
 import Btn from '../components/Btn'
+import Loader from './components/Loader'
 import TextField from '../components/TextField'
 import { User } from '../domain/User'
 
 @Component({
   components: {
     Btn,
+    Loader,
     TextField
   }
 })
