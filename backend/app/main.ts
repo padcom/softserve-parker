@@ -8,7 +8,7 @@ import { graphql } from './graphql'
 import { logger } from './logger'
 import { isAuthorized } from './middleware/authorization'
 import { delay } from './middleware/delay'
-import { login, logout, signUp } from './middleware/authenticate'
+import { login, logout, signUp, confirmSignUp } from './middleware/authenticate'
 
 const { NODE_ENV, PORT = 3000 } = process.env
 
@@ -22,6 +22,7 @@ async function main () {
   app.use('/login', login)
   app.use('/logout', logout)
   app.use('/signup', signUp)
+  app.use('/confirm-registration', confirmSignUp)
 
   const graphQlDelay = NODE_ENV === 'production' ? 100 : 1000
 

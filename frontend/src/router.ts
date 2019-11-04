@@ -20,6 +20,11 @@ const router = new Router({
       name: 'logout'
     },
     {
+      path: '/confirm-registration/:userId',
+      name: 'confirmRegistration',
+      component: () => import(/* webpackChunkName: "confirm-registration" */ './views/ConfirmRegistration.vue')
+    },
+    {
       path: '/',
       name: 'home',
       // route level code-splitting
@@ -50,7 +55,7 @@ router.beforeEach(async (to, from, next) => {
   if (to.name === 'login') {
     if (isLoggedIn) next('/')
     next()
-  } else if (!isLoggedIn && to.name !== 'signup') {
+  } else if (!isLoggedIn && to.name !== 'signup' && to.name !== 'confirmRegistration') {
     next('/login')
   } else if (to.name === 'logout' || to.name === '/logout') {
     await store.dispatch('auth/logout')

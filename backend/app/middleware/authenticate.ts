@@ -28,8 +28,23 @@ export async function login(req: Request, res: Response) {
 export async function signUp(req: Request, res: Response) {
   try {
     const { firstName, lastName, email, plate, phone, password } = req.body
+    await User.validateEmail(email)
     const result = await User.create(email, password, firstName, lastName, plate, phone)
-    res.send({data: { userId: result}})
+    await User.sendConfirmationEmail(email, result)
+    res.send({data: { userId: result }})
+  } catch (e) {
+    logger.error(e)
+    const status = getErrorStatus(e)
+    res.status(status).end(e.message)
+  }
+}
+
+export async function confirmSignUp(req: Request, res: Response) {
+  try {
+    const { userId } = req.body
+    await User.getById(userId)
+    await User.setEnabled(userId, true)
+    res.status(200).end('Ok')
   } catch (e) {
     logger.error(e)
     const status = getErrorStatus(e)
