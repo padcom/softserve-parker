@@ -29,6 +29,10 @@ const getters: GetterTree<ReservationRequestsState, RootState> = {
         .add(1, 'day')
         .isSame(disabledDate, 'day')
     )
+  },
+  tommorowWeekendDay: () => {
+    const tommorowDay = moment().add(1, 'day').day()
+    return tommorowDay === 5 || tommorowDay === 6
   }
 }
 
