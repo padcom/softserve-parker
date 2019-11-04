@@ -41,6 +41,19 @@ export default class App extends Vue {
 <style lang="scss">
 @import './styles';
 
+* {
+  box-sizing: border-box;
+}
+
+a,
+button {
+  cursor: pointer;
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
 #app {
   position: relative;
 

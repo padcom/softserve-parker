@@ -123,10 +123,6 @@ export default class MonthNavigator extends Vue {
       color: #009fea;
     }
   }
-
-  &__close {
-    cursor: pointer;
-  }
 }
 
 .figure {
