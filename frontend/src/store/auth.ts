@@ -60,6 +60,10 @@ class API {
       }
     )
   }
+
+  static async confirmRegistration (userId: number) {
+    return axios.post('/confirm-registration', { userId })
+  }
 }
 
 const actions: ActionTree<AuthState, RootState> = {
@@ -95,6 +99,10 @@ const actions: ActionTree<AuthState, RootState> = {
     commit('setUser', null)
     commit('setToken', null)
     bus.emit('user-logged-out', user)
+  },
+
+  async confirmRegistration ({ commit }, userId: number): Promise<void> {
+    await API.confirmRegistration(userId)
   }
 }
 

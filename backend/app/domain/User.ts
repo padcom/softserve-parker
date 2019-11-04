@@ -41,8 +41,6 @@ export class User {
   enabled: boolean
 
   static async create (email: string, password: string, firstName: string, lastName: string, plate: string, phone: number) {
-    this.validateEmail(email)
-
     const [ result ] = await db.execute(
       `INSERT INTO user (email, password, firstName, lastName, plate, phone) 
       VALUES (?, ?, ?, ?, ?, ?)`, [ email, password, firstName, lastName, plate, phone ]
@@ -51,25 +49,38 @@ export class User {
     if (result.affectedRows !== 1) {
       throw new Error('Unable to create new user - reason unknown')
     }
-    await this.sendConfirmationEmail(email)
+
     return result.insertId
   }
  
-  private static validateEmail (email: string): Error | void {
-    var re = /@softserveinc.com\s*$/;
+  static async validateEmail (email: string): Promise<Error | void> {
+    const re = /@softserveinc.com\s*$/;
     if (!re.test(email.toLowerCase())) throw new Error('Invalid email address.')
+    let user;
+    try {
+     user = await this.getByEmail(email)
+    } catch (e) {}
+    if (user) throw new Error('User with provided email address already exist.')
   }
 
-  private static async sendConfirmationEmail (email: string) {
+  static async sendConfirmationEmail (email: string, userId: number) {
     const transporter = mailer()
-    let info = await transporter.sendMail({
+    await transporter.sendMail({
           from: 'ssparkertesting@gmail.com',
           to: email,
           subject: 'Email Confirmation', 
-          html: '<p>please confirm your email<p/>'
+          html: `<p>please confirm your email ${userId}<p/>`
       });
+  }
 
-      console.log(info)
+  static async setEnabled (id: number, value: Boolean) {
+    const [ rows ]: [OkPacket, FieldPacket[]] = await db.execute('UPDATE user SET enabled = ? WHERE id = ?', [Boolean(value), id])
+
+    if (rows.affectedRows == 0) {
+      throw new Error('User not found')
+    }
+
+    return id
   }
 
   static async delete (email: string) {
@@ -93,6 +104,16 @@ export class User {
 
     return rows[0] as User
   }
+
+  static async getById(id: number) {
+    const [ rows ]: [ RowDataPacket[], FieldPacket[] ] = await db.execute(
+      'SELECT * FROM user WHERE id = ?',
+      [ id ]
+    )
+    this.assertFound(rows[0])
+
+    return rows[0] as User
+  } 
 
   private static assertFound(user: RowDataPacket) {
     if (!user) throw new Error(`User doesn't exist.`)

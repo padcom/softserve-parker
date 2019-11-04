@@ -60,7 +60,7 @@
     <div v-if="loading && !success">Loader</div>
     <div v-if="success" class="singup__success">
       <p class="singup__success__text">Almost there! We've just sent an<br /> email with activation link.</p>
-      <Btn clas="singup__success__btn" name="ok" text="ok" v-on:click="redirectToLoginPage" outlined fullWidth/>
+      <Btn name="ok" text="ok" v-on:click="redirectToLoginPage" outlined fullWidth/>
     </div>
   </section>
 </template>
