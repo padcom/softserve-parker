@@ -110,9 +110,10 @@ export default class Home extends Vue {
   }
 
   async pickDate (date) {
+    const dateStart = moment(date).startOf('day')
     try {
       this.clearError()
-      await this.createRequest(date)
+      await this.createRequest(dateStart)
       await this.getOwnRequests()
     } catch (error) {
       this.setError(error.message)
