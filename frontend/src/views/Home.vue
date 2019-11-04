@@ -25,7 +25,7 @@
             text="pick tomorrow"
             fullWidth
             @click="pickTomorrow"
-            :disabled="tomorrowAlreadyRequested"
+            :disabled="tomorrowAlreadyRequested || tommorowWeekendDay"
           />
           <Btn
             icon="/img/calendar.png"
@@ -83,6 +83,7 @@ export default class Home extends Vue {
   @ReservationRequestsAction createRequest
   @ReservationRequestsGetter requestsDate
   @ReservationRequestsGetter tomorrowAlreadyRequested
+  @ReservationRequestsGetter tommorowWeekendDay
 
   async mounted () {
     try {
