@@ -1,6 +1,6 @@
 <template>
   <div v-if="loading" class="loader">
-    <img src="/img/loading.gif">
+    <img src="/img/loader.png" class="loader__img">
   </div>
 </template>
 
@@ -15,7 +15,7 @@ export default class Loader extends Vue {
 
 <style lang="scss">
 .loader {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
@@ -24,5 +24,10 @@ export default class Loader extends Vue {
   justify-content: center;
   align-items: center;
   z-index: 10;
+  background: rgba(0, 0, 0, .2);
+
+  &__img {
+    animation: spin .9s infinite linear;
+  }
 }
 </style>
