@@ -1,7 +1,11 @@
 <template>
   <div class="home-page">
-    <Modal v-if="error" :actions="errorActions" @close="clearError">
-      {{ errorMessage }}
+    <Modal
+      v-if="showModalInfo"
+      :actions="infoActions"
+      @close="clearInfo"
+    >
+      {{ infoMessage }}
     </Modal>
 
     <Title borderBottom>Parking dates</Title>
@@ -48,6 +52,7 @@ import {
   ReservationRequestsGetter,
   ReservationRequestsAction
 } from '@/store/reservationRequests'
+import { APP_MESSAGES } from '@/app-statuses'
 
 import Title from '../components/Title'
 import Btn from '../components/Btn'
@@ -67,10 +72,11 @@ import Modal from '../components/Modal'
 export default class Home extends Vue {
   loading = true
   showCalendar = false
-  error = ''
+  showModalInfo = false
+  infoMessage = ''
   htmlBody = document.querySelector('body')
 
-  errorActions = [
+  infoActions = [
     {
       outlined: true,
       fullWidth: true,
@@ -105,22 +111,25 @@ export default class Home extends Vue {
     this.showCalendar = false
   }
 
-  clearError () {
-    this.error = ''
+  clearInfo () {
+    this.showModalInfo = false
   }
 
   setError (error) {
-    this.error = error
+    this.infoMessage = error
   }
 
   async pickDate (date) {
     const dateStart = moment(date).startOf('day')
     try {
-      this.clearError()
+      this.clearInfo()
       await this.createRequest(dateStart)
       await this.getOwnRequests()
+      this.infoMessage = APP_MESSAGES.DATE_REQUESTED
     } catch (error) {
       this.setError(error.message)
+    } finally {
+      this.showModalInfo = true
     }
   }
 

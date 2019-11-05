@@ -17,7 +17,7 @@
     />
 
     <Modal
-      v-if="isModalConfirmVisible"
+      v-if="showModalConfirm"
       :actions="confirmActions"
       @close="closeConfirmModal"
       @remove="removeItem"
@@ -28,9 +28,9 @@
     <Modal
       :actions="infoActions"
       @revoke="closeInfoModal"
-      v-if="isModalInfoVisible"
+      v-if="showModalInfo"
       >
-      {{infoText}}
+      {{infoMessage}}
     </Modal>
   </div>
 </template>
@@ -56,7 +56,7 @@ export default class ParkingDates extends Vue {
   @ReservationRequestsAction cancelRequest
 
   activeElement = null
-  isModalConfirmVisible = false
+  showModalConfirm = false
   confirmActions = [
     {
       outlined: false,
@@ -71,8 +71,8 @@ export default class ParkingDates extends Vue {
       text: 'Yes'
     }
   ]
-  isModalInfoVisible = false
-  infoText = ''
+  showModalInfo = false
+  infoMessage = ''
   infoActions = [
     {
       outlined: true,
@@ -84,7 +84,7 @@ export default class ParkingDates extends Vue {
 
   onRemoveStart(element) {
     this.activeElement = element
-    this.isModalConfirmVisible = true
+    this.showModalConfirm = true
   }
 
   async removeItem() {
@@ -92,22 +92,22 @@ export default class ParkingDates extends Vue {
     try {
       if (id) await this.cancelRequest(id)
       this.activeElement = null
-      this.infoText = APP_MESSAGES.REVOKE_SUUCCESS
+      this.infoMessage = APP_MESSAGES.REVOKE_SUUCCESS
     } catch (e) {
-      this.infoText = APP_MESSAGES.ERROR
+      this.infoMessage = APP_MESSAGES.ERROR
     } finally {
-      this.isModalConfirmVisible = false
-      this.isModalInfoVisible = true
+      this.showModalConfirm = false
+      this.showModalInfo = true
     }
   }
 
   closeConfirmModal() {
     if (lodashGet(this, 'activeElement.leftPosition')) this.activeElement.leftPosition = 0
-    this.isModalConfirmVisible = false
+    this.showModalConfirm = false
   }
 
   closeInfoModal() {
-    this.isModalInfoVisible = false
+    this.showModalInfo = false
   }
 }
 </script>
