@@ -38,11 +38,12 @@ export default class OfflineInfo extends Vue {
     box-sizing: border-box;
     background: $color-black;
     color: $color-white;
+    font-family: $font-family-proxima-nova;
     padding: 5px 15px;
     margin: 0;
 
     @media (min-width: $md-viewport) {
-      max-width: $desktop-width;
+      max-width: $sm-viewport;
       margin: 0 auto;
     }
   }

@@ -101,7 +101,7 @@ export default class Calendar extends Vue {
   padding: 16px;
   z-index: 3;
 
-  @media (max-height: 500px) {
+  @media (max-height: $sm-viewport) {
     max-height: 70vh;
     overflow: auto;
   }
@@ -113,7 +113,7 @@ export default class Calendar extends Vue {
     margin: 0 auto;
     left: 0;
     right: 0;
-    max-width: $desktop-width;
+    max-width: $sm-viewport;
   }
 
   &__button {

@@ -69,6 +69,7 @@ const actions: ActionTree<ReservationRequestsState, RootState> = {
       commit('cancelRequest', id)
     } catch (error) {
       bus.emit('reservation-requests-error', error)
+      throw new Error('Error')
     }
   },
 
