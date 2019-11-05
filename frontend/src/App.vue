@@ -44,6 +44,10 @@ export default class App extends Vue {
 <style lang="scss">
 @import './styles';
 
+* {
+  box-sizing: border-box;
+}
+
 body {
   &:before {
     position: fixed;
@@ -54,13 +58,22 @@ body {
     background: rgba(0, 0, 0, .2);
     z-index: 2;
   }
-  
+
   &.no-scroll {
     overflow: hidden;
 
     &:before {
       content: '';
     }
+  }
+}
+
+a,
+button {
+  cursor: pointer;
+
+  &:disabled {
+    cursor: not-allowed;
   }
 }
 
