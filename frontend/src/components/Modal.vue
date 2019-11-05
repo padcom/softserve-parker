@@ -42,6 +42,7 @@ export default class Modal extends Vue {
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 2;
 
   &__text {
     font-size: 16px;
