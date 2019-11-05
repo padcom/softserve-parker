@@ -25,7 +25,7 @@
             text="pick tomorrow"
             fullWidth
             @click="pickTomorrow"
-            :disabled="tomorrowAlreadyRequested"
+            :disabled="tomorrowAlreadyRequested || tommorowWeekendDay"
           />
           <Btn
             icon="/img/calendar.png"
@@ -68,6 +68,7 @@ export default class Home extends Vue {
   loading = true
   showCalendar = false
   error = ''
+  htmlBody = document.querySelector('body')
 
   errorActions = [
     {
@@ -83,6 +84,7 @@ export default class Home extends Vue {
   @ReservationRequestsAction createRequest
   @ReservationRequestsGetter requestsDate
   @ReservationRequestsGetter tomorrowAlreadyRequested
+  @ReservationRequestsGetter tommorowWeekendDay
 
   async mounted () {
     try {
@@ -94,10 +96,12 @@ export default class Home extends Vue {
   }
 
   openCalendar () {
+    this.htmlBody.classList.add('no-scroll')
     this.showCalendar = true
   }
 
   closeCalendar () {
+    this.htmlBody.classList.remove('no-scroll')
     this.showCalendar = false
   }
 
@@ -110,9 +114,10 @@ export default class Home extends Vue {
   }
 
   async pickDate (date) {
+    const dateStart = moment(date).startOf('day')
     try {
       this.clearError()
-      await this.createRequest(date)
+      await this.createRequest(dateStart)
       await this.getOwnRequests()
     } catch (error) {
       this.setError(error.message)

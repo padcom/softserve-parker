@@ -42,7 +42,7 @@ export default class ParkingDatesListItem extends Vue {
 
   get formattedDate () {
     return moment(this.request.date)
-      .format('DD.MM.YYYY')
+      .format('DD.MM.YYYY, ddd')
       .toString()
   }
 
@@ -89,6 +89,14 @@ export default class ParkingDatesListItem extends Vue {
 .reservation {
   background-color: $color-danger;
   position: relative;
+
+  &:hover {
+    .reservation__cancel-desktop-btn {
+      @media (min-width: $lg-viewport) {
+        display: block;
+      }
+    }
+  }
 
   &__background {
     display: flex;
