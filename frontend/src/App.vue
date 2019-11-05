@@ -81,7 +81,7 @@ button {
   position: relative;
 
   @media (min-width: $md-viewport) {
-    max-width: $desktop-width;
+    max-width: 500px;
     margin: 0 auto;
   }
 }
