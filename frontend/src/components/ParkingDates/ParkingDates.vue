@@ -17,12 +17,20 @@
     />
 
     <Modal
-      v-if="isModalVisible"
-      :actions="actions"
-      @close="closeModal"
+      v-if="isModalConfirmVisible"
+      :actions="confirmActions"
+      @close="closeConfirmModal"
       @remove="removeItem"
       >
       Do you want to revoke your parking request?
+    </Modal>
+
+    <Modal
+      :actions="infoActions"
+      @revoke="closeInfoModal"
+      v-if="isModalInfoVisible"
+      >
+      {{infoText}}
     </Modal>
   </div>
 </template>
@@ -33,6 +41,7 @@ import lodashGet from 'lodash.get'
 import {
   ReservationRequestsAction
 } from '@/store/reservationRequests'
+import { APP_MESSAGES } from '@/app-statuses'
 import Modal from '@/components/Modal.vue'
 import ParkingDatesListItem from './ParkingDatesListItem'
 
@@ -47,8 +56,8 @@ export default class ParkingDates extends Vue {
   @ReservationRequestsAction cancelRequest
 
   activeElement = null
-  isModalVisible = false
-  actions = [
+  isModalConfirmVisible = false
+  confirmActions = [
     {
       outlined: false,
       fullWidth: true,
@@ -62,22 +71,43 @@ export default class ParkingDates extends Vue {
       text: 'Yes'
     }
   ]
+  isModalInfoVisible = false
+  infoText = ''
+  infoActions = [
+    {
+      outlined: true,
+      fullWidth: true,
+      emitType: 'revoke',
+      text: 'Ok'
+    }
+  ]
 
   onRemoveStart(element) {
     this.activeElement = element
-    this.isModalVisible = true
+    this.isModalConfirmVisible = true
   }
 
-  removeItem() {
+  async removeItem() {
     const id = lodashGet(this, 'activeElement.request.id')
-    if (id) this.cancelRequest(id)
-    this.isModalVisible = false
-    this.activeElement = null
+    try {
+      if (id) await this.cancelRequest(id)
+      this.activeElement = null
+      this.infoText = APP_MESSAGES.REVOKE_SUUCCESS
+    } catch (e) {
+      this.infoText = APP_MESSAGES.ERROR
+    } finally {
+      this.isModalConfirmVisible = false
+      this.isModalInfoVisible = true
+    }
   }
 
-  closeModal() {
+  closeConfirmModal() {
     if (lodashGet(this, 'activeElement.leftPosition')) this.activeElement.leftPosition = 0
-    this.isModalVisible = false
+    this.isModalConfirmVisible = false
+  }
+
+  closeInfoModal() {
+    this.isModalInfoVisible = false
   }
 }
 </script>
