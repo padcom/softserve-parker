@@ -96,8 +96,10 @@ export default class Home extends Vue {
     try {
       await this.getOwnRequests()
       this.loading = false
-    } catch (e) {
+    } catch (error) {
       this.loading = false
+      this.setError(error.message)
+      this.showModalInfo = true
     }
   }
 
