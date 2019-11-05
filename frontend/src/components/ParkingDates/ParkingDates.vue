@@ -13,6 +13,7 @@
       v-for="request in requests"
       :key="request.id"
       :request="request"
+      :touchedDevice="touchedDevice"
       @action="onRemoveStart"
     />
 
@@ -30,6 +31,7 @@
 <script>
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import lodashGet from 'lodash.get'
+import isTouchDevice from 'is-touch-device'
 import {
   ReservationRequestsAction
 } from '@/store/reservationRequests'
@@ -46,6 +48,7 @@ export default class ParkingDates extends Vue {
   @Prop({ type: Array, default: () => [] }) requests
   @ReservationRequestsAction cancelRequest
 
+  touchedDevice = false
   activeElement = null
   isModalVisible = false
   actions = [
@@ -62,6 +65,10 @@ export default class ParkingDates extends Vue {
       text: 'Yes'
     }
   ]
+
+  mounted() {
+    this.touchedDevice = isTouchDevice()
+  }
 
   onRemoveStart(element) {
     this.activeElement = element

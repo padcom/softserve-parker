@@ -8,9 +8,9 @@
       />
     </span>
     <p
-      v-on:touchstart="handleTouchStart"
-      v-on:touchmove="handleSwipe"
-      v-on:touchend="handleTouchEnd"
+      @touchstart="handleTouchStart"
+      @touchmove="handleSwipe"
+      @touchend="handleTouchEnd"
       v-bind:style="{left: leftPosition + positionUnit}"
       class="reservation__date"
       v-bind:class="{'reservation__date--animeted-movement': animetedMovementActive}"
@@ -19,7 +19,8 @@
     </p>
     <button
       class="reservation__cancel-desktop-btn"
-      v-on:click="removeItemByClick">
+      v-if="!touchedDevice"
+      @click="removeItemByClick">
       <img src="/img/close-black.png" alt="">
     </button>
   </div>
@@ -35,6 +36,7 @@ const CANCELABLE_POSITION = -125
 @Component()
 export default class ParkingDatesListItem extends Vue {
   @Prop({ type: Object, required: true }) request
+  @Prop({ type: Boolean }) touchedDevice
   leftPosition = 0
   positionUnit = 'px'
   animetedMovementActive = false
@@ -92,9 +94,7 @@ export default class ParkingDatesListItem extends Vue {
 
   &:hover {
     .reservation__cancel-desktop-btn {
-      @media (min-width: $lg-viewport) {
-        display: block;
-      }
+      display: block;
     }
   }
 
