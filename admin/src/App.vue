@@ -29,7 +29,6 @@
       </v-btn>
     </v-app-bar>
 
-
     <div class="loading-bar" v-if="total > 0">
       <div class="progress" :style="loadingIndicatorStyles"></div>
     </div>
@@ -85,7 +84,7 @@ export default class App extends Vue {
     this.$bus.on('request-end', this.endRequest)
   }
 
-  beforeDestroy() {
+  beforeDestroy () {
     this.$bus.off('request-begin', this.beginRequest)
     this.$bus.off('request-end', this.endRequest)
   }

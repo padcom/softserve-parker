@@ -25,30 +25,32 @@
 import moment from 'moment'
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
+import { User } from '@/domain/User'
 
 @Component
 export default class ParkingStatus extends Vue {
   headers = [
-    { text: 'Name', align: 'left', sortable: true, value: 'name' },
+    { text: 'First Name', align: 'left', sortable: true, value: 'firstName' },
+    { text: 'Last Name', align: 'left', sortable: true, value: 'lasttName' },
+    { text: 'Phone number', align: 'left', sortable: true, value: 'phone' },
     { text: 'Plate number', align: 'left', sortable: true, value: 'plate' },
-    { text: 'Mobile number', align: 'left', sortable: true, value: 'phone' }
+    { text: 'Role', align: 'left', value: 'role' },
+    { text: 'State', align: 'left', value: 'state' },
+    { text: 'Ranking', align: 'left', value: 'ranking' }
   ]
 
-  drivers = [
-    { id: 1, name: 'Dariusz Tanski', plate: 'SK 3127L', phone: '+48 661 546 889' },
-    { id: 2, name: 'Marcin Kosmaty', plate: 'GLI 34252', phone: '+48 234 886 097' },
-    { id: 3, name: 'Yuit Kaganec', plate: 'GL 2346H', phone: '+380 385 902 413' },
-    { id: 4, name: 'FirstName LastName', plate: 'Text value', phone: '9' },
-    { id: 5, name: 'FirstName LastName', plate: 'Text value', phone: '11' },
-    { id: 6, name: 'FirstName LastName', plate: 'Text value', phone: '13' },
-    { id: 7, name: 'FirstName LastName', plate: 'Text value', phone: '14' },
-    { id: 8, name: 'FirstName LastName', plate: 'Text value', phone: '20' },
-    { id: 9, name: 'FirstName LastName', plate: 'Text value', phone: '22' },
-    { id: 10, name: 'FirstName LastName', plate: 'Text value', phone: '1000' },
-    { id: 11, name: 'FirstName LastName', plate: 'Text value', phone: '1000' }
-  ]
+  drivers = []
 
   search = ''
+
+  async mounted () {
+    try {
+      const users = await User.getAll()
+      this.drivers = users
+    } catch (e) {
+      this.drivers = []
+    }
+  }
 
   get date () {
     return moment(new Date()).format('YYYY-MM-DD')
