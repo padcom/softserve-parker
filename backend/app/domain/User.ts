@@ -117,6 +117,15 @@ export class User {
     return rows[0] as User
   } 
 
+  static async getAll(): Promise<User[]> {
+    const [ rows ]: [ RowDataPacket[], FieldPacket[] ] = await db.execute(
+      'SELECT * FROM user'
+    )
+    this.assertFound(rows[0])
+
+    return rows as User[]
+  }
+
   private static assertFound(user: RowDataPacket) {
     if (!user) throw new Error(`User doesn't exist.`)
   }

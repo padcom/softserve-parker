@@ -3,6 +3,13 @@ import { User } from '../../domain/User'
 
 @Resolver(User)
 export class UserResolver {
+  @Query(() => [User], {
+    description: 'Returns all users',
+  })
+  async allUsers () {
+    return User.getAll()
+  }
+
   @Query(() => User!, {
     description: 'Returns a given user',
   })
