@@ -28,7 +28,7 @@ export async function login(req: Request, res: Response) {
 export async function signUp(req: Request, res: Response) {
   try {
     const { firstName, lastName, email, plate, phone, password } = req.body
-    await User.validateEmail(email)
+    await User.validateUserCreation(email)
     const result = await User.create(email, password, firstName, lastName, plate, phone)
     await User.sendConfirmationEmail(email, result)
     res.send({data: { userId: result }})
@@ -44,7 +44,7 @@ export async function confirmSignUp(req: Request, res: Response) {
     const { userId } = req.body
     await User.getById(userId)
     await User.setEnabled(userId, true)
-    res.status(200).end('Ok')
+    res.status(200).end('OK')
   } catch (e) {
     logger.error(e)
     const status = getErrorStatus(e)
