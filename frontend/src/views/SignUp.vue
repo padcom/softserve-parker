@@ -1,65 +1,10 @@
 <template>
-  <section>
-    <form v-if="!success && !loading" @submit.prevent="submit" class="singup">
-      <TextField
-        name="firstName"
-        placeholder="First Name"
-        v-model="firstName"
-        :isEmpty="!firstName"
-      />
-      <TextField
-        name="lasttName"
-        placeholder="Last Name"
-        v-model="lastName"
-        :isEmpty="!lastName"
-      />
-      <TextField
-        name="email"
-        placeholder="Email"
-        v-model="email"
-        :isEmpty="!email"
-        :isInvalid="markInvalid(email, isEmailValid)"
-      />
-      <TextField
-        name="plateNumber"
-        placeholder="Plate Number"
-        v-model="plateNumber"
-        :isEmpty="!plateNumber"
-      />
-      <TextField
-        name="phoneNumber"
-        placeholder="Phone Number"
-        v-model="phoneNumber"
-        :isEmpty="!phoneNumber"
-      />
-      <TextField
-        name="password"
-        placeholder="Password"
-        :type="passwordFieldType"
-        v-model="password"
-        :isEmpty="!password"
-        :iconSrc="'/img/password-lookup.png'"
-        :iconClb="() => { passwordFieldType = passwordFieldType === 'password' ? 'text' : 'password' }"
-      />
-      <TextField
-        name="passwordConfirmation"
-        :type="passwordConfirmationFieldType"
-        placeholder="Retype Passwrod"
-        v-model="passwordConfirmation"
-        :isEmpty="!passwordConfirmation"
-        :isInvalid="markInvalid(passwordConfirmation, passwordsAreMatching)"
-        :iconSrc="'/img/password-lookup.png'"
-        :iconClb="() => { passwordConfirmationFieldType = passwordConfirmationFieldType === 'password' ? 'text' : 'password' }"
-      />
-      <Btn name="signup" text="sign up" fullWidth :disabled="!isFormValid()" v-on:click="createUser" />
-      <p class="text-center">
-        Got account?
-        <router-link to="/login">Log in here</router-link>
-      </p>
-    </form>
-    <Loader :loading="loading && !success" />
-    <div v-if="success" class="singup__success">
-      <p class="singup__success__text">Almost there! We've just sent an<br /> email with activation link.</p>
+  <section class="singup">
+    <SignUpForm v-if="!success && !loading && !error" :onSubmit="createUser" />
+    <Loader :loading="loading && !success && !error" />
+    <div v-if="success || error" class="singup__done">
+      <p v-if="success" class="singup__done__text">Almost there! We've just sent an<br /> email with activation link.</p>
+      <p v-if="error" class="singup__done__text">Ups somehting went wrong.</p>
       <Btn name="ok" text="ok" v-on:click="redirectToLoginPage" outlined fullWidth/>
     </div>
   </section>
@@ -68,68 +13,30 @@
 <script>
 import { Vue, Component } from 'vue-property-decorator'
 import Btn from '../components/Btn'
-import Loader from './components/Loader'
-import TextField from '../components/TextField'
+import Loader from '../components/Loader'
+import SignUpForm from '../components/SignUpForm'
 import { User } from '../domain/User'
 
 @Component({
   components: {
     Btn,
     Loader,
-    TextField
+    SignUpForm
   }
 })
 export default class SignUp extends Vue {
-  firstName = ''
-  lastName = ''
-  email = ''
-  plateNumber = ''
-  phoneNumber = null
-  password = ''
-  passwordFieldType = 'password'
-  passwordConfirmation = ''
-  passwordConfirmationFieldType = 'password'
   loading = false
   success = false
+  error = false
 
-  markInvalid (field, validationFn) {
-    return field ? !validationFn() : false
-  }
-
-  isFormValid () {
-    return (
-      this.isFormFilledUp() &&
-      this.passwordsAreMatching() &&
-      this.isEmailValid()
-    )
-  }
-
-  isEmailValid () {
-    const re = /@softserveinc.com\s*$/
-    return !this.email || re.test(this.email.toLowerCase())
-  }
-
-  passwordsAreMatching () {
-    return this.password === this.passwordConfirmation
-  }
-
-  isFormFilledUp () {
-    return Boolean(
-      this.firstName &&
-      this.lastName &&
-      this.email &&
-      this.plateNumber &&
-      this.phoneNumber &&
-      this.password &&
-      this.passwordConfirmation
-    )
-  }
-
-  async createUser () {
-    this.loading = true
-    await User.create(this.firstName, this.lastName, this.email, this.plateNumber, this.phoneNumber, this.password)
-    // this.loading = false
-    this.success = true
+  async createUser (user) {
+    try {
+      this.loading = true
+      await User.create(user.firstName, user.lastName, user.email, user.plateNumber, user.phoneNumber, user.password)
+      this.success = true
+    } catch (e) {
+      this.error = true
+    }
   }
 
   redirectToLoginPage () {
@@ -140,15 +47,7 @@ export default class SignUp extends Vue {
 
 <style lang="scss">
 .singup {
-  margin: 4rem auto 0 auto;
-  width: 95%;
-  .text-field {
-    .text-field__input {
-      padding: 10px;
-    }
-  }
-
-  &__success {
+  &__done {
     height: calc(95vh - 65px);
     padding: 1rem;
     display: flex;

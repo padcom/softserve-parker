@@ -57,11 +57,6 @@ export default class Btn extends Vue {
     outline: none;
   }
 
-  &:disabled {
-    background-color: $gray;
-    cursor: not-allowed;
-  }
-
   &--black {
     color: $color-white-text;
     background-color: $color-black;
@@ -81,6 +76,7 @@ export default class Btn extends Vue {
   &--disabled {
     color: $color-gray;
     border-color: $color-gray;
+    cursor: not-allowed;
   }
 
   &__icon {
