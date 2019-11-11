@@ -3,6 +3,9 @@ import { OkPacket, FieldPacket, RowDataPacket } from 'mysql'
 import { db } from '../db'
 import { logger } from '../logger'
 import { mailer } from '../mailer'
+import env from '../config'
+
+const { EMAIL, CONFIRM_URL_BASE } = env
 
 @ObjectType({
   description: 'Object representing user.',
@@ -53,23 +56,22 @@ export class User {
     return result.insertId
   }
  
-  static async validateEmail (email: string): Promise<Error | void> {
+  static async validateUserCreation (email: string): Promise<Error | void> {
     const re = /@softserveinc.com\s*$/;
     if (!re.test(email.toLowerCase())) throw new Error('Invalid email address.')
-    let user;
     try {
-     user = await this.getByEmail(email)
+     const user = await this.getByEmail(email)
+     if (user) throw new Error('User with provided email address already exist.')
     } catch (e) {}
-    if (user) throw new Error('User with provided email address already exist.')
   }
 
   static async sendConfirmationEmail (email: string, userId: number) {
     const transporter = mailer()
     await transporter.sendMail({
-          from: 'ssparkertesting@gmail.com',
+          from: EMAIL,
           to: email,
           subject: 'Email Confirmation', 
-          html: `<p>please confirm your email ${userId}<p/>`
+          html: `<p>Please confirm your email address <a href='${CONFIRM_URL_BASE}/#/confirm-registration/${userId}'>here</a>.<p/>`
       });
   }
 

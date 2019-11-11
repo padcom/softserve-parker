@@ -22,6 +22,8 @@
     "date-fns": "^2.4.1",
     "db-migrate": "^0.11.6",
     "db-migrate-mysql": "^1.1.10",
+    "dotenv": "^8.2.0",
+    "envalid": "^5.0.0",
     "express": "^4.17.1",
     "graphql": "^14.4.2",
     "helmet": "^3.18.0",

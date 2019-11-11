@@ -1,12 +1,15 @@
 import nodemailer from 'nodemailer'
+import env from './config';
+
+const { SMTP_PORT, SMTP_HOST, SMTP_USER, SMTP_PASSWORD } = env;
 
 export function mailer() {
   return nodemailer.createTransport({
-    host: "smtp.mailtrap.io",
-    port: 2525,
+    host: SMTP_HOST,
+    port: SMTP_PORT,
     auth: {
-      user: "e7a1a548c2b5fa",
-      pass: "375ad49c0a886c"
+      user: SMTP_USER,
+      pass: SMTP_PASSWORD
     }
   })
 }
