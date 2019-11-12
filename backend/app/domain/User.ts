@@ -107,7 +107,7 @@ export class User {
     return rows[0] as User
   }
 
-  static async getById(id: number) {
+  static async getById(id: number): Promise<User> {
     const [ rows ]: [ RowDataPacket[], FieldPacket[] ] = await db.execute(
       'SELECT * FROM user WHERE id = ?',
       [ id ]
@@ -115,7 +115,7 @@ export class User {
     this.assertFound(rows[0])
 
     return rows[0] as User
-  } 
+  }
 
   private static assertFound(user: RowDataPacket) {
     if (!user) throw new Error(`User doesn't exist.`)

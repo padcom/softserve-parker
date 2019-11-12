@@ -40,7 +40,10 @@ export class ReservationRequest {
   @Field(() => Number)
   parkingSpotId: number
 
-  user: User
+  @Field(() => User)
+  user (): Promise<User> {
+    return User.getById(this.userId)
+  }
 
   static async fetchByUserId(userId: number, from: Date): Promise<ReservationRequest[]> {
     const [rows]: [RowDataPacket[], FieldPacket[]] = await db.execute(
@@ -107,9 +110,7 @@ export class ReservationRequest {
 
   static async getAllByDay(from: Date, to: Date) {
     const [ result ] = await db.execute(`
-      SELECT  U.email, R.id, R.date, R.status FROM parker.reservationRequest R
-      JOIN  parker.user U 
-      ON R.userId = U.id
+      SELECT  * FROM parker.reservationRequest
       WHERE date BETWEEN ? AND ?
     `, [from, to])
     
