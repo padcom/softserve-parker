@@ -8,6 +8,9 @@ export class Requests {
           id
           date
           status
+          user {
+            email
+          }
         }
       }`, { from, to })
 

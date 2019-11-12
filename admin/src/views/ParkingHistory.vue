@@ -67,7 +67,7 @@ import { Requests } from '@/domain/Requests'
 })
 export default class ParkingStatus extends Vue {
   headers = [
-    { text: 'User', align: 'left', sortable: true, value: 'name' },
+    { text: 'User', align: 'left', sortable: true, value: 'user.email' },
     { text: 'Date', align: 'left', sortable: true, value: 'date' },
     { text: 'Status', align: 'left', sortable: true, value: 'status' }
   ]
@@ -108,7 +108,7 @@ export default class ParkingStatus extends Vue {
     return moment(new Date()).format('YYYY-MM-DD')
   }
 
-  parseDate (date: any) {
+  parseDate (date: string) {
     return moment(new Date(date)).format('YYYY-MM-DD')
   }
 }
