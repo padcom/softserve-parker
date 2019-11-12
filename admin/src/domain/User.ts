@@ -5,7 +5,11 @@ export class User {
     const { allUsers } = await query(`query {
       allUsers {
         id
-        email
+        firstName
+        lastName
+        phone
+        plate
+        roles
         rank
       }
     }`)

@@ -26,7 +26,7 @@ export class User {
   @Field(() => String)
   plate: string 
 
-  @Field(() => Number)
+  @Field(() => Number, { nullable: true })
   phone?: number
 
   @Field(() => Date)
@@ -42,6 +42,9 @@ export class User {
 
   @Field(() => Boolean)
   enabled: boolean
+
+  @Field(() => String, { nullable: true })
+  roles?: string
 
   static async create (email: string, password: string, firstName: string, lastName: string, plate: string, phone: number) {
     const [ result ] = await db.execute(
