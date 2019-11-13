@@ -1,5 +1,6 @@
 import { Field, ID, ObjectType } from 'type-graphql'
 import { OkPacket, FieldPacket, RowDataPacket } from 'mysql'
+import bcrypt from 'bcrypt'
 import { db } from '../db'
 import { logger } from '../logger'
 import { mailer } from '../mailer'
@@ -47,9 +48,11 @@ export class User {
   roles?: string
 
   static async create (email: string, password: string, firstName: string, lastName: string, plate: string, phone: number) {
+    const hashedPassword = await bcrypt.hash(password, 10)
+
     const [ result ] = await db.execute(
       `INSERT INTO user (email, password, firstName, lastName, plate, phone) 
-      VALUES (?, ?, ?, ?, ?, ?)`, [ email, password, firstName, lastName, plate, phone ]
+      VALUES (?, ?, ?, ?, ?, ?)`, [ email, hashedPassword, firstName, lastName, plate, phone ]
     ) as OkPacket[]
 
     if (result.affectedRows !== 1) {
@@ -90,6 +93,18 @@ export class User {
 
   static async delete (email: string) {
     const [ result ] = await db.execute('DELETE FROM user WHERE email=?', [ email ]) as OkPacket[]
+
+    if (result.affectedRows == 0) {
+      throw new Error('User not found')
+    } else if (result.affectedRows > 1) {
+      logger.warn('Multiple users deleted')
+    }
+
+    return result.affectedRows
+  }
+
+  static async deleteByID (id: string) {
+    const [ result ] = await db.execute('DELETE FROM user WHERE id=?', [ id ]) as OkPacket[]
 
     if (result.affectedRows == 0) {
       throw new Error('User not found')
