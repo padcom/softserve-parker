@@ -5,7 +5,7 @@ import { Session } from '../domain/Session'
 import { User } from '../domain/User'
 
 beforeEach(async () => {
-  await User.create('fake@softserveinc.com', '$2b$10$RKJermYaezNSXeQK.osx8OOgIppGcd7CaVC4dCAcMRnhjrmnXeIG.')
+  await User.create('fake@softserveinc.com', '$2b$10$RKJermYaezNSXeQK.osx8OOgIppGcd7CaVC4dCAcMRnhjrmnXeIG.', 'John', 'Lock', 'BO PARKER', 123123123)
 })
 
 afterEach(async () => {
