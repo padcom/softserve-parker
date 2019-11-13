@@ -10,7 +10,7 @@ module.exports = {
             "SMTP_HOST"="smtp.mailtrap.io",
             "SMTP_USER"="e7a1a548c2b5fa",
             "SMTP_PASSWORD"="375ad49c0a886c",
-            "email"="ssparkertesting@gmail.com",
+            "EMAIL"="ssparkertesting@gmail.com",
             "CONFIRM_URL_BASE"="http://127.0.0.1:8080"
         },
         env_qa: {
@@ -20,7 +20,7 @@ module.exports = {
             "SMTP_HOST"="smtp.mailtrap.io",
             "SMTP_USER"="e7a1a548c2b5fa",
             "SMTP_PASSWORD"="375ad49c0a886c",
-            "email"="ssparkertesting@gmail.com",
+            "EMAIL"="ssparkertesting@gmail.com",
             "CONFIRM_URL_BASE"="http://parker-qa.aplaline.com"
         }
       }
