@@ -13,9 +13,9 @@ module.exports = {
             "EMAIL": "ssparkertesting@gmail.com",
             "CONFIRM_URL_BASE": "http://127.0.0.1:8080"
         },
-        env_qa: {
+        env_production: {
             "PORT": 3000,
-            "NODE_ENV": "qa",
+            "NODE_ENV": "production",
             "SMTP_PORT": 2525,
             "SMTP_HOST": "smtp.mailtrap.io",
             "SMTP_USER": "e7a1a548c2b5fa",
