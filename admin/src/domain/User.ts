@@ -5,7 +5,7 @@ export interface UserInterface {
   lastName: string,
   plate: string,
   id: string
-  phone?: number,
+  phone: number,
 }
 
 export class User {
@@ -48,5 +48,13 @@ export class User {
     })
 
     return updateUser
+  }
+
+  static async removeUser (id: string) {
+    const { removeUser } = await query(`mutation removeUser($id: String!) {
+        removeUser(id: $id)
+      }`, { id })
+
+    return removeUser
   }
 }

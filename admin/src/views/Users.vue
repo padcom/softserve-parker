@@ -11,7 +11,6 @@
           single-line
           hide-details
         />
-        <v-spacer />
         <v-dialog
           v-model="dialog"
           max-width="500px"
@@ -39,9 +38,14 @@
         <template v-slot:item.state="{ item }">
           {{ getValue(item.state) }}
         </template>
-        <template v-slot:item.action="{ item }">
+        <template v-slot:item.edit="{ item }">
           <v-btn x-small color="primary" @click="editItem(item)">
             edit
+          </v-btn>
+        </template>
+        <template v-slot:item.remove="{ item }">
+          <v-btn x-small color="error" @click="onRemoveItem(item)">
+            remove
           </v-btn>
         </template>
       </v-data-table>
@@ -73,7 +77,8 @@ export default class Users extends Vue {
     { text: 'Role', align: 'left', value: 'roles' },
     { text: 'State', align: 'left', value: 'state' },
     { text: 'Ranking', align: 'left', value: 'rank' },
-    { text: 'Actions', value: 'action', sortable: false }
+    { text: 'Actions', value: 'edit', sortable: false },
+    { text: 'Remove', value: 'remove', sortable: false }
   ]
 
   drivers = []
@@ -96,6 +101,11 @@ export default class Users extends Vue {
     this.user = item
   }
 
+  async onRemoveItem (user: UserInterface) {
+    const agree = confirm(`Do you want to remove?`)
+    if (agree) this.removeUser(user)
+  }
+
   async loadDrivers () {
     try {
       const drivers = await User.getAll()
@@ -113,6 +123,20 @@ export default class Users extends Vue {
       const res = await User.updateUser(firstName, lastName, plate, phone, id)
       // @ts-ignore
       if (res) this.$refs.info.showInfo('User added')
+      this.loadDrivers()
+    } catch (e) {
+      // @ts-ignore
+      this.$refs.info.showError(e.message as string)
+    }
+  }
+
+  async removeUser (user: UserInterface) {
+    try {
+      const { id } = user
+      const res = await User.removeUser(id)
+      // @ts-ignore
+      if (res) this.$refs.info.showInfo('User removed')
+      this.loadDrivers()
     } catch (e) {
       // @ts-ignore
       this.$refs.info.showError(e.message as string)
