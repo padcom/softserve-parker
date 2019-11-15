@@ -1,5 +1,13 @@
 import { query } from '@/graphql'
 
+export interface UserInterface {
+  firstName: string,
+  lastName: string,
+  plate: string,
+  id: string
+  phone?: number,
+}
+
 export class User {
   static async getAll () {
     const { allUsers } = await query(`query {
@@ -26,5 +34,19 @@ export class User {
       }`, { email })
 
     return user
+  }
+
+  static async updateUser (firstName: string, lastName: string, plate: string, phone: number, id: string) {
+    const { updateUser } = await query(`mutation updateUser($firstName: String!, $lastName: String!, $plate: String!, $phone: Int!, $id: String!) {
+        updateUser(firstName: $firstName, lastName: $lastName, plate: $plate, phone: $phone, id: $id)
+      }`, {
+      firstName,
+      lastName,
+      plate,
+      id,
+      phone: Number(phone)
+    })
+
+    return updateUser
   }
 }
