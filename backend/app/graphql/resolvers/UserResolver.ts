@@ -57,4 +57,14 @@ export class UserResolver {
   ) {
     return User.update(firstName, lastName, plate, phone, id)
   }
+
+  @Mutation(() => Int, {
+    description: 'Remove user'
+  })
+  async removeUser (
+    @Arg('id', () => String!)
+    id: string,
+  ) {
+    return User.deleteByID(id)
+  }
 }
