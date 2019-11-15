@@ -39,5 +39,22 @@ export class UserResolver {
   ) {
     return User.create(email, password, firstName, lastName, plate, phone)
   }
-}
 
+  @Mutation(() => Int, {
+    description: 'Update user'
+  })
+  async updateUser (
+    @Arg('firstName', () => String!)
+    firstName: string,
+    @Arg('lastName', () => String!)
+    lastName: string, 
+    @Arg('plate', () => String!)
+    plate: string,
+    @Arg('id', () => String!)
+    id: string,
+    @Arg('phone', () => Int!)
+    phone: number,
+  ) {
+    return User.update(firstName, lastName, plate, phone, id)
+  }
+}

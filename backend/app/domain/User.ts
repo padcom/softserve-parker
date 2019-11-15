@@ -61,6 +61,16 @@ export class User {
 
     return result.insertId
   }
+
+  static async update (firstName: string, lastName: string, plate: string, phone: number, id: string) {
+    const [ result ] = await db.execute(
+      `UPDATE user
+      SET firstName=?, lastName=?, plate=?, phone=?
+      WHERE id=?`, [ firstName, lastName, plate, phone, id ]
+    ) as OkPacket[]
+
+    return id
+  }
  
   static async validateUserCreation (email: string): Promise<Error | void> {
     const re = /@softserveinc.com\s*$/;
