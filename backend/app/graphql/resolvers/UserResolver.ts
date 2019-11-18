@@ -3,6 +3,13 @@ import { User } from '../../domain/User'
 
 @Resolver(User)
 export class UserResolver {
+  @Query(() => [User], {
+    description: 'Returns all users',
+  })
+  async allUsers () {
+    return User.getAll()
+  }
+
   @Query(() => User!, {
     description: 'Returns a given user',
   })
@@ -32,5 +39,32 @@ export class UserResolver {
   ) {
     return User.create(email, password, firstName, lastName, plate, phone)
   }
-}
 
+  @Mutation(() => Int, {
+    description: 'Update user'
+  })
+  async updateUser (
+    @Arg('firstName', () => String!)
+    firstName: string,
+    @Arg('lastName', () => String!)
+    lastName: string, 
+    @Arg('plate', () => String!)
+    plate: string,
+    @Arg('id', () => String!)
+    id: string,
+    @Arg('phone', () => Int!)
+    phone: number,
+  ) {
+    return User.update(firstName, lastName, plate, phone, id)
+  }
+
+  @Mutation(() => Int, {
+    description: 'Remove user'
+  })
+  async removeUser (
+    @Arg('id', () => String!)
+    id: string,
+  ) {
+    return User.deleteByID(id)
+  }
+}

@@ -1,5 +1,6 @@
 import { Field, ID, ObjectType } from 'type-graphql'
 import { OkPacket, FieldPacket, RowDataPacket } from 'mysql'
+import bcrypt from 'bcrypt'
 import { db } from '../db'
 import { logger } from '../logger'
 import { mailer } from '../mailer'
@@ -26,7 +27,7 @@ export class User {
   @Field(() => String)
   plate: string 
 
-  @Field(() => Number)
+  @Field(() => Number, { nullable: true })
   phone?: number
 
   @Field(() => Date)
@@ -43,10 +44,15 @@ export class User {
   @Field(() => Boolean)
   enabled: boolean
 
+  @Field(() => String, { nullable: true })
+  roles?: string
+
   static async create (email: string, password: string, firstName: string, lastName: string, plate: string, phone: number) {
+    const hashedPassword = await bcrypt.hash(password, 10)
+
     const [ result ] = await db.execute(
       `INSERT INTO user (email, password, firstName, lastName, plate, phone) 
-      VALUES (?, ?, ?, ?, ?, ?)`, [ email, password, firstName, lastName, plate, phone ]
+      VALUES (?, ?, ?, ?, ?, ?)`, [ email, hashedPassword, firstName, lastName, plate, phone ]
     ) as OkPacket[]
 
     if (result.affectedRows !== 1) {
@@ -54,6 +60,16 @@ export class User {
     }
 
     return result.insertId
+  }
+
+  static async update (firstName: string, lastName: string, plate: string, phone: number, id: string) {
+    const [ result ] = await db.execute(
+      `UPDATE user
+      SET firstName=?, lastName=?, plate=?, phone=?
+      WHERE id=?`, [ firstName, lastName, plate, phone, id ]
+    ) as OkPacket[]
+
+    return id
   }
  
   static async validateUserCreation (email: string): Promise<Error | void> {
@@ -97,6 +113,18 @@ export class User {
     return result.affectedRows
   }
 
+  static async deleteByID (id: string) {
+    const [ result ] = await db.execute('DELETE FROM user WHERE id=?', [ id ]) as OkPacket[]
+
+    if (result.affectedRows == 0) {
+      throw new Error('User not found')
+    } else if (result.affectedRows > 1) {
+      logger.warn('Multiple users deleted')
+    }
+
+    return result.affectedRows
+  }
+
   static async getByEmail(email: string): Promise<User> {
     const [ rows ]: [ RowDataPacket[], FieldPacket[] ] = await db.execute(
       'SELECT * FROM user WHERE email = ?',
@@ -107,7 +135,7 @@ export class User {
     return rows[0] as User
   }
 
-  static async getById(id: number) {
+  static async getById(id: number): Promise<User> {
     const [ rows ]: [ RowDataPacket[], FieldPacket[] ] = await db.execute(
       'SELECT * FROM user WHERE id = ?',
       [ id ]
@@ -115,7 +143,16 @@ export class User {
     this.assertFound(rows[0])
 
     return rows[0] as User
-  } 
+  }
+
+  static async getAll(): Promise<User[]> {
+    const [ rows ]: [ RowDataPacket[], FieldPacket[] ] = await db.execute(
+      'SELECT * FROM user'
+    )
+    this.assertFound(rows[0])
+
+    return rows as User[]
+  }
 
   private static assertFound(user: RowDataPacket) {
     if (!user) throw new Error(`User doesn't exist.`)

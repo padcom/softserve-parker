@@ -8,6 +8,8 @@ import { FieldPacket, RowDataPacket, OkPacket } from 'mysql'
 import { isPast } from 'date-fns'
 import { db } from '../db'
 
+import { User } from './User'
+
 export enum RequestStatus {
   pending = "pending",
   approved = "approved",
@@ -37,6 +39,11 @@ export class ReservationRequest {
 
   @Field(() => Number)
   parkingSpotId: number
+
+  @Field(() => User)
+  user (): Promise<User> {
+    return User.getById(this.userId)
+  }
 
   static async fetchByUserId(userId: number, from: Date): Promise<ReservationRequest[]> {
     const [rows]: [RowDataPacket[], FieldPacket[]] = await db.execute(
@@ -99,5 +106,14 @@ export class ReservationRequest {
       } 
 
     return result.affectedRows
+  }
+
+  static async getAllByDay(from: Date, to: Date) {
+    const [ result ] = await db.execute(`
+      SELECT  * FROM parker.reservationRequest
+      WHERE date BETWEEN ? AND ?
+    `, [from, to])
+    
+    return result
   }
 }

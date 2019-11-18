@@ -3,6 +3,8 @@ import Router from 'vue-router'
 
 import Login from './views/Login.vue'
 import ParkingStatus from './views/ParkingStatus.vue'
+import ParkingHistory from './views/ParkingHistory.vue'
+import Users from './views/Users.vue'
 
 import store from '@/store'
 import logger from '@/logger'
@@ -28,12 +30,12 @@ const router = new Router({
     {
       path: '/parking-history',
       name: 'parking-history',
-      component: () => import(/* webpackChunkName: "empty" */ './views/Empty.vue')
+      component: ParkingHistory
     },
     {
       path: '/users',
       name: 'users',
-      component: () => import(/* webpackChunkName: "empty" */ './views/Empty.vue')
+      component: Users
     },
     {
       path: '/users-history',
