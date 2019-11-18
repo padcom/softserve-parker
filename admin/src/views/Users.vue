@@ -98,7 +98,7 @@ export default class Users extends Vue {
 
   editItem (item: UserInterface) {
     this.dialog = true
-    this.user = item
+    this.user = Object.assign({}, item)
   }
 
   async onRemoveItem (user: UserInterface) {
