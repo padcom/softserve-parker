@@ -9,7 +9,11 @@ export class Requests {
           date
           status
           user {
+            firstName
+            lastName
             email
+            phone
+            plate
           }
         }
       }`, { from, to })
