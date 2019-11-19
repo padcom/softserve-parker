@@ -67,7 +67,11 @@ import { Requests } from '@/domain/Requests'
 })
 export default class ParkingStatus extends Vue {
   headers = [
-    { text: 'User', align: 'left', sortable: true, value: 'user.email' },
+    { text: 'First name', align: 'left', sortable: true, value: 'user.firstName' },
+    { text: 'Last name', align: 'left', sortable: true, value: 'user.lastName' },
+    { text: 'Email', align: 'left', sortable: true, value: 'user.email' },
+    { text: 'Phone', align: 'left', sortable: true, value: 'user.phone' },
+    { text: 'Plate', align: 'left', sortable: true, value: 'user.plate' },
     { text: 'Date', align: 'left', sortable: true, value: 'date' },
     { text: 'Status', align: 'left', sortable: true, value: 'status' }
   ]

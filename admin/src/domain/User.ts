@@ -15,6 +15,7 @@ export class User {
         id
         firstName
         lastName
+        email
         phone
         plate
         roles
