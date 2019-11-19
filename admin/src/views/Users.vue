@@ -72,6 +72,7 @@ export default class Users extends Vue {
   headers = [
     { text: 'First Name', align: 'left', sortable: true, value: 'firstName' },
     { text: 'Last Name', align: 'left', sortable: true, value: 'lastName' },
+    { text: 'Email', align: 'left', sortable: true, value: 'email' },
     { text: 'Phone number', align: 'left', sortable: true, value: 'phone' },
     { text: 'Plate number', align: 'left', sortable: true, value: 'plate' },
     { text: 'Role', align: 'left', value: 'roles' },
