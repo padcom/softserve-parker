@@ -56,5 +56,6 @@ export default class PopupMenu extends Vue {
   right: 0;
   line-height: 20pt;
   padding: 12px 15px;
+  cursor: default;
 }
 </style>
