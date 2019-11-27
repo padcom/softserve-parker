@@ -19,7 +19,7 @@
           v-if="showCalendar"
           bottom
           :disabledDates="requestsDate"
-          :tomorrowAlreadyRequested="tomorrowAlreadyRequested"
+          :tomorrowWeekendOrAlreadyRequested="tomorrowAlreadyRequested || tommorowWeekendDay"
           @save="calendarPickDate"
           @close="closeCalendar"
         />

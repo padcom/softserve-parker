@@ -49,7 +49,7 @@ export default class Calendar extends Vue {
   @Prop({ type: Boolean, required: false, default: false }) bottom
   @Prop({ type: Array, required: false, default: () => [] }) disabledDates
   @Prop({ type: Boolean, required: false, default: false })
-  tomorrowAlreadyRequested
+  tomorrowWeekendOrAlreadyRequested
 
   date = moment().startOf('month')
   selectedDay = null
@@ -62,7 +62,7 @@ export default class Calendar extends Vue {
       iteration++
     })
 
-    if (this.tomorrowAlreadyRequested === false) {
+    if (!this.tomorrowWeekendOrAlreadyRequested) {
       this.selectedDay = moment.range(
         moment().add(1, 'day'),
         moment().add(1, 'day')
