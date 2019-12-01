@@ -25,5 +25,15 @@ services:
     volumes:
       - parker-mysql-db:/var/lib/mysql
 
+  parker:
+    image: parker-app
+    container_name: parker-app
+    links:
+      - mysql
+    logging:
+      driver: json-file
+    ports:
+      - 3000:3000
+
 volumes:
   parker-mysql-db:
