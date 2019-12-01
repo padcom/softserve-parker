@@ -26,7 +26,7 @@ services:
       - parker-mysql-db:/var/lib/mysql
 
   parker:
-    image: parker-app
+    image: localhost:5000/parker-app
     container_name: parker-app
     links:
       - mysql
