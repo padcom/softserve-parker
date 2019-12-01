@@ -10,7 +10,7 @@ ENV SMTP_HOST=smtp.mailtrap.io
 ENV SMTP_USER=e7a1a548c2b5fa
 ENV SMTP_PASSWORD=375ad49c0a886c
 ENV EMAIL=ssparkertesting@gmail.com
-ENV CONFIRM_URL_BASE=http://127.0.0.1:8080
+ENV CONFIRM_URL_BASE=http://parker-qa.aplaline.com
 
 COPY backend/dist /app/
 COPY backend/node_modules /app/node_modules

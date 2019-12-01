@@ -21,3 +21,5 @@ cd ../deployment/runtime
 # Build application
 cd ../..
 docker build -t parker-app .
+docker tag parker-app localhost:5000/parker-app
+docker push localhost:5000/parker-app
