@@ -1,5 +1,9 @@
 #!/bin/sh -e
 
+# Create a folder for caching NPM packages to speed up the build
+rm -rf .npm-cache
+mkdir -p .npm-cache
+
 # Create apache container
 cd apache
 ./build.sh

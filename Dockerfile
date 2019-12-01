@@ -1,7 +1,10 @@
 FROM parker-runtime
 
+MAINTAINER Matthias Hryniszak <padcom@gmail.com>
+
 ARG environment=production
 ARG port=3000
+ARG domain=parker-qa.aplaline.com
 
 ENV NODE_ENV=$environment
 ENV PORT=$port
@@ -10,7 +13,7 @@ ENV SMTP_HOST=smtp.mailtrap.io
 ENV SMTP_USER=e7a1a548c2b5fa
 ENV SMTP_PASSWORD=375ad49c0a886c
 ENV EMAIL=ssparkertesting@gmail.com
-ENV CONFIRM_URL_BASE=http://parker-qa.aplaline.com
+ENV CONFIRM_URL_BASE=http://$domain
 
 COPY backend/dist /app/
 COPY backend/node_modules /app/node_modules
