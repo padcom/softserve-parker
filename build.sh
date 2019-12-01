@@ -1,7 +1,11 @@
 #!/bin/sh -e
 
+# Create apache container
+cd apache
+./build.sh
+
 # Create build container
-cd deployment/build
+cd ../deployment/build
 ./build.sh
 
 # Build parts of the application using build container
