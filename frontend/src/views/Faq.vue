@@ -39,7 +39,7 @@ export default class Faq extends Vue {}
 
 .faq-page {
   margin: 15px;
-  font-size: 18px;
+  font-size: 14px;
   font-family: $font-family-proxima-nova;
 
   &__head {
@@ -49,11 +49,12 @@ export default class Faq extends Vue {}
   &__header {
     margin-top: 0;
     margin-bottom: 0;
+    font-weight: $font-weight-semi-bold;
   }
 
   &__paragraph {
     font-family: $font-family-open-sans;
-    line-height: 30px;
+    line-height: 24px;
   }
 }
 </style>
