@@ -38,20 +38,23 @@ export default class Faq extends Vue {}
 @import '../styles/variables';
 
 .faq-page {
-  margin: 15px;
-  font-size: 18px;
   font-family: $font-family-proxima-nova;
+  padding: 0 15px 15px 20px;
 
   &__head {
+    font-size: 14px;
     font-weight: $font-weight-extra-bold;
+    margin-block-start: 16px;
   }
 
   &__header {
+    font-size: 14px;
     margin-top: 0;
     margin-bottom: 0;
   }
 
   &__paragraph {
+    font-size: 14px;
     font-family: $font-family-open-sans;
     line-height: 30px;
   }
