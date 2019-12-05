@@ -1,6 +1,9 @@
 import dotenv from 'dotenv'
 import envalid from 'envalid'
 
+console.error('NODE_ENV', process.env.NODE_ENV)
+console.error( process.env)
+
 const { str, url, port } = envalid;
 
 const envVariableValidators = {
@@ -14,5 +17,6 @@ const envVariableValidators = {
 }
 
 dotenv.config()
+
 const env = envalid.cleanEnv(process.env, envVariableValidators, { strict: true })
 export default env

@@ -13,6 +13,12 @@ const {
   MYSQL_DATABASE = config[NODE_ENV].database,
 } = process.env
 
+console.log('MYSQL_HOST =', MYSQL_HOST)
+console.log('MYSQL_PORT =', MYSQL_PORT)
+console.log('MYSQL_USER =', MYSQL_USER)
+console.log('MYSQL_PASSWORD =', MYSQL_PASSWORD)
+console.log('MYSQL_DATABASE =', MYSQL_DATABASE)
+
 const pool = mysql.createPool({
   connectionLimit: 10,
   host: MYSQL_HOST,
