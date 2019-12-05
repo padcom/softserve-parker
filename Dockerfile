@@ -2,11 +2,9 @@ FROM parker-runtime
 
 MAINTAINER Matthias Hryniszak <padcom@gmail.com>
 
-ARG environment=production
 ARG port=3000
 ARG domain=parker-qa.aplaline.com
 
-ENV NODE_ENV=$environment
 ENV PORT=$port
 ENV SMTP_PORT=2525
 ENV SMTP_HOST=smtp.mailtrap.io
