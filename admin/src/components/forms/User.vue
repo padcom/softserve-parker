@@ -19,6 +19,12 @@
           <v-col cols="12" sm="6">
             <v-text-field v-model="user.plate" label="Plate number" :error="!user.plate"></v-text-field>
           </v-col>
+          <v-col class="d-flex" cols="12" sm="6">
+            <v-select
+              :items="this.roles"
+              label="User Role">
+            </v-select>
+          </v-col>
         </v-row>
       </v-container>
     </v-card-text>
@@ -44,6 +50,8 @@ export default class UserForm extends Vue {
 
   user = this.userProp
 
+  roles = ['Regular', 'Vip', 'Admin']
+
   onSubmit () {
     if (this.isFormFilledUp()) {
       const user = this.user
@@ -56,7 +64,8 @@ export default class UserForm extends Vue {
       this.user.firstName &&
       this.user.lastName &&
       this.user.plate &&
-      this.user.phone
+      this.user.phone &&
+      this.roles
     )
   }
 }
