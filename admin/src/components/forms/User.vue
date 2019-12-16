@@ -22,7 +22,9 @@
           <v-col class="d-flex" cols="12" sm="6">
             <v-select
               :items="this.roles"
-              label="User Role">
+              label="User Role"
+              v-model="user.roles"
+              >
             </v-select>
           </v-col>
         </v-row>
@@ -50,7 +52,7 @@ export default class UserForm extends Vue {
 
   user = this.userProp
 
-  roles = ['Regular', 'Vip', 'Admin']
+  roles = ['regular', 'vip', 'admin']
 
   onSubmit () {
     if (this.isFormFilledUp()) {

@@ -4,7 +4,7 @@ export interface UserInterface {
   firstName: string,
   lastName: string,
   plate: string,
-  id: string
+  id: string,
   phone: number,
   roles: string
 }
