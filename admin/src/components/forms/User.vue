@@ -22,8 +22,20 @@
           <v-col class="d-flex" cols="12" sm="6">
             <v-select
               :items="this.roles"
+              item-text="name"
+              item-value="value"
               label="User Role"
               v-model="user.roles"
+              >
+            </v-select>
+          </v-col>
+          <v-col class="d-flex" cols="12" sm="6">
+            <v-select
+              :items="this.state"
+              item-text="name"
+              item-value="value"
+              label="User State"
+              v-model="user.state"
               >
             </v-select>
           </v-col>
@@ -52,7 +64,31 @@ export default class UserForm extends Vue {
 
   user = this.userProp
 
-  roles = ['regular', 'vip', 'admin']
+  roles = [
+    {
+      name: 'regular',
+      value: 1
+    },
+    {
+      name: 'vip',
+      value: 2
+    },
+    {
+      name: 'admin',
+      value: 3
+    }
+  ]
+
+  state = [
+    {
+      name: 'active',
+      value: true
+    },
+    {
+      name: 'inactive',
+      value: false
+    }
+  ]
 
   onSubmit () {
     if (this.isFormFilledUp()) {
@@ -67,7 +103,8 @@ export default class UserForm extends Vue {
       this.user.lastName &&
       this.user.plate &&
       this.user.phone &&
-      this.roles
+      this.roles &&
+      this.state
     )
   }
 }

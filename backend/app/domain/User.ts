@@ -47,6 +47,9 @@ export class User {
   @Field(() => String, { nullable: true })
   roles?: string
 
+  @Field(() => Boolean)
+  state: boolean
+
   static async create (email: string, password: string, firstName: string, lastName: string, plate: string, phone: number) {
     const hashedPassword = await bcrypt.hash(password, 10)
 
@@ -62,11 +65,11 @@ export class User {
     return result.insertId
   }
 
-  static async update (firstName: string, lastName: string, plate: string, phone: number, id: string, roles: string) {
+  static async update (firstName: string, lastName: string, plate: string, phone: number, id: string, roles: string, state: boolean) {
     const [ result ] = await db.execute(
       `UPDATE user
-      SET firstName=?, lastName=?, plate=?, phone=?, roles=?
-      WHERE id=?`, [ firstName, lastName, plate, phone, roles, id ]
+      SET firstName=?, lastName=?, plate=?, phone=?, roles=?, state=?
+      WHERE id=?`, [ firstName, lastName, plate, phone, roles, state, id ]
     ) as OkPacket[]
 
     return id

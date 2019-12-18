@@ -15,6 +15,7 @@ export class Requests {
             phone
             plate
             roles
+            state
           }
         }
       }`, { from, to })

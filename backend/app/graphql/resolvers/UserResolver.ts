@@ -55,9 +55,11 @@ export class UserResolver {
     @Arg('phone', () => Int!)
     phone: number,
     @Arg('roles', () => String!)
-    roles: string
+    roles: string,
+    @Arg('state', () => Boolean!)
+    state: boolean
   ) {
-    return User.update(firstName, lastName, plate, phone, id, roles)
+    return User.update(firstName, lastName, plate, phone, id, roles, state)
   }
 
   @Mutation(() => Int, {

@@ -6,7 +6,8 @@ export interface UserInterface {
   plate: string,
   id: string,
   phone: number,
-  roles: string
+  roles: string,
+  state: boolean
 }
 
 export class User {
@@ -21,6 +22,7 @@ export class User {
         plate
         roles
         rank
+        state
       }
     }`)
     return allUsers
@@ -37,16 +39,17 @@ export class User {
     return user
   }
 
-  static async updateUser (firstName: string, lastName: string, plate: string, phone: number, id: string, roles: string) {
-    const { updateUser } = await query(`mutation updateUser($firstName: String!, $lastName: String!, $plate: String!, $phone: Int!, $id: String!, $roles: String!) {
-        updateUser(firstName: $firstName, lastName: $lastName, plate: $plate, phone: $phone, id: $id, roles: $roles)
+  static async updateUser (firstName: string, lastName: string, plate: string, phone: number, id: string, roles: string, state: boolean) {
+    const { updateUser } = await query(`mutation updateUser($firstName: String!, $lastName: String!, $plate: String!, $phone: Int!, $id: String!, $roles: String! $state: Boolean!) {
+        updateUser(firstName: $firstName, lastName: $lastName, plate: $plate, phone: $phone, id: $id, roles: $roles, state: $state)
       }`, {
       firstName,
       lastName,
       plate,
       id,
       phone: Number(phone),
-      roles
+      roles,
+      state
     })
     return updateUser
   }
