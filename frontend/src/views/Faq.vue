@@ -27,10 +27,7 @@
 <script>
 import { Vue, Component } from 'vue-property-decorator'
 
-@Component({
-  components: {
-  }
-})
+@Component()
 export default class Faq extends Vue {}
 </script>
 

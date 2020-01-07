@@ -16,8 +16,8 @@ import Avatar from '@/components/Avatar'
 @Component({
   components: {
     LoginForm,
-    Avatar
-  }
+    Avatar,
+  },
 })
 export default class Login extends Vue {}
 </script>

@@ -38,11 +38,8 @@
 
 <script>
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import lodashGet from 'lodash.get'
 import isTouchDevice from 'is-touch-device'
-import {
-  ReservationRequestsAction
-} from '@/store/reservationRequests'
+import { ReservationRequestsAction } from '@/store/reservationRequests'
 import { APP_MESSAGES } from '@/app-statuses'
 import Modal from '@/components/Modal.vue'
 import ParkingDatesListItem from './ParkingDatesListItem'
@@ -50,8 +47,8 @@ import ParkingDatesListItem from './ParkingDatesListItem'
 @Component({
   components: {
     ParkingDatesListItem,
-    Modal
-  }
+    Modal,
+  },
 })
 export default class ParkingDates extends Vue {
   @Prop({ type: Array, default: () => [] }) requests
@@ -65,15 +62,16 @@ export default class ParkingDates extends Vue {
       outlined: false,
       fullWidth: true,
       emitType: 'close',
-      text: 'No'
+      text: 'No',
     },
     {
       outlined: true,
       fullWidth: true,
       emitType: 'remove',
-      text: 'Yes'
-    }
+      text: 'Yes',
+    },
   ]
+
   showModalInfo = false
   infoMessage = ''
   infoActions = [
@@ -81,21 +79,22 @@ export default class ParkingDates extends Vue {
       outlined: true,
       fullWidth: true,
       emitType: 'revoke',
-      text: 'Ok'
-    }
+      text: 'Ok',
+    },
   ]
 
-  mounted() {
+  mounted () {
     this.touchedDevice = isTouchDevice()
   }
 
-  onRemoveStart(element) {
+  onRemoveStart (element) {
     this.activeElement = element
     this.showModalConfirm = true
   }
 
-  async removeItem() {
-    const id = lodashGet(this, 'activeElement.request.id')
+  async removeItem () {
+    const id = this?.activeElement?.request?.id
+
     try {
       if (id) await this.cancelRequest(id)
       this.activeElement = null
@@ -108,12 +107,14 @@ export default class ParkingDates extends Vue {
     }
   }
 
-  closeConfirmModal() {
-    if (lodashGet(this, 'activeElement.leftPosition')) this.activeElement.leftPosition = 0
+  closeConfirmModal () {
+    if (this?.activeElement?.leftPosition) {
+      this.activeElement.leftPosition = 0
+    }
     this.showModalConfirm = false
   }
 
-  closeInfoModal() {
+  closeInfoModal () {
     this.showModalInfo = false
   }
 }

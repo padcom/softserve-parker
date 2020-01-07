@@ -65,8 +65,8 @@ import UserForm from '@/components/forms/User.vue'
 @Component({
   components: {
     Information,
-    UserForm
-  }
+    UserForm,
+  },
 })
 export default class Users extends Vue {
   headers = [
@@ -79,7 +79,7 @@ export default class Users extends Vue {
     { text: 'State', align: 'left', value: 'state' },
     { text: 'Ranking', align: 'left', value: 'rank' },
     { text: 'Actions', value: 'edit', sortable: false },
-    { text: 'Remove', value: 'remove', sortable: false }
+    { text: 'Remove', value: 'remove', sortable: false },
   ]
 
   drivers = []

@@ -31,20 +31,20 @@ import PopupMenu from '@/components/PopupMenu.vue'
 @Component({
   components: {
     Avatar,
-    PopupMenu
-  }
+    PopupMenu,
+  },
 })
 export default class AppHeader extends Vue {
   @AuthGetter isLoggedIn
 
   userMenu = false
   userMenuLinks = [
-    { url: '/logout', title: 'Logout' }
+    { url: '/logout', title: 'Logout' },
   ]
 
   icons = {
-    'home': { icon: '/img/menu.png', route: 'faq' },
-    'faq': { icon: '/img/faq.png', route: '/' }
+    home: { icon: '/img/menu.png', route: 'faq' },
+    faq: { icon: '/img/faq.png', route: '/' },
   }
 
   get menuIcon () {

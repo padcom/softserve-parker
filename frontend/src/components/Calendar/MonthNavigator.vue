@@ -43,21 +43,21 @@ import MonthName from './MonthName.vue'
 
 @Component({
   components: {
-    MonthName
-  }
+    MonthName,
+  },
 })
 export default class MonthNavigator extends Vue {
   @Prop({ type: Object, required: true }) value
   @Prop({
     type: Object,
     required: false,
-    default: () => moment.range(null, null)
+    default: () => moment.range(null, null),
   })
   valid
 
   icons = {
     left: '/img/chevron-left.png',
-    right: '/img/chevron-right.png'
+    right: '/img/chevron-right.png',
   }
 
   get canNavigatePrevMonth () {
@@ -75,6 +75,7 @@ export default class MonthNavigator extends Vue {
   prevViewMonth () {
     this.$emit('previous')
   }
+
   nextViewMonth () {
     this.$emit('next')
   }

@@ -12,6 +12,6 @@ export default new Vuex.Store<RootState>({
   modules: {
     auth,
     ui,
-    reservationRequests
-  }
+    reservationRequests,
+  },
 })

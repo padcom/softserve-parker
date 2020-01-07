@@ -17,8 +17,8 @@ import { AuthAction } from '@/store/auth'
 @Component({
   components: {
     Btn,
-    Loader
-  }
+    Loader,
+  },
 })
 export default class ConfirmRegistration extends Vue {
   @AuthAction confirmRegistration

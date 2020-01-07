@@ -67,8 +67,8 @@ import TextField from './TextField'
 @Component({
   components: {
     Btn,
-    TextField
-  }
+    TextField,
+  },
 })
 export default class SignUpForm extends Vue {
   @Prop({ type: Function, default: () => {} }) onSubmit
@@ -78,8 +78,9 @@ export default class SignUpForm extends Vue {
     email: '',
     plateNumber: '',
     phoneNumber: null,
-    password: ''
+    password: '',
   }
+
   passwordFieldType = 'password'
   passwordConfirmation = ''
   passwordConfirmationFieldType = 'password'
@@ -113,7 +114,7 @@ export default class SignUpForm extends Vue {
       this.user.plateNumber &&
       this.user.phoneNumber &&
       this.user.password &&
-      this.passwordConfirmation
+      this.passwordConfirmation,
     )
   }
 

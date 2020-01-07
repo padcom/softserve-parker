@@ -42,8 +42,8 @@ import { Settings as SettingsInterface, SettingsAPI } from '@/domain/Settings'
 @Component({
   components: {
     TimePicker,
-    Information
-  }
+    Information,
+  },
 })
 export default class Settings extends Vue {
   numberOfParkingSpots = 50
@@ -70,7 +70,7 @@ export default class Settings extends Vue {
         api.updateDeadlineHour(this.deadlineHour),
         api.updateCancelHour(this.cancelHour),
         api.updateDaysForCalculation(this.daysForCalculation),
-        api.updateDaysForRequests(this.daysForRequests)
+        api.updateDaysForRequests(this.daysForRequests),
       ])
       // @ts-ignore
       this.$refs.info.showInfo('Settings saved')

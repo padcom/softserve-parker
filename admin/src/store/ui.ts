@@ -9,13 +9,13 @@ export interface UIState {
 
 const state: UIState = {
   total: 0,
-  pendingCalls: 0
+  pendingCalls: 0,
 }
 
 const getters: GetterTree<UIState, RootState> = {
   loading: state => {
     return state.pendingCalls > 0
-  }
+  },
 }
 
 const mutations: MutationTree<UIState> = {
@@ -28,7 +28,7 @@ const mutations: MutationTree<UIState> = {
     if (state.pendingCalls === 0) {
       state.total = 0
     }
-  }
+  },
 }
 
 const actions: ActionTree<UIState, RootState> = {
@@ -38,7 +38,7 @@ const actions: ActionTree<UIState, RootState> = {
 
   endRequest ({ commit }) {
     commit('endRequest')
-  }
+  },
 }
 
 export default {
@@ -46,7 +46,7 @@ export default {
   state,
   getters,
   mutations,
-  actions
+  actions,
 }
 
 export const UIState = namespace('ui').State

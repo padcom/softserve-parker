@@ -13,93 +13,93 @@ afterEach(async () => {
 })
 
 describe('Authentication', () => {
-	test('Responds with 403 code and lack of credentials message when credentials are not provided', async () => {
-		const request  = httpMocks.createRequest({
-			method: 'POST',
-			url: '/login',
-		});
-		
-		const response = httpMocks.createResponse()
-		await login(request, response)
-		expect(response.statusCode).toBe(403);
-		expect(response._getData()).toBe(`Credentials not provided.`);
-	});
+  test('Responds with 403 code and lack of credentials message when credentials are not provided', async () => {
+    const request = httpMocks.createRequest({
+      method: 'POST',
+      url: '/login',
+    });
 
-	test(`Responds with 403 code and message about none existing user when username doesn't exist`, async () => {
-		const request  = httpMocks.createRequest({
-			method: 'POST',
-			url: '/login',
-			body: {
-				email: 'failtast@google.com',
-				password: '5431'
-			}
-		});
-		
-		const response = httpMocks.createResponse()
-		await login(request, response)
+    const response = httpMocks.createResponse()
+    await login(request, response)
+    expect(response.statusCode).toBe(403);
+    expect(response._getData()).toBe(`Credentials not provided.`);
+  });
 
-		expect(response.statusCode).toBe(403);
-		expect(response._getData()).toBe(`User doesn't exist.`);
-	});
+  test(`Responds with 403 code and message about none existing user when username doesn't exist`, async () => {
+    const request = httpMocks.createRequest({
+      method: 'POST',
+      url: '/login',
+      body: {
+        email: 'failtast@google.com',
+        password: '5431'
+      }
+    });
 
-	test(`Responds with 403 code and message about incorrect password when wrong password`, async () => {
-		const request  = httpMocks.createRequest({
-			method: 'POST',
-			url: '/login',
-			body: {
-					email: 'fake@softserveinc.com',
-					password: '5431'
-			}
-		});
-		const response = httpMocks.createResponse()
+    const response = httpMocks.createResponse()
+    await login(request, response)
 
-		await login(request, response)
+    expect(response.statusCode).toBe(403);
+    expect(response._getData()).toBe(`User doesn't exist.`);
+  });
 
-		expect(response.statusCode).toBe(403);
-		expect(response._getData()).toBe(`Incorrect password.`);
-	});
+  test(`Responds with 403 code and message about incorrect password when wrong password`, async () => {
+    const request = httpMocks.createRequest({
+      method: 'POST',
+      url: '/login',
+      body: {
+        email: 'fake@softserveinc.com',
+        password: '5431'
+      }
+    });
+    const response = httpMocks.createResponse()
 
-	test(`Responds with 200 code and jwt when login is successful`, async () => {
-		const request  = httpMocks.createRequest({
-			method: 'POST',
-			url: '/login',
-			body: {
-					email: 'fake@softserveinc.com',
-					password: 'pass123'
-			}
-		});
-		
-		const response = httpMocks.createResponse()
-		await login(request, response)
+    await login(request, response)
 
-		expect(response.statusCode).toBe(200);
-		const token = await Session.fetchToken(response._getData())
+    expect(response.statusCode).toBe(403);
+    expect(response._getData()).toBe(`Incorrect password.`);
+  });
 
-		expect(token).toBe(response._getData())
-		await Session.delete(response._getData())
-	});
+  test(`Responds with 200 code and jwt when login is successful`, async () => {
+    const request = httpMocks.createRequest({
+      method: 'POST',
+      url: '/login',
+      body: {
+        email: 'fake@softserveinc.com',
+        password: 'pass123'
+      }
+    });
 
-	test('Will logout logged in user', async () => {
-		const token = uuid()
-		await Session.create(token)
+    const response = httpMocks.createResponse()
+    await login(request, response)
 
-		const request  = httpMocks.createRequest({
-			method: 'POST',
-			url: '/logout',
-			headers: {
-				Authorization: `Bearer ${token}`
-			},
-			body: {}
-		});
+    expect(response.statusCode).toBe(200);
+    const token = await Session.fetchToken(response._getData())
 
-		const response = httpMocks.createResponse()
+    expect(token).toBe(response._getData())
+    await Session.delete(response._getData())
+  });
 
-		await logout(request, response)
+  test('Will logout logged in user', async () => {
+    const token = uuid()
+    await Session.create(token)
 
-		expect(response.statusCode).toBe(200)
+    const request = httpMocks.createRequest({
+      method: 'POST',
+      url: '/logout',
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      body: {}
+    });
 
-		const session = await Session.fetch(token)
+    const response = httpMocks.createResponse()
 
-		expect(session).toBe(null)
-	})
+    await logout(request, response)
+
+    expect(response.statusCode).toBe(200)
+
+    const session = await Session.fetch(token)
+
+    expect(session).toBe(null)
+  })
 })

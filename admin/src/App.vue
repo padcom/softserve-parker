@@ -57,7 +57,7 @@ export default class App extends Vue {
     { icon: 'mdi-comment-text', text: 'Parking history', url: '/parking-history' },
     { icon: 'mdi-account-multiple', text: 'Users', url: '/users' },
     { icon: 'mdi-clipboard-text', text: 'User\'s history', url: '/users-history' },
-    { icon: 'mdi-settings', text: 'Settings', url: '/settings' }
+    { icon: 'mdi-settings', text: 'Settings', url: '/settings' },
   ]
 
   drawer = null
@@ -75,7 +75,7 @@ export default class App extends Vue {
     const width = this.pendingCalls > 0 ? 100 / (this.total / this.pendingCalls) + 'vw' : '0vw'
     return {
       'width': width,
-      'transition-duration': '1s'
+      'transition-duration': '1s',
     }
   }
 

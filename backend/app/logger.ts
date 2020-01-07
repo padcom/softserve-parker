@@ -13,7 +13,7 @@ export const logger = winston.createLogger({
   ],
 })
 
-// PM2 will be running the processes and it needs console logs to do logging
+// Docker will be running the processes and it needs console logs to do logging
 logger.add(new winston.transports.Console({
   format: winston.format.simple()
 }))

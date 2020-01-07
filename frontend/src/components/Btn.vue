@@ -32,7 +32,7 @@ export default class Btn extends Vue {
   @Prop({ type: Boolean, default: false }) outlined
   @Prop({ type: Boolean, default: false }) fullWidth
   @Prop({ type: Boolean, default: false }) disabled
-  @Prop({ type: [String, Boolean], default: false }) icon
+  @Prop({ type: [ String, Boolean ], default: false }) icon
 }
 </script>
 

@@ -28,9 +28,7 @@ export class SettingsAPI {
       setNumberOfParkingSpots($spots: Int!) {
         setNumberOfParkingSpots(spots: $spots)
       }
-    `, {
-      spots
-    })
+    `, { spots })
 
     return result
   }
@@ -40,9 +38,7 @@ export class SettingsAPI {
     setDeadlineHour($hour: String!) {
       setDeadlineHour(hour: $hour)
     }
-  `, {
-      hour
-    })
+  `, { hour })
 
     return result
   }
@@ -52,9 +48,7 @@ export class SettingsAPI {
       setCancelHour($hour: String!) {
         setCancelHour(hour: $hour)
       }
-    `, {
-      hour
-    })
+    `, { hour })
 
     return result
   }
@@ -64,9 +58,7 @@ export class SettingsAPI {
       setDaysForCalculation($days: Int!) {
         setDaysForCalculation(days: $days)
       }
-    `, {
-      days
-    })
+    `, { days })
 
     return result
   }
@@ -76,9 +68,7 @@ export class SettingsAPI {
       setDaysForRequests($days: Int!) {
         setDaysForRequests(days: $days)
       }
-    `, {
-      days
-    })
+    `, { days })
 
     return result
   }

@@ -9,7 +9,7 @@ export async function query (query: string, variables: object = {}) {
     throw new Error('User unauthenticated')
   } else {
     const headers = {
-      'Authorization': `Bearer ${token} `
+      'Authorization': `Bearer ${token} `,
     }
 
     const response = await axios.post('/graphql', { query, variables }, { headers })

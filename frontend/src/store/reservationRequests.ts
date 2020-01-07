@@ -16,7 +16,7 @@ export interface ReservationRequestsState {
 }
 
 const state: ReservationRequestsState = {
-  requests: []
+  requests: [],
 }
 
 const getters: GetterTree<ReservationRequestsState, RootState> = {
@@ -33,7 +33,7 @@ const getters: GetterTree<ReservationRequestsState, RootState> = {
   tommorowWeekendDay: () => {
     const tommorowDay = moment().add(1, 'day').day()
     return tommorowDay === 6 || tommorowDay === 7
-  }
+  },
 }
 
 const mutations: MutationTree<ReservationRequestsState> = {
@@ -42,7 +42,7 @@ const mutations: MutationTree<ReservationRequestsState> = {
   },
   cancelRequest (state, id) {
     state.requests = state.requests.filter(request => request.id !== id)
-  }
+  },
 }
 
 const actions: ActionTree<ReservationRequestsState, RootState> = {
@@ -78,7 +78,7 @@ const actions: ActionTree<ReservationRequestsState, RootState> = {
       try {
         const reservationRequests = await ReservationRequest.createRequest(
           rootState.auth.user.id,
-          [date]
+          [ date ],
         )
 
         bus.emit('reservation-request-created', reservationRequests)
@@ -88,7 +88,7 @@ const actions: ActionTree<ReservationRequestsState, RootState> = {
         reject(error)
       }
     })
-  }
+  },
 }
 
 export default {
@@ -96,17 +96,17 @@ export default {
   state,
   getters,
   mutations,
-  actions
+  actions,
 }
 
 export const ReservationRequestsState = namespace('reservationRequests').State
 export const ReservationRequestsGetter = namespace('reservationRequests').Getter
 export const ReservationRequestsAction = namespace('reservationRequests').Action
 
-bus.on('reservation-requests-fetched', requests => {
+bus.on('reservation-requests-fetched', (requests: any) => {
   logger.info(`Fetched ${requests.length} user requests`)
 })
 
-bus.on('reservation-requests-error', error => {
+bus.on('reservation-requests-error', (error: any) => {
   logger.error(error)
 })

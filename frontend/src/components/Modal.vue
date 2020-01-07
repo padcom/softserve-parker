@@ -21,8 +21,8 @@ import Btn from './Btn'
 
 @Component({
   components: {
-    Btn
-  }
+    Btn,
+  },
 })
 export default class Modal extends Vue {
   @Prop({ type: Array, required: true }) actions

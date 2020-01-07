@@ -10,6 +10,6 @@ Vue.use(Vuex)
 export default new Vuex.Store<RootState>({
   modules: {
     auth,
-    ui
-  }
+    ui,
+  },
 })

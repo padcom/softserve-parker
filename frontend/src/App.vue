@@ -21,8 +21,8 @@ import { UIState, UIAction } from '@/store/ui'
   components: {
     AppHeader,
     Loader,
-    OfflineInfo
-  }
+    OfflineInfo,
+  },
 })
 export default class App extends Vue {
   @AuthGetter isLoggedIn

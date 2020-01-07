@@ -50,7 +50,7 @@ import moment from 'moment'
 import {
   ReservationRequestsState,
   ReservationRequestsGetter,
-  ReservationRequestsAction
+  ReservationRequestsAction,
 } from '@/store/reservationRequests'
 import { APP_MESSAGES } from '@/app-statuses'
 
@@ -66,8 +66,8 @@ import Modal from '../components/Modal'
     Title,
     ParkingDates,
     Calendar,
-    Modal
-  }
+    Modal,
+  },
 })
 export default class Home extends Vue {
   loading = true
@@ -81,8 +81,8 @@ export default class Home extends Vue {
       outlined: true,
       fullWidth: true,
       emitType: 'close',
-      text: 'Close'
-    }
+      text: 'Close',
+    },
   ]
 
   @ReservationRequestsState requests

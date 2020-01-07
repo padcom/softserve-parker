@@ -42,8 +42,8 @@ import Information from '@/components/Information.vue'
 
 @Component({
   components: {
-    Information
-  }
+    Information,
+  },
 })
 export default class ParkingStatus extends Vue {
   headers = [
@@ -53,7 +53,7 @@ export default class ParkingStatus extends Vue {
     { text: 'Plate number', align: 'left', sortable: true, value: 'plate' },
     { text: 'Role', align: 'left', value: 'role' },
     { text: 'State', align: 'left', value: 'state' },
-    { text: 'Ranking', align: 'left', value: 'rank' }
+    { text: 'Ranking', align: 'left', value: 'rank' },
   ]
 
   drivers = []

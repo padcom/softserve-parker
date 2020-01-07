@@ -13,9 +13,6 @@ date2.setSeconds(58)
 const date3 = new Date(date.getTime())
 date3.setSeconds(57)
 
-
-
-
 let user: User;
 const email = "fakeemailfortesting@testing.fake.com"
 
@@ -76,7 +73,7 @@ describe('Reservation Requests', () => {
 
     expect(result.length).toBe(1)
     expect(result[0].date.getTime()).toBe(localDate.getTime())
-    
+
     await ReservationRequest.delete(user.id, localDate)
   })
 

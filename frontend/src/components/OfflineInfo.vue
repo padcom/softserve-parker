@@ -11,7 +11,7 @@ import { Component, Vue } from 'vue-property-decorator'
 export default class OfflineInfo extends Vue {
   offline = false
 
-  mounted() {
+  mounted () {
     window.addEventListener('offline', (e) => {
       this.offline = true
     })

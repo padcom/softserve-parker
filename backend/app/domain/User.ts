@@ -19,13 +19,13 @@ export class User {
   email: string
 
   @Field(() => String)
-  firstName: string 
+  firstName: string
 
   @Field(() => String)
-  lastName: string 
+  lastName: string
 
   @Field(() => String)
-  plate: string 
+  plate: string
 
   @Field(() => Number, { nullable: true })
   phone?: number
@@ -71,7 +71,7 @@ export class User {
 
     return id
   }
- 
+
   static async validateUserCreation (email: string): Promise<Error | void> {
     const re = /@softserveinc.com\s*$/;
     if (!re.test(email.toLowerCase())) throw new Error('Invalid email address.')

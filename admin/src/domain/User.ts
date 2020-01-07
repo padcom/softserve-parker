@@ -1,11 +1,12 @@
 import { query } from '@/graphql'
 
 export interface UserInterface {
-  firstName: string,
-  lastName: string,
-  plate: string,
+  firstName: string
+  lastName: string
+  plate: string
   id: string
-  phone: number,
+  phone: number
+  email: string
 }
 
 export class User {
@@ -45,7 +46,7 @@ export class User {
       lastName,
       plate,
       id,
-      phone: Number(phone)
+      phone: Number(phone),
     })
 
     return updateUser

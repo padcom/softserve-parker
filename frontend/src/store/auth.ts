@@ -14,13 +14,13 @@ export interface AuthState {
 const state: AuthState = {
   // @ts-ignore because JSON.parse(null) => null
   user: JSON.parse(window.localStorage.getItem('parker:user')),
-  token: window.localStorage.getItem('parker:token')
+  token: window.localStorage.getItem('parker:token'),
 }
 
 const getters: GetterTree<AuthState, RootState> = {
   isLoggedIn: state => {
     return state.user !== null && state.token !== null
-  }
+  },
 }
 
 const mutations: MutationTree<AuthState> = {
@@ -40,7 +40,7 @@ const mutations: MutationTree<AuthState> = {
     } else {
       window.localStorage.setItem('parker:token', token)
     }
-  }
+  },
 }
 
 class API {
@@ -55,9 +55,9 @@ class API {
       {},
       {
         headers: {
-          Authorization: `Bearer ${token} `
-        }
-      }
+          Authorization: `Bearer ${token} `,
+        },
+      },
     )
   }
 
@@ -77,7 +77,7 @@ const actions: ActionTree<AuthState, RootState> = {
           'id',
           'email',
           'rank',
-          'enabled'
+          'enabled',
         ])
         commit('setUser', user)
 
@@ -103,7 +103,7 @@ const actions: ActionTree<AuthState, RootState> = {
 
   async confirmRegistration ({ commit }, userId: number): Promise<void> {
     await API.confirmRegistration(userId)
-  }
+  },
 }
 
 export default {
@@ -111,7 +111,7 @@ export default {
   state,
   getters,
   mutations,
-  actions
+  actions,
 }
 
 export const AuthState = namespace('auth').State

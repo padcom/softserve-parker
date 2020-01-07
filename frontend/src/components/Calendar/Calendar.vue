@@ -42,8 +42,8 @@ import Btn from '../Btn'
     WeekDays,
     Month,
     Btn,
-    MonthNavigator
-  }
+    MonthNavigator,
+  },
 })
 export default class Calendar extends Vue {
   @Prop({ type: Boolean, required: false, default: false }) bottom
@@ -54,7 +54,7 @@ export default class Calendar extends Vue {
   date = moment().startOf('month')
   selectedDay = null
 
-  mounted() {
+  mounted () {
     const defocuser = new Defocuser()
     let iteration = 0
     defocuser.addElement(this.$el, 'bubbling', () => {
@@ -65,28 +65,28 @@ export default class Calendar extends Vue {
     if (!this.tomorrowWeekendOrAlreadyRequested) {
       this.selectedDay = moment.range(
         moment().add(1, 'day'),
-        moment().add(1, 'day')
+        moment().add(1, 'day'),
       )
     }
   }
 
-  closeCalendar() {
+  closeCalendar () {
     this.$emit('close')
   }
 
-  saveDate() {
+  saveDate () {
     this.$emit('save', this.selectedDay.start)
   }
 
-  daySelected(day) {
+  daySelected (day) {
     this.selectedDay = moment.range(day, day)
   }
 
-  nextMonth() {
+  nextMonth () {
     this.date = moment(this.date).add(1, 'month')
   }
 
-  previousMonth() {
+  previousMonth () {
     this.date = moment(this.date).subtract(1, 'month')
   }
 }

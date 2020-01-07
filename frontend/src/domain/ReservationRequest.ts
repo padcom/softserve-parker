@@ -4,7 +4,7 @@ export class ReservationRequest {
   static async fetchByUserId (
     userId: number,
     from: Date = new Date(),
-    fields: string[] = ['id', 'date', 'status']
+    fields: string[] = [ 'id', 'date', 'status' ]
   ) {
     const { reservationRequests } = await query(
       `query
@@ -13,10 +13,7 @@ export class ReservationRequest {
           ${fields.join('\n')}
         }
       }`,
-      {
-        from,
-        userId
-      }
+      { from, userId }
     )
 
     return reservationRequests
@@ -28,16 +25,14 @@ export class ReservationRequest {
       cancelReservationRequest($id: Int!) {
         cancelReservationRequest(id: $id)
       }`,
-      {
-        id: requestId
-      }
+      { id: requestId }
     )
   }
 
   static async createRequest (
     userId: number,
     dates: Date[],
-    fields: string[] = ['id', 'date', 'status']
+    fields: string[] = [ 'id', 'date', 'status' ]
   ) {
     const { reservationRequests } = await query(
       `mutation
@@ -46,10 +41,7 @@ export class ReservationRequest {
           ${fields.join('\n')}
         }
       }`,
-      {
-        dates,
-        userId
-      }
+      { dates, userId }
     )
 
     return reservationRequests

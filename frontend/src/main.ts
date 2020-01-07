@@ -14,13 +14,13 @@ const moment = extendMoment(Moment)
 moment.updateLocale('en', {
   week: {
     dow: 1,
-    doy: 4
-  }
+    doy: 4,
+  },
 })
 
 // @ts-ignore
 window.app = new Vue({
   router,
   store,
-  render: h => h(App)
+  render: (h: any) => h(App),
 }).$mount('#app')

@@ -23,7 +23,7 @@ async function main () {
   app.use('/signup', signUp)
   app.use('/confirm-registration', confirmSignUp)
 
-  const graphQlDelay = NODE_ENV === 'production' ? 100 : 1000
+  const graphQlDelay = NODE_ENV === 'production' ? 1 : 1000
 
   const server = await graphql
   // @ts-ignore

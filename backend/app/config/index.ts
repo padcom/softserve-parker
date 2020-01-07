@@ -19,4 +19,5 @@ const envVariableValidators = {
 dotenv.config()
 
 const env = envalid.cleanEnv(process.env, envVariableValidators, { strict: true })
+
 export default env

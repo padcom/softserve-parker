@@ -29,8 +29,8 @@ import logger from '../logger'
 @Component({
   components: {
     Btn,
-    TextField
-  }
+    TextField,
+  },
 })
 export default class LoginForm extends Vue {
   email = ''

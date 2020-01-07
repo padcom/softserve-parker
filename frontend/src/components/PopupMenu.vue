@@ -16,8 +16,8 @@ import Ranking from '@/components/Ranking.vue'
 
 @Component({
   components: {
-    Ranking
-  }
+    Ranking,
+  },
 })
 export default class PopupMenu extends Vue {
   @AuthState user

@@ -4,7 +4,7 @@ import axios from 'axios'
 import { RootState } from './root-state'
 import bus from '@/bus'
 import logger from '@/logger'
-import { User } from '@/domain/User'
+import { User, UserInterface } from '@/domain/User'
 
 export interface AuthState {
   user: any
@@ -14,13 +14,13 @@ export interface AuthState {
 const state: AuthState = {
   // @ts-ignore because JSON.parse(null) => null
   user: JSON.parse(window.localStorage.getItem('parker-admin:user')),
-  token: window.localStorage.getItem('parker-admin:token')
+  token: window.localStorage.getItem('parker-admin:token'),
 }
 
 const getters: GetterTree<AuthState, RootState> = {
   isLoggedIn: state => {
     return state.user !== null && state.token !== null
-  }
+  },
 }
 
 const mutations: MutationTree<AuthState> = {
@@ -39,7 +39,7 @@ const mutations: MutationTree<AuthState> = {
     } else {
       window.localStorage.setItem('parker-admin:token', token)
     }
-  }
+  },
 }
 
 class API {
@@ -51,8 +51,8 @@ class API {
   static async logout (token: string) {
     await axios.post('/logout', {}, {
       headers: {
-        'Authorization': `Bearer ${token} `
-      }
+        'Authorization': `Bearer ${token} `,
+      },
     })
   }
 }
@@ -85,7 +85,7 @@ const actions: ActionTree<AuthState, RootState> = {
     commit('setUser', null)
     commit('setToken', null)
     bus.emit('user-logged-out', user)
-  }
+  },
 }
 
 export default {
@@ -93,21 +93,21 @@ export default {
   state,
   getters,
   mutations,
-  actions
+  actions,
 }
 
 export const AuthState = namespace('auth').State
 export const AuthGetter = namespace('auth').Getter
 export const AuthAction = namespace('auth').Action
 
-bus.on('user-logged-in', user => {
+bus.on('user-logged-in', (user: UserInterface) => {
   logger.info(`User ${user.email} logged in`)
 })
 
-bus.on('user-login-error', error => {
+bus.on('user-login-error', (error: any) => {
   logger.error(error)
 })
 
-bus.on('user-logged-out', user => {
+bus.on('user-logged-out', (user: UserInterface) => {
   logger.info(`User ${user.email} logged out`)
 })

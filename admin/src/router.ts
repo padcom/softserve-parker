@@ -16,38 +16,38 @@ const router = new Router({
     {
       path: '/login',
       name: 'login',
-      component: Login
+      component: Login,
     },
     {
       path: '/logout',
-      name: 'logout'
+      name: 'logout',
     },
     {
       path: '/',
       name: 'parking-status',
-      component: ParkingStatus
+      component: ParkingStatus,
     },
     {
       path: '/parking-history',
       name: 'parking-history',
-      component: ParkingHistory
+      component: ParkingHistory,
     },
     {
       path: '/users',
       name: 'users',
-      component: Users
+      component: Users,
     },
     {
       path: '/users-history',
       name: 'users-history',
-      component: () => import(/* webpackChunkName: "empty" */ './views/Empty.vue')
+      component: () => import(/* webpackChunkName: "empty" */ './views/Empty.vue'),
     },
     {
       path: '/settings',
       name: 'settings',
-      component: () => import(/* webpackChunkName: "settings" */ './views/Settings.vue')
-    }
-  ]
+      component: () => import(/* webpackChunkName: "settings" */ './views/Settings.vue'),
+    },
+  ],
 })
 
 router.beforeEach(async (to, from, next) => {

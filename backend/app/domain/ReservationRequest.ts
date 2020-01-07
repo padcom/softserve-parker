@@ -1,9 +1,4 @@
-import {
-  Field,
-  ID,
-  ObjectType,
-  registerEnumType
-} from 'type-graphql'
+import { Field, ID, ObjectType, registerEnumType } from 'type-graphql'
 import { FieldPacket, RowDataPacket, OkPacket } from 'mysql'
 import { isPast } from 'date-fns'
 import { db } from '../db'
@@ -75,7 +70,7 @@ export class ReservationRequest {
     const records = await this.fetchByUserIdAndDates(userId, dates)
     if (records && records.length) throw new Error('Request already exist')
   }
-  
+
   static async fetchByUserIdAndDates(userId: number, dates: Date[]): Promise<ReservationRequest[]> {
     const [rows]: [RowDataPacket[], FieldPacket[]] = await db.query(
       `SELECT * FROM reservationRequest
@@ -92,7 +87,7 @@ export class ReservationRequest {
 
       if (result.affectedRows == 0) {
         throw new Error('Requests not found')
-      } 
+      }
 
     return result.affectedRows
   }
@@ -113,7 +108,7 @@ export class ReservationRequest {
       SELECT  * FROM parker.reservationRequest
       WHERE date BETWEEN ? AND ?
     `, [from, to])
-    
+
     return result
   }
 }

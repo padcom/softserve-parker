@@ -1,21 +1,19 @@
 import { namespace } from 'vuex-class'
 import { MutationTree, ActionTree } from 'vuex'
 import { RootState } from './root-state'
-import bus from '@/bus'
-import logger from '@/logger'
 
 export interface UIState {
   loading: boolean
 }
 
 const state: UIState = {
-  loading: false
+  loading: false,
 }
 
 const mutations: MutationTree<UIState> = {
   setLoading (state, loading) {
     state.loading = loading
-  }
+  },
 }
 
 const actions: ActionTree<UIState, RootState> = {
@@ -24,14 +22,14 @@ const actions: ActionTree<UIState, RootState> = {
   },
   stopLoading () {
     this.commit('ui/setLoading', false)
-  }
+  },
 }
 
 export default {
   namespaced: true,
   state,
   mutations,
-  actions
+  actions,
 }
 
 export const UIState = namespace('ui').State

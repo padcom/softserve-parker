@@ -62,8 +62,8 @@ import { Requests } from '@/domain/Requests'
 
 @Component({
   components: {
-    Information
-  }
+    Information,
+  },
 })
 export default class ParkingStatus extends Vue {
   headers = [
@@ -73,7 +73,7 @@ export default class ParkingStatus extends Vue {
     { text: 'Phone', align: 'left', sortable: true, value: 'user.phone' },
     { text: 'Plate', align: 'left', sortable: true, value: 'user.plate' },
     { text: 'Date', align: 'left', sortable: true, value: 'date' },
-    { text: 'Status', align: 'left', sortable: true, value: 'status' }
+    { text: 'Status', align: 'left', sortable: true, value: 'status' },
   ]
 
   requests = []

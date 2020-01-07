@@ -13,16 +13,16 @@ const router = new Router({
     {
       path: '/login',
       name: 'login',
-      component: Login
+      component: Login,
     },
     {
       path: '/logout',
-      name: 'logout'
+      name: 'logout',
     },
     {
       path: '/confirm-registration/:userId',
       name: 'confirmRegistration',
-      component: () => import(/* webpackChunkName: "confirm-registration" */ './views/ConfirmRegistration.vue')
+      component: () => import(/* webpackChunkName: "confirm-registration" */ './views/ConfirmRegistration.vue'),
     },
     {
       path: '/',
@@ -30,7 +30,7 @@ const router = new Router({
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "home" */ './views/Home.vue')
+      component: () => import(/* webpackChunkName: "home" */ './views/Home.vue'),
     },
     {
       path: '/faq',
@@ -38,14 +38,14 @@ const router = new Router({
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "faq" */ './views/Faq.vue')
+      component: () => import(/* webpackChunkName: "faq" */ './views/Faq.vue'),
     },
     {
       path: '/signup',
       name: 'signup',
-      component: () => import('./views/SignUp.vue')
-    }
-  ]
+      component: () => import('./views/SignUp.vue'),
+    },
+  ],
 })
 
 router.beforeEach(async (to, from, next) => {

@@ -21,8 +21,8 @@ import { User } from '../domain/User'
   components: {
     Btn,
     Loader,
-    SignUpForm
-  }
+    SignUpForm,
+  },
 })
 export default class SignUp extends Vue {
   loading = false
