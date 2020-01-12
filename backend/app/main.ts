@@ -9,6 +9,9 @@ import { isAuthorized } from './middleware/authorization'
 import { delay } from './middleware/delay'
 import { login, logout, signUp, confirmSignUp } from './middleware/authenticate'
 
+import { CronJob } from 'cron'
+import { engine } from './engine'
+
 const { NODE_ENV, PORT = 3000 } = process.env
 
 async function main () {
@@ -39,6 +42,9 @@ async function main () {
   } catch (e) {
     logger.error(`Error! Failed to start Apollo server. Error message: ${e}`)
   }
+
+  // start cron that will recalculate parking spaces
+  new CronJob('*/5 * * * * *', engine, null, true, 'Europe/Warsaw')
 }
 
 main()
