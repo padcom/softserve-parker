@@ -8,32 +8,31 @@ import { calculateRanking } from '../engine'
   description: 'Object representing ranking entry.',
 })
 export class Ranking {
-  @Field(() => ID)
+  @Field(() => Number)
   id: number
-
-  @Field(() => Date)
-  date: Date
 
   @Field(() => Number)
   rank: number
 
   @Field(() => Number)
-  userId: number
+  numberOfTimesParked: number
+
+  @Field(() => Date, { nullable: true })
+  requestTimeStamp: Date
 
   @Field(() => User)
   user (): Promise<User> {
-    return User.getById(this.userId)
+    return User.getById(this.id)
   }
 
   static async getCurrentRanking(): Promise<Ranking[]> {
-    const date = new Date()
     const ranking = await calculateRanking()
     return ranking.users.map(user => {
       const entry = new Ranking()
-      entry.id = 0
-      entry.date = date
-      entry.userId = user.id
+      entry.id = user.id
       entry.rank = user.rank
+      entry.numberOfTimesParked = user.numberOfTimesParked
+      entry.requestTimeStamp = user.requestTimeStamp
       return entry
     })
   }

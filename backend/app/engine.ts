@@ -15,7 +15,7 @@ interface RankingUser {
   roles: string
   rank: number
   numberOfTimesParked: number
-  requestTimeStamp: number
+  requestTimeStamp: Date
 }
 
 interface Ranking {
@@ -24,6 +24,8 @@ interface Ranking {
   timeOfRankingStart: Date
   users: RankingUser[]
 }
+
+const NO_REQUEST_TIMESTAMP = 32503676399000
 
 export async function calculateRanking(): Promise<Ranking> {
   const timestamp = new Date()
@@ -54,7 +56,6 @@ export async function calculateRanking(): Promise<Ranking> {
   }
 
   function requestTimeStamp(userId) {
-    const NO_REQUEST_TIMESTAMP = '2999-12-31 23:59:59'
     const request = requests.find(request => request.userId === userId)
     return new Date(request?.date || NO_REQUEST_TIMESTAMP).getTime()
   }
@@ -91,7 +92,11 @@ export async function calculateRanking(): Promise<Ranking> {
     
         return result
       })
-      .map((user, rank) => ({ ...user, rank }))
+      .map((user, rank) => ({
+        ...user, 
+        rank,
+        requestTimeStamp: user.requestTimeStamp === NO_REQUEST_TIMESTAMP ? null : new Date(user.requestTimeStamp)
+      }))
     }
 }
 
@@ -118,10 +123,10 @@ export async function engine(): Promise<void> {
   console.log('--- ranking')
 
   users.map(async (user, index) => {
-    if (new Date(user.requestTimeStamp).getFullYear() > 2100) {
+    if (!user.requestTimeStamp) {
       console.log(index, user.id, user.email, user.numberOfTimesParked, user.roles)
     } else {
-      console.log(index, user.id, user.email, user.numberOfTimesParked, new Date(user.requestTimeStamp), user.roles)
+      console.log(index, user.id, user.email, user.numberOfTimesParked, user.requestTimeStamp, user.roles)
     }
   })
 
