@@ -184,6 +184,10 @@ async function createHistoryEntriesForWinners(timestamp: Date, winners: RankingU
   }))
 }
 
+async function sendConfirmationEmails(winners: RankingUser[]) {
+  // TODO implement sending confirmation emails
+}
+
 async function createRandomReservationRequests(timestamp: Date) {
   const users = await User.getAllActiveUsers()
   const numberOfRequests = Math.floor(Math.random() * users.length) + 1
@@ -207,5 +211,6 @@ export async function engine(): Promise<void> {
   const numberOfParkingSpots = 2
   const winners = calculateWinners(users, numberOfParkingSpots)
   dumpWinners(winners)
-  createHistoryEntriesForWinners(timestamp, winners)
+  await createHistoryEntriesForWinners(timestamp, winners)
+  await sendConfirmationEmails(winners)
 }
