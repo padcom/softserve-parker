@@ -20,8 +20,10 @@ export async function engine(): Promise<void> {
 
   const users = await User.getAllActiveUsers()
 
+  const numberOfRequests = Math.floor(Math.random() * users.length + 1)
+
   // create reservation requests 
-  await Promise.all(users.clone().randomize().take(3).map(async (user, index) => {
+  await Promise.all(users.clone().randomize().take(numberOfRequests).map(async (user, index) => {
     const date = addSeconds(timestamp, -index - 1)
     await ReservationRequest.create(user.id, [ date ], false)
   }))
@@ -29,15 +31,15 @@ export async function engine(): Promise<void> {
   const history = await History.getHistorySince(timeOfRankingStart)
   const requests = await ReservationRequest.getAllByDay(timeOfFirstRequest, timestamp)
 
-  console.log('> number of active users:', users.length)
+  console.log('--- users:', users.length)
   users.forEach(user => {
     console.log('USER:', user.email, user.roles)
   })
-  console.log('> number of active history entries:', history.length)
+  console.log('--- active history entries:', history.length)
   history.forEach(async (entry) => {
     console.log('HISTORY:', entry.date, entry.userId, entry.state)
   })
-  console.log('> number of requests', requests.length)
+  console.log('--- requests', requests.length)
   requests.forEach(request => {
     console.log('REQUEST:', request.userId, request.date)
   })
@@ -90,20 +92,20 @@ export async function engine(): Promise<void> {
   ranking
     .forEach((user, index) => {
       if (new Date(user.requestTimeStamp).getFullYear() > 2100) {
-        console.log(index, user.id, user.email, user.numberOfTimesParked, 'no request')
+        console.log(index, user.id, user.email, user.numberOfTimesParked, user.roles)
       } else {
-        console.log(index, user.id, user.email, user.numberOfTimesParked, new Date(user.requestTimeStamp))
+        console.log(index, user.id, user.email, user.numberOfTimesParked, new Date(user.requestTimeStamp), user.roles)
       }
     })
-  
+
   console.log('--- lucky winners')
-  
+
   await Promise.all(ranking
     .filter(user => hasRequestedParkingSpot(user.id))
     .take(numberOfParkingSpots)
     .map(async (user) => {
+      console.log(user.id, user.email, user.roles)
       await History.create(timestamp, user.id)
-      console.log(user.id, user.email)
     })
   )
 }
