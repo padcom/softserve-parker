@@ -23,12 +23,12 @@ interface Ranking {
   timeOfFirstRequest: Date
   timeOfRankingStart: Date
   users: RankingUser[]
+  requests: ReservationRequest[]
 }
 
 const NO_REQUEST_TIMESTAMP = 32503676399000
 
-export async function calculateRanking(): Promise<Ranking> {
-  const timestamp = new Date()
+export async function calculateRanking(timestamp: Date = new Date()): Promise<Ranking> {
   const numberOfSeconds = 8
   const timeOfRankingStart = addSeconds(timestamp, -((numberOfSeconds + 2) * 10))
   const timeOfFirstRequest = addSeconds(timestamp, -numberOfSeconds - 2)
@@ -70,6 +70,7 @@ export async function calculateRanking(): Promise<Ranking> {
     timestamp,
     timeOfRankingStart: new Date(timeOfRankingStart),
     timeOfFirstRequest: new Date(timeOfFirstRequest),
+    requests,
     users: users
       .map(user => ({
         id: user.id,
@@ -100,20 +101,25 @@ export async function calculateRanking(): Promise<Ranking> {
     }
 }
 
-export async function engine(): Promise<void> {
-  console.log('Engine running')
-
-  const { users, timestamp, timeOfFirstRequest } = await calculateRanking()
-
+async function createRandomRequests(timestamp: Date) {
+  const users = await User.getAllActiveUsers()
   const numberOfRequests = Math.floor(Math.random() * users.length + 1)
 
   // create reservation requests 
   await Promise.all(users.clone().randomize().take(numberOfRequests).map(async (user, index) => {
     const date = addSeconds(timestamp, -index - 1)
-    await ReservationRequest.create(user.id, [ date ], false)
+    return await ReservationRequest.create(user.id, [ date ], false)
   }))
+}
 
-  const requests = await ReservationRequest.getAllByDay(timeOfFirstRequest, timestamp)
+export async function engine(): Promise<void> {
+  console.log('Engine running')
+
+  const timestamp = new Date()
+
+  await createRandomRequests(timestamp)
+
+  const { users, requests } = await calculateRanking(timestamp)
 
   console.log('--- requests', requests.length)
   requests.forEach(request => {
