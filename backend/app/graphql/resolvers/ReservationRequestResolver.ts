@@ -1,16 +1,9 @@
-import {
-  Arg,
-  Int,
-  Query,
-  Resolver,
-  Mutation,
-} from 'type-graphql'
+import { Arg, Int, Query, Resolver, Mutation } from 'type-graphql'
 import { ReservationRequest } from '../../domain/ReservationRequest'
-import { User } from '../../domain/User'
 
 @Resolver(ReservationRequest)
 export class ReservationRequestResolver {
-  @Query(() => [ReservationRequest], {
+  @Query(() => [ ReservationRequest ], {
     description: 'Returns all reservation requests in someday',
   })
   async reservationRequestsInDay (
@@ -26,7 +19,7 @@ export class ReservationRequestResolver {
     return ReservationRequest.getAllByDay(from, to)
   }
 
-  @Query(() => [ReservationRequest], {
+  @Query(() => [ ReservationRequest ], {
     description: 'Returns list of reservation requests for given user id',
   })
   async reservationRequests(
@@ -42,7 +35,7 @@ export class ReservationRequestResolver {
     return ReservationRequest.fetchByUserId(userId, from)
   }
   
-  @Mutation(() => [ReservationRequest], {
+  @Mutation(() => [ ReservationRequest ], {
     description:
       'Creates reservation requests.',
   })
@@ -66,6 +59,6 @@ export class ReservationRequestResolver {
     })
     id: number
   ) {
-    return ReservationRequest.deleteById(id)
+    return ReservationRequest.cancelById(id)
   }
 }

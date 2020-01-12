@@ -1,3 +1,5 @@
+import './polyfills'
+
 import cors from 'cors'
 import express from 'express'
 import helmet from 'helmet'
@@ -44,7 +46,7 @@ async function main () {
   }
 
   // start cron that will recalculate parking spaces
-  new CronJob('*/5 * * * * *', engine, null, true, 'Europe/Warsaw')
+  new CronJob('*/10 * * * * *', engine, null, true, 'Europe/Warsaw')
 }
 
 main()

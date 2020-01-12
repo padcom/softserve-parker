@@ -5,17 +5,6 @@ import { db } from '../db'
 
 import { User } from './User'
 
-export enum RequestStatus {
-  pending = "pending",
-  approved = "approved",
-  rejected = "rejected"
-}
-
-registerEnumType(RequestStatus, {
-  name: "RequestStatus",
-  description: "Request status types",
-});
-
 @ObjectType({
   description: 'Object representing reservation request.',
 })
@@ -29,10 +18,7 @@ export class ReservationRequest {
   @Field(() => Date)
   date: Date
 
-  @Field(() => RequestStatus)
-  status: RequestStatus
-
-  @Field(() => Number)
+  @Field(() => Number, { nullable: true })
   parkingSpotId: number
 
   @Field(() => User)
@@ -50,11 +36,15 @@ export class ReservationRequest {
     return rows as ReservationRequest[]
   }
 
-  static async create(userId: number, dates: Date[]): Promise<ReservationRequest[]> {
-    this.validateDates(dates)
+  static async create(userId: number, dates: Date[], validate: boolean = true): Promise<ReservationRequest[]> {
+    if (validate) this.validateDates(dates)
     await this.assertRequestsDoesntExist(userId, dates)
-    await db.query(`INSERT INTO reservationRequest (userId, date, status)
-          VALUES ?`, [dates.map((date: Date) => [userId, date, RequestStatus.pending])])
+
+    await db.query(
+      `INSERT INTO reservationRequest (userId, date, status) VALUES ?`,
+      [ dates.map(date => [ userId, date, '' ]) ],
+    )
+
     return this.fetchByUserIdAndDates(userId, dates)
   }
 
@@ -78,6 +68,7 @@ export class ReservationRequest {
         ORDER BY date ASC`,
       [userId, ...dates]
     )
+
     return rows as ReservationRequest[]
   }
 
@@ -92,8 +83,9 @@ export class ReservationRequest {
     return result.affectedRows
   }
 
-  static async deleteById(id: number) {
-    const [ result ] = await db.execute(`DELETE from reservationRequest WHERE id = ?`,
+  static async cancelById(id: number) {
+    const [ result ] = await db.execute(
+      `UPDATE reservationRequest SET state='cancelled' WHERE id = ?`,
       [id]) as OkPacket[]
 
       if (result.affectedRows == 0) {
@@ -103,12 +95,12 @@ export class ReservationRequest {
     return result.affectedRows
   }
 
-  static async getAllByDay(from: Date, to: Date) {
+  static async getAllByDay(from: Date, to: Date): Promise<ReservationRequest[]> {
     const [ result ] = await db.execute(`
       SELECT  * FROM parker.reservationRequest
       WHERE date BETWEEN ? AND ?
     `, [from, to])
 
-    return result
+    return result as ReservationRequest[]
   }
 }
