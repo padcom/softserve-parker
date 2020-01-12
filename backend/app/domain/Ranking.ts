@@ -1,8 +1,6 @@
 import { Field, ID, ObjectType } from 'type-graphql'
-import { OkPacket, FieldPacket, RowDataPacket } from 'mysql'
-import { db } from '../db'
 import { User } from './User'
-import { calculateRanking } from '../engine'
+import { calculateCurrentRanking, RankingUser } from '../engine'
 
 @ObjectType({
   description: 'Object representing ranking entry.',
@@ -18,7 +16,7 @@ export class Ranking {
   numberOfTimesParked: number
 
   @Field(() => Date, { nullable: true })
-  requestTimeStamp: Date
+  requestTimestamp: Date
 
   @Field(() => User)
   user (): Promise<User> {
@@ -26,14 +24,17 @@ export class Ranking {
   }
 
   static async getCurrentRanking(): Promise<Ranking[]> {
-    const ranking = await calculateRanking()
-    return ranking.users.map(user => {
-      const entry = new Ranking()
-      entry.id = user.id
-      entry.rank = user.rank
-      entry.numberOfTimesParked = user.numberOfTimesParked
-      entry.requestTimeStamp = user.requestTimeStamp
-      return entry
-    })
+    const ranking = await calculateCurrentRanking()
+    return ranking.users.map(convertRankingUserToRanking)
   }
+}
+
+function convertRankingUserToRanking(user: RankingUser): Ranking {
+  const entry = new Ranking()
+  entry.id = user.id
+  entry.rank = user.rank
+  entry.numberOfTimesParked = user.numberOfTimesParked
+  entry.requestTimestamp = user.requestTimestamp
+
+  return entry
 }

@@ -5,7 +5,7 @@ import { db } from '../db'
 import { logger } from '../logger'
 import { mailer } from '../mailer'
 import env from '../config'
-import { calculateRanking } from '../engine'
+import { calculateCurrentRanking } from '../engine'
 
 const { EMAIL, CONFIRM_URL_BASE } = env
 
@@ -39,7 +39,7 @@ export class User {
 
   @Field(() => Number)
   async rank (): Promise<number> {
-    const ranking = await calculateRanking()
+    const ranking = await calculateCurrentRanking()
     const user = ranking.users.find(user => user.id === this.id)
 
     if (!user) {
