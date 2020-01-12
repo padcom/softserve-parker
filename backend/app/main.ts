@@ -28,11 +28,11 @@ async function main () {
   app.use('/signup', signUp)
   app.use('/confirm-registration', confirmSignUp)
 
-  const graphQlDelay = NODE_ENV === 'production' ? 1 : 1000
+  const graphQlDelay = NODE_ENV === 'production' ? 1 : 1
 
   const server = await graphql
   // @ts-ignore
-  app.use('/graphql', isAuthorized, delay(graphQlDelay), server.getMiddleware({ path: '/' }))
+  app.use('/graphql', isAuthorized, server.getMiddleware({ path: '/' }))
 
   app.use(express.static('public'))
 

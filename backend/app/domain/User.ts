@@ -5,6 +5,7 @@ import { db } from '../db'
 import { logger } from '../logger'
 import { mailer } from '../mailer'
 import env from '../config'
+import { calculateRanking } from '../engine'
 
 const { EMAIL, CONFIRM_URL_BASE } = env
 
@@ -37,8 +38,15 @@ export class User {
   password: string
 
   @Field(() => Number)
-  rank (): number {
-    return Math.round(Math.random() * 200)
+  async rank (): Promise<number> {
+    const ranking = await calculateRanking()
+    const user = ranking.users.find(user => user.id === this.id)
+
+    if (!user) {
+      throw new Error(`Ranking for user ${this.email} not calculated`)
+    }
+
+    return user.rank
   }
 
   @Field(() => Boolean)
@@ -92,7 +100,10 @@ export class User {
   }
 
   static async setEnabled (id: number, value: Boolean) {
-    const [ rows ]: [OkPacket, FieldPacket[]] = await db.execute('UPDATE user SET enabled = ? WHERE id = ?', [Boolean(value), id])
+    const [ rows ] = await db.execute(
+      'UPDATE user SET enabled = ? WHERE id = ?',
+      [ Boolean(value), id ]
+    ) as OkPacket[]
 
     if (rows.affectedRows == 0) {
       throw new Error('User not found')
@@ -102,7 +113,10 @@ export class User {
   }
 
   static async delete (email: string) {
-    const [ result ] = await db.execute('DELETE FROM user WHERE email=?', [ email ]) as OkPacket[]
+    const [ result ] = await db.execute(
+      'DELETE FROM user WHERE email=?',
+      [ email ]
+    ) as OkPacket[]
 
     if (result.affectedRows == 0) {
       throw new Error('User not found')
@@ -114,7 +128,10 @@ export class User {
   }
 
   static async deleteByID (id: string) {
-    const [ result ] = await db.execute('DELETE FROM user WHERE id=?', [ id ]) as OkPacket[]
+    const [ result ] = await db.execute(
+      'DELETE FROM user WHERE id=?',
+      [ id ]
+    ) as OkPacket[]
 
     if (result.affectedRows == 0) {
       throw new Error('User not found')
@@ -126,7 +143,7 @@ export class User {
   }
 
   static async getByEmail(email: string): Promise<User> {
-    const [ rows ]: [ RowDataPacket[], FieldPacket[] ] = await db.execute(
+    const [ rows ] = await db.execute(
       'SELECT * FROM user WHERE email = ?',
       [ email ]
     )
@@ -136,7 +153,7 @@ export class User {
   }
 
   static async getById(id: number): Promise<User> {
-    const [ rows ]: [ RowDataPacket[], FieldPacket[] ] = await db.execute(
+    const [ rows ] = await db.execute(
       'SELECT * FROM user WHERE id = ?',
       [ id ]
     )
@@ -146,7 +163,7 @@ export class User {
   }
 
   static async getAll(): Promise<User[]> {
-    const [ rows ]: [ RowDataPacket[], FieldPacket[] ] = await db.execute(
+    const [ rows ] = await db.execute(
       'SELECT * FROM user'
     )
     this.assertFound(rows[0])
@@ -155,7 +172,7 @@ export class User {
   }
 
   static async getAllActiveUsers(): Promise<User[]> {
-    const [ rows ]: [ RowDataPacket[], FieldPacket[] ] = await db.execute(
+    const [ rows ] = await db.execute(
       'SELECT * FROM user WHERE enabled=1'
     )
     this.assertFound(rows[0])

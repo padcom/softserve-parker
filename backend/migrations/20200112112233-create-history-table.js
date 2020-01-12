@@ -34,6 +34,8 @@ exports.up = function(db) {
 };
 
 exports.down = function(db) {
+  db.dropTable('history')
+
   return null;
 };
 
