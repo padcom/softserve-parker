@@ -33,7 +33,7 @@ export interface Ranking {
 // value used for comparison of ranking users when the user has not posted a request
 const NO_REQUEST_TIMESTAMP = 32503676399000
 
-export async function calculateRanking(users: User[], history: History[], requests: ReservationRequest[]): Promise<RankingUser[]> {
+export async function calculateUserRankings(users: User[], history: History[], requests: ReservationRequest[]): Promise<RankingUser[]> {
   function getNumberOfTimesUserParked(userId) {
     return history
       .filter(entry => entry.state === 'used')
@@ -135,7 +135,7 @@ async function calculateRankingForDates(timestamp: Date, timeOfRankingStart: Dat
     timestamp,
     history,
     requests,
-    users: await calculateRanking(users, history, requests),
+    users: await calculateUserRankings(users, history, requests),
   }
 }
 
