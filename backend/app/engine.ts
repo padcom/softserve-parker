@@ -3,17 +3,22 @@ import { User } from './domain/User'
 import { History } from './domain/History'
 import { ReservationRequest } from './domain/ReservationRequest'
 
+// Example apache benchmark enchantation to test the performance of the engine through ranking
+//
 // ab -p request.json -T application/json \
 //   -c 5 \
 //   -n 1000 \
 //   -H 'Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjMsImVtYWlsIjoidGVzdDNAc29mdHNlcnZlaW5jLmNvbSIsImlhdCI6MTU3ODQyNzAyNH0.HrxhwXb3pmWg-QXJstku10RFIHMmwYFyT4KiaZnKr4v9oZSS2m3-ph8GEqY9vioc9EszRY3WoSCq0q6VIoHHsQ' \
 //   http://localhost:3000/graphql
+//
+// request.json:
+//   { "query": "{ ranking { user { email roles rank } } }" }
 
 export interface RankingUser {
   id: number
   email: string
   roles: string
-  rank: number
+  rank: number | null
   numberOfTimesParked: number
   requestTimestamp: Date | null
 }
@@ -25,16 +30,17 @@ export interface Ranking {
   requests: ReservationRequest[]
 }
 
+// value used for comparison of ranking users when the user has not posted a request
 const NO_REQUEST_TIMESTAMP = 32503676399000
 
 export async function calculateRanking(users: User[], history: History[], requests: ReservationRequest[]): Promise<RankingUser[]> {
-  function numberOfTimesParked(userId) {
+  function getNumberOfTimesUserParked(userId) {
     return history
       .filter(entry => entry.state === 'used')
       .reduce((acc, entry) => acc + (entry.userId === userId ? 1 : 0), 0)
   }
 
-  function requestTimestamp(userId) {
+  function getUserRequestTimestamp(userId) {
     const request = requests.find(request => request.userId === userId)
     return new Date(request?.date || NO_REQUEST_TIMESTAMP)
   }
@@ -50,9 +56,9 @@ export async function calculateRanking(users: User[], history: History[], reques
       id: user.id,
       email: user.email,
       roles: user.roles,
-      rank: -1,
-      numberOfTimesParked: numberOfTimesParked(user.id),
-      requestTimestamp: requestTimestamp(user.id),
+      rank: null,
+      numberOfTimesParked: getNumberOfTimesUserParked(user.id),
+      requestTimestamp: getUserRequestTimestamp(user.id),
     }
   }
 
@@ -78,7 +84,7 @@ export async function calculateRanking(users: User[], history: History[], reques
     }
   }
 
-  function updateUserRequestTimestamp(user: RankingUser): RankingUser {
+  function removeRequestTimestampIfUserDidNotRequestParkingSpot(user: RankingUser): RankingUser {
     return {
       ...user,
       requestTimestamp: user.requestTimestamp.getTime() === NO_REQUEST_TIMESTAMP ? null : user.requestTimestamp
@@ -88,8 +94,8 @@ export async function calculateRanking(users: User[], history: History[], reques
   return users
     .map(convertUserToRankingUser)
     .sort(compareRankingUsers)
+    .map(removeRequestTimestampIfUserDidNotRequestParkingSpot)
     .map(updateUserRank)
-    .map(updateUserRequestTimestamp)
 }
 
 function dumpUsers(users: User[]) {
@@ -147,7 +153,7 @@ export async function calculateCurrentRanking(numberOfSeconds: number = 8): Prom
 function dumpRankingUsers(users: RankingUser[]) {
   console.log('--- ranking')
   users.map(async (user, index) => {
-    if (!user.requestTimestamp) {
+    if (user.requestTimestamp === null) {
       console.log(index, user.id, user.email, user.numberOfTimesParked, user.roles)
     } else {
       console.log(index, user.id, user.email, user.numberOfTimesParked, user.requestTimestamp, user.roles)
@@ -155,11 +161,27 @@ function dumpRankingUsers(users: RankingUser[]) {
   })
 }
 
+export function calculateWinners(users: RankingUser[], numberOfParkingSpots: number) {
+  function hasRequestedParkingSpot(user: RankingUser) {
+    return user.requestTimestamp != null
+  }
+
+  return users
+    .filter(hasRequestedParkingSpot)
+    .take(numberOfParkingSpots)
+}
+
 function dumpWinners(users: RankingUser[]) {
   console.log('--- lucky winners')
   users.forEach(user => {
     console.log(user.id, user.email, user.roles)
   })
+}
+
+async function createHistoryEntriesForWinners(timestamp: Date, winners: RankingUser[]): Promise<number[]> {
+  return Promise.all(winners.map(async (user) => {
+    return await History.create(timestamp, user.id)
+  }))
 }
 
 async function createRandomReservationRequests(timestamp: Date) {
@@ -179,23 +201,11 @@ export async function engine(): Promise<void> {
   // TESTING: create a set of random requests
   await createRandomReservationRequests(new Date())
 
-  const { users, requests, timestamp } = await calculateCurrentRanking()
-
+  const { users, timestamp } = await calculateCurrentRanking()
   dumpRankingUsers(users)
 
   const numberOfParkingSpots = 2
-
-  function hasRequestedParkingSpot(user) {
-    return requests.some(request => request.userId === user.id)
-  }
-
-  const winners = users
-    .filter(hasRequestedParkingSpot)
-    .take(numberOfParkingSpots)
-
+  const winners = calculateWinners(users, numberOfParkingSpots)
   dumpWinners(winners)
-
-  await Promise.all(winners.map(async (user) => {
-    await History.create(timestamp, user.id)
-  }))
+  createHistoryEntriesForWinners(timestamp, winners)
 }
