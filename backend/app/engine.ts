@@ -42,7 +42,7 @@ export async function calculateRanking(): Promise<Ranking> {
 
   console.log('--- users:', users.length)
   users.forEach(user => {
-    console.log('USER:', user.email, user.roles)
+    console.log('USER:', user.id, user.email, user.roles)
   })
   console.log('--- active history entries:', history.length)
   history.forEach(async (entry) => {
