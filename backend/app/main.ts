@@ -8,7 +8,6 @@ import 'reflect-metadata' // required for typegraphql
 import { graphql } from './graphql'
 import { logger } from './logger'
 import { isAuthorized } from './middleware/authorization'
-import { delay } from './middleware/delay'
 import { login, logout, signUp, confirmSignUp } from './middleware/authenticate'
 
 import { CronJob } from 'cron'
@@ -27,8 +26,6 @@ async function main () {
   app.use('/logout', logout)
   app.use('/signup', signUp)
   app.use('/confirm-registration', confirmSignUp)
-
-  const graphQlDelay = NODE_ENV === 'production' ? 1 : 1
 
   const server = await graphql
   // @ts-ignore
