@@ -31,8 +31,8 @@ describe('Authentication', () => {
       url: '/login',
       body: {
         email: 'failtast@google.com',
-        password: '5431'
-      }
+        password: '5431',
+      },
     });
 
     const response = httpMocks.createResponse()
@@ -48,8 +48,8 @@ describe('Authentication', () => {
       url: '/login',
       body: {
         email: 'fake@softserveinc.com',
-        password: '5431'
-      }
+        password: '5431',
+      },
     });
     const response = httpMocks.createResponse()
 
@@ -65,8 +65,8 @@ describe('Authentication', () => {
       url: '/login',
       body: {
         email: 'fake@softserveinc.com',
-        password: 'pass123'
-      }
+        password: 'pass123',
+      },
     });
 
     const response = httpMocks.createResponse()
@@ -87,9 +87,9 @@ describe('Authentication', () => {
       method: 'POST',
       url: '/logout',
       headers: {
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
-      body: {}
+      body: {},
     });
 
     const response = httpMocks.createResponse()

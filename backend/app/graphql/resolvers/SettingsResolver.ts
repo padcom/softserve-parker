@@ -11,7 +11,7 @@ export class SettingsResolver {
 
   @Authorized('admin')
   @Mutation(() => Number)
-  async setNumberOfParkingSpots(
+  async setNumberOfParkingSpots (
     @Arg('spots', () => Int!) spots: number
   ) {
     return Settings.update('numberOfParkingSpots', spots)
@@ -19,7 +19,7 @@ export class SettingsResolver {
 
   @Authorized('admin')
   @Mutation(() => String)
-  async setDeadlineHour(
+  async setDeadlineHour (
     @Arg('hour', () => String!) hour: string
   ) {
     return Settings.update('deadlineHour', hour)
@@ -27,7 +27,7 @@ export class SettingsResolver {
 
   @Authorized('admin')
   @Mutation(() => String)
-  async setCancelHour(
+  async setCancelHour (
     @Arg('hour', () => String!) hour: string
   ) {
     return Settings.update('cancelHour', hour)
@@ -35,7 +35,7 @@ export class SettingsResolver {
 
   @Authorized('admin')
   @Mutation(() => Number)
-  async setDaysForCalculation(
+  async setDaysForCalculation (
     @Arg('days', () => Int!) days: number
   ) {
     return Settings.update('daysForCalculation', days)
@@ -43,7 +43,7 @@ export class SettingsResolver {
 
   @Authorized('admin')
   @Mutation(() => Number)
-  async setDaysForRequests(
+  async setDaysForRequests (
     @Arg('days', () => Int!) days: number
   ) {
     return Settings.update('daysForRequests', days)

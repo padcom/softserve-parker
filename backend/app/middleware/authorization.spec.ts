@@ -2,12 +2,11 @@ import httpMocks from 'node-mocks-http'
 import * as fs from 'fs';
 import * as path from 'path'
 import jwt from 'jsonwebtoken';
-import { db } from '../db'
 import { isAuthorized } from './authorization'
 import { Session } from '../domain/Session'
 
-const cert: string  = fs.readFileSync(path.resolve(__dirname, '../../private.key'), 'utf8');
-const token = jwt.sign({userID: 1234, email: "email"}, cert, { algorithm: 'RS256' });
+const cert: string  = fs.readFileSync(path.resolve(__dirname, '../../private.key'), 'utf8')
+const token = jwt.sign({userID: 1234, email: "email"}, cert, { algorithm: 'RS256' })
 
 beforeAll(async () => {
   await Session.create(token)
@@ -37,8 +36,8 @@ describe('Authorization middleware', () => {
       method: 'POST',
       url: '/login',
       headers: {
-        Authorization: 'Bearer faketoken.faketoken'
-      }
+        Authorization: 'Bearer faketoken.faketoken',
+      },
     });
 
     const response = httpMocks.createResponse()
@@ -53,8 +52,8 @@ describe('Authorization middleware', () => {
       method: 'POST',
       url: '/login',
       headers: {
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
 
     const response = httpMocks.createResponse()

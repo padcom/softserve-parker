@@ -1,4 +1,4 @@
-import { Field, ID, ObjectType, registerEnumType } from 'type-graphql'
+import { Field, ID, ObjectType } from 'type-graphql'
 import { FieldPacket, RowDataPacket, OkPacket } from 'mysql'
 import { isPast } from 'date-fns'
 import { db } from '../db'
@@ -26,7 +26,7 @@ export class ReservationRequest {
     return User.getById(this.userId)
   }
 
-  static async fetchByUserId(userId: number, from: Date): Promise<ReservationRequest[]> {
+  static async fetchByUserId (userId: number, from: Date): Promise<ReservationRequest[]> {
     const [rows]: [RowDataPacket[], FieldPacket[]] = await db.execute(
       `SELECT * FROM reservationRequest
        WHERE userId = ? AND date >= ?
@@ -36,7 +36,7 @@ export class ReservationRequest {
     return rows as ReservationRequest[]
   }
 
-  static async create(userId: number, dates: Date[], validate: boolean = true): Promise<ReservationRequest[]> {
+  static async create (userId: number, dates: Date[], validate = true): Promise<ReservationRequest[]> {
     if (validate) this.validateDates(dates)
     await this.assertRequestsDoesntExist(userId, dates)
 
@@ -48,7 +48,7 @@ export class ReservationRequest {
     return this.fetchByUserIdAndDates(userId, dates)
   }
 
-  private static validateDates(dates: Date[]): void | Error {
+  private static validateDates (dates: Date[]): void | Error {
     if (dates.some((date: Date) => isPast(date))) throw new Error(`Provided date is in the past.`)
     const containsDuplicates = dates
       .map((date: Date) => date.getTime())
@@ -56,12 +56,12 @@ export class ReservationRequest {
     if (containsDuplicates) throw new Error('Provided date range contains duplicates.')
   }
 
-  static async assertRequestsDoesntExist(userId: number, dates: Date[]): Promise<void | Error> {
+  static async assertRequestsDoesntExist (userId: number, dates: Date[]): Promise<void | Error> {
     const records = await this.fetchByUserIdAndDates(userId, dates)
     if (records && records.length) throw new Error('Request already exist')
   }
 
-  static async fetchByUserIdAndDates(userId: number, dates: Date[]): Promise<ReservationRequest[]> {
+  static async fetchByUserIdAndDates (userId: number, dates: Date[]): Promise<ReservationRequest[]> {
     const [rows]: [RowDataPacket[], FieldPacket[]] = await db.query(
       `SELECT * FROM reservationRequest
         WHERE userId = ? AND date IN(?)
@@ -72,7 +72,7 @@ export class ReservationRequest {
     return rows as ReservationRequest[]
   }
 
-  static async delete(userId: number, date: Date) {
+  static async delete (userId: number, date: Date) {
     const [ result ] = await db.execute(`DELETE from reservationRequest WHERE userId = ? AND date = ?`,
       [userId, date]) as OkPacket[]
 
@@ -83,7 +83,7 @@ export class ReservationRequest {
     return result.affectedRows
   }
 
-  static async cancelById(id: number) {
+  static async cancelById (id: number) {
     const [ result ] = await db.execute(
       `UPDATE reservationRequest SET state='cancelled' WHERE id = ?`,
       [id]) as OkPacket[]
@@ -95,7 +95,7 @@ export class ReservationRequest {
     return result.affectedRows
   }
 
-  static async getAllByDay(from: Date, to: Date): Promise<ReservationRequest[]> {
+  static async getAllByDay (from: Date, to: Date): Promise<ReservationRequest[]> {
     const [ result ] = await db.execute(`
       SELECT  * FROM parker.reservationRequest
       WHERE date BETWEEN ? AND ?

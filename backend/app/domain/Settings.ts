@@ -7,19 +7,19 @@ import { db } from '../db'
 })
 export class Settings {
   @Field(() => Number)
-  numberOfParkingSpots: number = 50
+  numberOfParkingSpots = 50
 
   @Field(() => String)
-  deadlineHour: string = '18:00'
+  deadlineHour = '18:00'
 
   @Field(() => String)
-  cancelHour: string = '07:00'
+  cancelHour = '07:00'
 
   @Field(() => Number)
-  daysForCalculation: number = 90
+  daysForCalculation = 90
 
   @Field(() => Number)
-  daysForRequests: number = 30
+  daysForRequests = 30
 
   static async retrieve () {
     const [ results ] = await db.execute(`SELECT name, value FROM settings`) as RowDataPacket[][]

@@ -8,12 +8,12 @@ export const logger = winston.createLogger({
       level: 'error',
     }),
     new winston.transports.File({
-      filename: 'parker-general.log'
+      filename: 'parker-general.log',
     }),
   ],
 })
 
 // Docker will be running the processes and it needs console logs to do logging
 logger.add(new winston.transports.Console({
-  format: winston.format.simple()
+  format: winston.format.simple(),
 }))

@@ -1,5 +1,4 @@
 import { ReservationRequestResolver } from '../../resolvers/ReservationRequestResolver'
-import { db } from '../../../db'
 import { User } from '../../../domain/User'
 import { ReservationRequest } from '../../../domain/ReservationRequest'
 

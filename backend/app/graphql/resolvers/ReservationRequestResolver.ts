@@ -22,9 +22,9 @@ export class ReservationRequestResolver {
   @Query(() => [ ReservationRequest ], {
     description: 'Returns list of reservation requests for given user id',
   })
-  async reservationRequests(
+  async reservationRequests (
     @Arg('userId', () => Int!, {
-      description: 'This argument defines for which user fetch reservation requests.'
+      description: 'This argument defines for which user fetch reservation requests.',
     })
     userId: number,
     @Arg('from', () => Date!, {
@@ -39,7 +39,7 @@ export class ReservationRequestResolver {
     description:
       'Creates reservation requests.',
   })
-  async createReservationRequest(
+  async createReservationRequest (
     @Arg('userId', () => Int!, {
       description: 'User for which will be created requests.',
     })
@@ -53,9 +53,9 @@ export class ReservationRequestResolver {
   }
 
   @Mutation(() => Number)
-  async cancelReservationRequest(
+  async cancelReservationRequest (
     @Arg('id', () => Int!, {
-      description: 'Id of request for cancelation'
+      description: 'Id of request for cancelation',
     })
     id: number
   ) {

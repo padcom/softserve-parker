@@ -1,5 +1,5 @@
 import { Field, ID, ObjectType } from 'type-graphql'
-import { OkPacket, FieldPacket, RowDataPacket } from 'mysql'
+import { OkPacket, RowDataPacket } from 'mysql'
 import bcrypt from 'bcrypt'
 import { db } from '../db'
 import { logger } from '../logger'
@@ -77,6 +77,10 @@ export class User {
       WHERE id=?`, [ firstName, lastName, plate, phone, id ]
     ) as OkPacket[]
 
+    if (result.affectedRows !== 1) {
+      throw new Error('Unable to update user - reason unknown')
+    }
+
     return id
   }
 
@@ -95,11 +99,11 @@ export class User {
           from: EMAIL,
           to: email,
           subject: 'Email Confirmation', 
-          html: `<p>Please confirm your email address <a href='${CONFIRM_URL_BASE}/#/confirm-registration/${userId}'>here</a>.<p/>`
+          html: `<p>Please confirm your email address <a href='${CONFIRM_URL_BASE}/#/confirm-registration/${userId}'>here</a>.<p/>`,
       });
   }
 
-  static async setEnabled (id: number, value: Boolean) {
+  static async setEnabled (id: number, value: boolean) {
     const [ rows ] = await db.execute(
       'UPDATE user SET enabled = ? WHERE id = ?',
       [ Boolean(value), id ]
@@ -142,7 +146,7 @@ export class User {
     return result.affectedRows
   }
 
-  static async getByEmail(email: string): Promise<User> {
+  static async getByEmail (email: string): Promise<User> {
     const [ rows ] = await db.execute(
       'SELECT * FROM user WHERE email = ?',
       [ email ]
@@ -152,7 +156,7 @@ export class User {
     return rows[0] as User
   }
 
-  static async getById(id: number): Promise<User> {
+  static async getById (id: number): Promise<User> {
     const [ rows ] = await db.execute(
       'SELECT * FROM user WHERE id = ?',
       [ id ]
@@ -162,7 +166,7 @@ export class User {
     return rows[0] as User
   }
 
-  static async getAll(): Promise<User[]> {
+  static async getAll (): Promise<User[]> {
     const [ rows ] = await db.execute(
       'SELECT * FROM user'
     )
@@ -171,7 +175,7 @@ export class User {
     return rows as User[]
   }
 
-  static async getAllActiveUsers(): Promise<User[]> {
+  static async getAllActiveUsers (): Promise<User[]> {
     const [ rows ] = await db.execute(
       'SELECT * FROM user WHERE enabled=1'
     )
@@ -180,7 +184,7 @@ export class User {
     return rows as User[]
   }
 
-  private static assertFound(user: RowDataPacket) {
+  private static assertFound (user: RowDataPacket) {
     if (!user) throw new Error(`User doesn't exist.`)
   }
 }

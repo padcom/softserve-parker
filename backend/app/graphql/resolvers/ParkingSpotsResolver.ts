@@ -6,7 +6,7 @@ export class ParkingSpotsResolver {
   @Query(() => [ParkingSpot], {
     description: 'Returns all parking spots up to limit.',
   })
-  async parkingspots(
+  async parkingspots (
     @Arg('skip', () => Int!, {
       description: 'This argument defines how many rows to skip',
     })
@@ -24,7 +24,7 @@ export class ParkingSpotsResolver {
     description:
       'Updates information whether a parking spot is reserved or not',
   })
-  async setParkingSpotReservationStatus(
+  async setParkingSpotReservationStatus (
     @Arg('id', () => Int!, {
       description: 'Parking spot id you want to change',
     })

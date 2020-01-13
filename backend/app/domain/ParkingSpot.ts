@@ -23,7 +23,7 @@ export class ParkingSpot {
    * @returns First X parking spots
    * @memberof Service
    */
-  static async getOne(id: number) {
+  static async getOne (id: number) {
     const [rows]: [RowDataPacket[], FieldPacket[]] = await db.execute(
       `
       SELECT *
@@ -36,7 +36,7 @@ export class ParkingSpot {
     return rows as ParkingSpot[]
   }
 
-  static async fetch(skip: number, limit: number): Promise<ParkingSpot[]> {
+  static async fetch (skip: number, limit: number): Promise<ParkingSpot[]> {
     const [rows] = await db.execute(
       `SELECT * FROM parkingspot
        ORDER BY id LIMIT ?,?`,
@@ -45,7 +45,7 @@ export class ParkingSpot {
     return rows as ParkingSpot[]
   }
 
-  static async setReservation(status: boolean, id: number) {
+  static async setReservation (status: boolean, id: number) {
     const [rows]: [OkPacket, FieldPacket[]] = await db.execute(
       `
       UPDATE parkingspot

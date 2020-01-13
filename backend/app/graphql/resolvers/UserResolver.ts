@@ -21,7 +21,7 @@ export class UserResolver {
   }
 
   @Mutation(() => Int, {
-    description: 'Returns newly created user'
+    description: 'Returns newly created user',
   })
   async createUser (
     @Arg('email', () => String!)
@@ -35,13 +35,13 @@ export class UserResolver {
     @Arg('plate', () => String!)
     plate: string,
     @Arg('phone', () => Int!)
-    phone: number
+    phone: number,
   ) {
     return User.create(email, password, firstName, lastName, plate, phone)
   }
 
   @Mutation(() => Int, {
-    description: 'Update user'
+    description: 'Update user',
   })
   async updateUser (
     @Arg('firstName', () => String!)
@@ -53,13 +53,13 @@ export class UserResolver {
     @Arg('id', () => String!)
     id: string,
     @Arg('phone', () => Int!)
-    phone: number,
+    phone: number
   ) {
     return User.update(firstName, lastName, plate, phone, id)
   }
 
   @Mutation(() => Int, {
-    description: 'Remove user'
+    description: 'Remove user',
   })
   async removeUser (
     @Arg('id', () => String!)

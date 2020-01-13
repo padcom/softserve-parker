@@ -42,7 +42,7 @@ export const graphql = schema
         const data = jwt.decode(token) as TokenData
 
         return { user: data.email } as GraphQLContext
-      }
+      },
     })
 
     return server

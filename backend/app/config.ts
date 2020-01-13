@@ -10,7 +10,7 @@ const envVariableValidators = {
   EMAIL: str({ default: 'ssparkertesting@gmail.com', desc: 'The e-mail account login for the e-mail sender in this project' }),
   CONFIRM_URL_BASE: url({ default: 'http://localhost:8080', desc: 'Url of application' }),
   SMTP_USER: str({ default: 'e7a1a548c2b5fa', desc: 'User for smtp login'}),
-  SMTP_PASSWORD: str({ default: '375ad49c0a886c', desc: 'The password for the smtp login' })
+  SMTP_PASSWORD: str({ default: '375ad49c0a886c', desc: 'The password for the smtp login' }),
 }
 
 dotenv.config()

@@ -24,7 +24,7 @@ export class History {
     return User.getById(this.userId)
   }
 
-  static async create(date: Date, userId: number, state: string = 'used'): Promise<number> {
+  static async create (date: Date, userId: number, state = 'used'): Promise<number> {
     const [ result ] = await db.execute(
       'INSERT INTO history (date, userId, state) VALUES (?,?,?)',
       [ date, userId, state ]
@@ -37,7 +37,7 @@ export class History {
     return result.insertId
   }
 
-  static async getHistorySince(date: Date): Promise<History[]> {
+  static async getHistorySince (date: Date): Promise<History[]> {
     const [ rows ]: [ RowDataPacket[], FieldPacket[] ] = await db.execute(
       'SELECT * FROM history WHERE date > ?',
       [ date ]
