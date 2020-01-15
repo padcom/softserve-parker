@@ -26,7 +26,7 @@ services:
       - parker-mysql-db:/var/lib/mysql
 
   parker:
-    image: localhost:5000/parker-app
+    image: docker-registry.aplaline.com/parker-app
     container_name: parker-app
     links:
       - mysql
@@ -36,7 +36,7 @@ services:
       - 3000:3000
 
   apache:
-    image: localhost:5000/parker-apache
+    image: docker-registry.aplaline.com/parker-apache
     container_name: parker-apache
     links:
       - parker
