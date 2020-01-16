@@ -22,6 +22,12 @@
           <v-col cols="12" sm="6">
             <v-select v-model="user.roles" label="Role" :items="[ 'user', 'admin', 'vip' ]" required/>
           </v-col>
+          <v-col cols="12" sm="6">
+            <v-select v-model="user.state" label="State" :items="[ 'active', 'inactive', 'deleted' ]" :disabled="user.state === 'deleted'" />
+          </v-col>
+          <v-col cols="12" sm="12">
+            <v-textarea v-model="user.description" label="Description" rows="2" counter="255" :error="user.description.length > 255" />
+          </v-col>
         </v-row>
       </v-container>
     </v-card-text>
@@ -48,7 +54,7 @@ export default class UserForm extends Vue {
 
   user = { ...this.userProp }
 
-  setRole (role) {
+  setRole (role: string) {
     this.user.roles = role
   }
 
@@ -64,7 +70,9 @@ export default class UserForm extends Vue {
       this.user.firstName &&
       this.user.lastName &&
       this.user.plate &&
-      this.user.phone
+      this.user.phone &&
+      this.user.roles &&
+      this.user.description.length <= 255
     )
   }
 }

@@ -55,12 +55,15 @@ export class User {
   @Field(() => String, { nullable: true })
   roles?: string
 
-  static async create (email: string, password: string, firstName: string, lastName: string, plate: string, phone: number) {
+  @Field(() => String, { nullable: true })
+  description?: string
+
+  static async create (email: string, password: string, firstName: string, lastName: string, plate: string, phone: number, description: string) {
     const hashedPassword = await bcrypt.hash(password, 10)
 
     const [ result ] = await db.execute(
-      `INSERT INTO user (email, password, firstName, lastName, plate, phone) 
-      VALUES (?, ?, ?, ?, ?, ?)`, [ email, hashedPassword, firstName, lastName, plate, phone ]
+      `INSERT INTO user (email, password, firstName, lastName, plate, phone, description) 
+      VALUES (?, ?, ?, ?, ?, ?, ?)`, [ email, hashedPassword, firstName, lastName, plate, phone, description ]
     ) as OkPacket[]
 
     if (result.affectedRows !== 1) {
@@ -70,11 +73,11 @@ export class User {
     return result.insertId
   }
 
-  static async update (firstName: string, lastName: string, plate: string, phone: number, id: string, roles: string) {
+  static async update (firstName: string, lastName: string, plate: string, phone: number, id: string, roles: string, description: string) {
     const [ result ] = await db.execute(
       `UPDATE user
-      SET firstName=?, lastName=?, plate=?, phone=?, roles=?
-      WHERE id=?`, [ firstName, lastName, plate, phone, roles, id ]
+      SET firstName=?, lastName=?, plate=?, phone=?, roles=?, description=?
+      WHERE id=?`, [ firstName, lastName, plate, phone, roles, description, id ]
     ) as OkPacket[]
 
     if (result.affectedRows !== 1) {
