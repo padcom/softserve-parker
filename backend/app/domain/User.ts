@@ -70,11 +70,11 @@ export class User {
     return result.insertId
   }
 
-  static async update (firstName: string, lastName: string, plate: string, phone: number, id: string) {
+  static async update (firstName: string, lastName: string, plate: string, phone: number, id: string, roles: string) {
     const [ result ] = await db.execute(
       `UPDATE user
-      SET firstName=?, lastName=?, plate=?, phone=?
-      WHERE id=?`, [ firstName, lastName, plate, phone, id ]
+      SET firstName=?, lastName=?, plate=?, phone=?, roles=?
+      WHERE id=?`, [ firstName, lastName, plate, phone, roles, id ]
     ) as OkPacket[]
 
     if (result.affectedRows !== 1) {

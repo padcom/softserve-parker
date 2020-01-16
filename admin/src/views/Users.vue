@@ -98,8 +98,8 @@ export default class Users extends Vue {
   }
 
   editItem (item: UserInterface) {
+    this.user = item
     this.dialog = true
-    this.user = Object.assign({}, item)
   }
 
   async onRemoveItem (user: UserInterface) {
@@ -120,8 +120,8 @@ export default class Users extends Vue {
 
   async saveEditedUser (user: UserInterface) {
     try {
-      const { firstName, lastName, plate, phone, id } = user
-      const res = await User.updateUser(firstName, lastName, plate, phone, id)
+      const { firstName, lastName, plate, phone, id, roles } = user
+      const res = await User.updateUser(firstName, lastName, plate, phone, id, roles)
       // @ts-ignore
       if (res) this.$refs.info.showInfo('User added')
       this.loadDrivers()

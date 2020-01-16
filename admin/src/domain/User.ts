@@ -38,15 +38,16 @@ export class User {
     return user
   }
 
-  static async updateUser (firstName: string, lastName: string, plate: string, phone: number, id: string) {
-    const { updateUser } = await query(`mutation updateUser($firstName: String!, $lastName: String!, $plate: String!, $phone: Int!, $id: String!) {
-        updateUser(firstName: $firstName, lastName: $lastName, plate: $plate, phone: $phone, id: $id)
+  static async updateUser (firstName: string, lastName: string, plate: string, phone: number, id: string, roles: string) {
+    const { updateUser } = await query(`mutation updateUser($firstName: String!, $lastName: String!, $plate: String!, $phone: Int!, $roles: String!, $id: String!) {
+        updateUser(firstName: $firstName, lastName: $lastName, plate: $plate, phone: $phone, roles: $roles, id: $id)
       }`, {
       firstName,
       lastName,
       plate,
       id,
       phone: Number(phone),
+      roles,
     })
 
     return updateUser

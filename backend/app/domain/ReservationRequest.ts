@@ -21,6 +21,9 @@ export class ReservationRequest {
   @Field(() => Number, { nullable: true })
   parkingSpotId: number
 
+  @Field(() => String)
+  status: string
+
   @Field(() => User)
   user (): Promise<User> {
     return User.getById(this.userId)
