@@ -1,6 +1,7 @@
 import { ReservationRequestResolver } from '../../resolvers/ReservationRequestResolver'
 import { User } from '../../../domain/User'
 import { ReservationRequest } from '../../../domain/ReservationRequest'
+import { logger } from '../../../logger'
 
 const date = new Date()
 date.setHours(23)
@@ -67,7 +68,7 @@ describe('Reservation Requests', () => {
     try {
       result = await rr.createReservationRequest(user.id, [localDate])
     } catch (e) {
-      console.log(e)
+      logger.error(e)
     }
 
     expect(result.length).toBe(1)
@@ -93,7 +94,7 @@ describe('Reservation Requests', () => {
       result = await rr.createReservationRequest(user.id, [localDate])
       deletionResult = await rr.cancelReservationRequest(result[0].id)
     } catch (e) {
-      console.log(e)
+      logger.error(e)
     }
 
     expect(deletionResult).toBe(1)

@@ -24,6 +24,7 @@ export class User {
         plate
         roles
         rank
+        state
         description
       }
     }`)
@@ -42,17 +43,19 @@ export class User {
     return user
   }
 
-  static async updateUser (firstName: string, lastName: string, plate: string, phone: number, id: string, roles: string, description: string) {
-    const { user } = await query(`mutation updateUser(
+  static async updateUser (state: string, firstName: string, lastName: string, plate: string, phone: number, id: string, roles: string, description: string) {
+    const { updateUser } = await query(`mutation updateUser(
+        $state: String!,
         $firstName: String!,
         $lastName: String!,
         $plate: String!,
         $phone: Int!,
         $roles: String!,
-        $description: String!
+        $description: String
         $id: String!,
       ) {
         updateUser(
+          state: $state,
           firstName: $firstName,
           lastName: $lastName,
           plate: $plate,
@@ -61,7 +64,9 @@ export class User {
           description: $description,
           id: $id
         )
-      }`, {
+      }`,
+    {
+      state,
       firstName,
       lastName,
       plate,
@@ -71,7 +76,7 @@ export class User {
       id,
     })
 
-    return user
+    return updateUser
   }
 
   static async removeUser (id: string) {

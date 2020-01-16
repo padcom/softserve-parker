@@ -120,11 +120,15 @@ export default class Users extends Vue {
 
   async saveEditedUser (user: UserInterface) {
     try {
-      const { firstName, lastName, plate, phone, id, roles, description } = user
-      const res = await User.updateUser(firstName, lastName, plate, phone, id, roles, description)
+      const { state, firstName, lastName, plate, phone, id, roles, description } = user
+      const res = await User.updateUser(state, firstName, lastName, plate, phone, id, roles, description)
       // @ts-ignore
-      if (res) this.$refs.info.showInfo('User added')
-      this.loadDrivers()
+      if (res) {
+        await this.loadDrivers()
+        this.$refs.info.showInfo('User updated')
+      } else {
+        throw new Error(res)
+      }
     } catch (e) {
       // @ts-ignore
       this.$refs.info.showError(e.message as string)

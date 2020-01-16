@@ -36,10 +36,6 @@ export default class Modal extends Vue {
 
   @Prop({ type: String, default: '50%' }) width?: string
 
-  mounted () {
-    console.log('WIDTH:', this.width)
-  }
-
   async show (): Promise<string> {
     this.visible = true
     return new Promise((resolve, reject) => {

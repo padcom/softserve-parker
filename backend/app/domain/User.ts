@@ -37,6 +37,9 @@ export class User {
   @Field(() => String)
   password: string
 
+  @Field(() => String)
+  state: string
+
   @Field(() => Number)
   async rank (): Promise<number> {
     const ranking = await calculateCurrentRanking()
@@ -49,21 +52,18 @@ export class User {
     return user.rank
   }
 
-  @Field(() => Boolean)
-  enabled: boolean
-
   @Field(() => String, { nullable: true })
   roles?: string
 
   @Field(() => String, { nullable: true })
   description?: string
 
-  static async create (email: string, password: string, firstName: string, lastName: string, plate: string, phone: number, description: string) {
+  static async create (email: string, password: string, firstName: string, lastName: string, plate: string, phone: number) {
     const hashedPassword = await bcrypt.hash(password, 10)
 
     const [ result ] = await db.execute(
-      `INSERT INTO user (email, password, firstName, lastName, plate, phone, description) 
-      VALUES (?, ?, ?, ?, ?, ?, ?)`, [ email, hashedPassword, firstName, lastName, plate, phone, description ]
+      `INSERT INTO user (email, password, firstName, lastName, plate, phone) 
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, [ email, hashedPassword, firstName, lastName, plate, phone ]
     ) as OkPacket[]
 
     if (result.affectedRows !== 1) {
@@ -73,15 +73,33 @@ export class User {
     return result.insertId
   }
 
-  static async update (firstName: string, lastName: string, plate: string, phone: number, id: string, roles: string, description: string) {
+  static async update (id: string, state: string, firstName: string, lastName: string, plate: string, phone: number, roles: string, description: string) {
     const [ result ] = await db.execute(
       `UPDATE user
-      SET firstName=?, lastName=?, plate=?, phone=?, roles=?, description=?
-      WHERE id=?`, [ firstName, lastName, plate, phone, roles, description, id ]
+      SET state=?, firstName=?, lastName=?, plate=?, phone=?, roles=?
+      WHERE id=?`, [ state, firstName, lastName, plate, phone, roles, id ]
     ) as OkPacket[]
 
     if (result.affectedRows !== 1) {
       throw new Error('Unable to update user - reason unknown')
+    }
+
+    if (description !== null && description !== undefined) {
+      this.updateDescription(id, description)
+    }
+
+    return id
+  }
+
+  static async updateDescription (id: string, description: string) {
+    const [ result ] = await db.execute(
+      `UPDATE user
+      SET description=?
+      WHERE id=?`, [ description, id ]
+    ) as OkPacket[]
+
+    if (result.affectedRows !== 1) {
+      throw new Error('Unable to update user description - reason unknown')
     }
 
     return id
@@ -108,8 +126,8 @@ export class User {
 
   static async setEnabled (id: number, value: boolean) {
     const [ rows ] = await db.execute(
-      'UPDATE user SET enabled = ? WHERE id = ?',
-      [ Boolean(value), id ]
+      'UPDATE user SET state = ? WHERE id = ?',
+      [ Boolean(value) ? 'active' : 'inactive', id ]
     ) as OkPacket[]
 
     if (rows.affectedRows == 0) {
@@ -180,7 +198,7 @@ export class User {
 
   static async getAllActiveUsers (): Promise<User[]> {
     const [ rows ] = await db.execute(
-      'SELECT * FROM user WHERE enabled=1'
+      `SELECT * FROM user WHERE state='active'`
     )
     this.assertFound(rows[0])
 

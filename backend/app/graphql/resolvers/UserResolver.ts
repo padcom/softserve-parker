@@ -36,16 +36,16 @@ export class UserResolver {
     plate: string,
     @Arg('phone', () => Int!)
     phone: number,
-    @Arg('description', () => String)
-    description: string,
   ) {
-    return User.create(email, password, firstName, lastName, plate, phone, description)
+    return User.create(email, password, firstName, lastName, plate, phone)
   }
 
   @Mutation(() => Int, {
     description: 'Update user',
   })
   async updateUser (
+    @Arg('state', () => String!)
+    state: string,
     @Arg('firstName', () => String!)
     firstName: string,
     @Arg('lastName', () => String!)
@@ -58,10 +58,10 @@ export class UserResolver {
     phone: number,
     @Arg('roles', () => String!)
     roles: string,
-    @Arg('description', () => String!)
+    @Arg('description', () => String, { nullable: true })
     description: string,
   ) {
-    return User.update(firstName, lastName, plate, phone, id, roles, description)
+    return User.update(id, state, firstName, lastName, plate, phone, roles, description)
   }
 
   @Mutation(() => Int, {
