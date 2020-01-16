@@ -32,7 +32,7 @@
           <CreateUserForm
             :userProp="user"
             @onSubmit="createNewUser"
-            @close="close"
+            @close="newUserDialog = false"
           />
         </v-dialog>
       </v-card-title>
@@ -192,7 +192,7 @@ export default class Users extends Vue {
   }
 
   createNewUserDialog () {
-    this.user = {}
+    this.user = { state: 'active', roles: 'user' }
     this.newUserDialog = true
   }
 

@@ -58,7 +58,7 @@ export default class UserForm extends Vue {
     this.user = { ...value }
   }
 
-  user = { description: '', ...this.userProp }
+  user = { ...this.userProp }
 
   setRole (role: string) {
     this.user.roles = role
