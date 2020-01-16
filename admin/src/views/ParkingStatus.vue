@@ -15,6 +15,7 @@
         :headers="headers"
         :items="drivers"
         :search="search"
+        :loading="loading"
         disable-pagination
         hide-default-footer
       >
@@ -39,6 +40,7 @@ import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 import { User } from '@/domain/User'
 import Information from '@/components/Information.vue'
+import { UserInterface } from '../domain/User'
 
 @Component({
   components: {
@@ -56,18 +58,21 @@ export default class ParkingStatus extends Vue {
     { text: 'Ranking', align: 'left', value: 'rank' },
   ]
 
-  drivers = []
+  drivers = [] as UserInterface[]
 
   search = ''
+  loading = false
 
   async mounted () {
+    this.loading = true
     try {
-      const drivers = await User.getAll()
-      this.drivers = drivers
+      this.drivers = await User.getAll()
     } catch (e) {
       this.drivers = []
       // @ts-ignore
       this.$refs.info.showError(e.message as string)
+    } finally {
+      this.loading = false
     }
   }
 

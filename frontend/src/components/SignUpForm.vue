@@ -29,7 +29,6 @@
       name="phoneNumber"
       placeholder="Phone Number"
       v-model="user.phoneNumber"
-      :type="'number'"
       :isEmpty="!user.phoneNumber"
     />
     <TextField
@@ -77,7 +76,7 @@ export default class SignUpForm extends Vue {
     lastName: '',
     email: '',
     plateNumber: '',
-    phoneNumber: null,
+    phoneNumber: '',
     password: '',
   }
 

@@ -42,6 +42,7 @@
         :headers="headers"
         :items="requests"
         :search="search"
+        :loading="loading"
         disable-pagination
         hide-default-footer>
         <template v-slot:item.date="{ item }">
@@ -80,22 +81,29 @@ export default class ParkingStatus extends Vue {
   search = ''
   inputDate = this.date
   openCalendar = false
+  loading = false
 
   mounted () {
     this.loadRequests()
   }
 
   async loadRequests () {
+    this.loading = true
     const startOfDay = moment(this.inputDate).toDate()
     const endOfDay = moment(this.inputDate).endOf('day').toDate()
     this.requests = []
     try {
       const requests = await Requests.getAllInDay(startOfDay, endOfDay)
-      this.requests = requests
+      this.requests = requests.map((request: any) => ({
+        ...request,
+        status: request.status === '' ? 'used' : request.status,
+      }))
     } catch (e) {
       this.requests = []
       // @ts-ignore
       this.$refs.info.showError(e.message as string)
+    } finally {
+      this.loading = false
     }
   }
 

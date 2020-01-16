@@ -58,22 +58,26 @@ export class User {
   @Field(() => String, { nullable: true })
   description?: string
 
-  static async create (email: string, password: string, firstName: string, lastName: string, plate: string, phone: string) {
+  static async create (email: string, password: string, firstName: string, lastName: string, plate: string, phone: string, roles: string, state: string, description: string = null) {
     const hashedPassword = await bcrypt.hash(password, 10)
 
     const [ result ] = await db.execute(
-      `INSERT INTO user (email, password, firstName, lastName, plate, phone) 
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, [ email, hashedPassword, firstName, lastName, plate, phone ]
+      `INSERT INTO user (email, password, firstName, lastName, plate, phone, roles, state) 
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, [ email, hashedPassword, firstName, lastName, plate, phone, roles, state ]
     ) as OkPacket[]
 
     if (result.affectedRows !== 1) {
       throw new Error('Unable to create new user - reason unknown')
     }
 
+    if (description) {
+      User.updateDescription(result.insertId, description)
+    }
+
     return result.insertId
   }
 
-  static async update (id: string, state: string, firstName: string, lastName: string, plate: string, phone: string, roles: string, description: string) {
+  static async update (id: number, state: string, firstName: string, lastName: string, plate: string, phone: string, roles: string, description: string) {
     const [ result ] = await db.execute(
       `UPDATE user
       SET state=?, firstName=?, lastName=?, plate=?, phone=?, roles=?
@@ -91,7 +95,7 @@ export class User {
     return id
   }
 
-  static async updateDescription (id: string, description: string) {
+  static async updateDescription (id: number, description: string) {
     const [ result ] = await db.execute(
       `UPDATE user
       SET description=?
@@ -152,7 +156,7 @@ export class User {
     return result.affectedRows
   }
 
-  static async deleteByID (id: string) {
+  static async deleteByID (id: number) {
     const [ result ] = await db.execute(
       'DELETE FROM user WHERE id=?',
       [ id ]

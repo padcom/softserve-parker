@@ -1,14 +1,16 @@
 import { query } from '@/graphql'
 
 export interface UserInterface {
+  id: number
+  email: string
+  password: string
   firstName: string
   lastName: string
   plate: string
-  id: string
   phone: string
-  email: string
   state: string
   roles: string
+  rank: number | string
   description: string
 }
 
@@ -29,7 +31,7 @@ export class User {
       }
     }`)
 
-    return allUsers
+    return allUsers as UserInterface[]
   }
 
   static async getByEmail (email: string, fields: string[] = [ 'email' ]) {
@@ -43,7 +45,7 @@ export class User {
     return user
   }
 
-  static async updateUser (state: string, firstName: string, lastName: string, plate: string, phone: number, id: string, roles: string, description: string) {
+  static async updateUser (state: string, firstName: string, lastName: string, plate: string, phone: string, id: number, roles: string, description: string) {
     const { updateUser } = await query(`mutation updateUser(
         $state: String!,
         $firstName: String!,
@@ -52,7 +54,7 @@ export class User {
         $phone: String!,
         $roles: String!,
         $description: String
-        $id: String!,
+        $id: ID!,
       ) {
         updateUser(
           state: $state,
@@ -70,7 +72,7 @@ export class User {
       firstName,
       lastName,
       plate,
-      phone: Number(phone),
+      phone,
       roles,
       description,
       id,
@@ -79,8 +81,47 @@ export class User {
     return updateUser
   }
 
-  static async removeUser (id: string) {
-    const { removeUser } = await query(`mutation removeUser($id: String!) {
+  static async createUser (email: string, password: string, state: string, firstName: string, lastName: string, plate: string, phone: string, roles: string, description: string) {
+    const { createUser } = await query(`mutation createUser(
+      $email: String!,
+      $password: String!,
+      $state: String!,
+      $firstName: String!,
+      $lastName: String!,
+      $plate: String!,
+      $phone: String!,
+      $roles: String!,
+      $description: String
+    ) {
+      createUser(
+        email: $email,
+        password: $password,
+        state: $state,
+        firstName: $firstName,
+        lastName: $lastName,
+        plate: $plate,
+        phone: $phone,
+        roles: $roles,
+        description: $description
+      )
+    }`,
+    {
+      email,
+      password,
+      state,
+      firstName,
+      lastName,
+      plate,
+      phone,
+      roles,
+      description,
+    })
+
+    return createUser
+  }
+
+  static async removeUser (id: number) {
+    const { removeUser } = await query(`mutation removeUser($id: ID!) {
         removeUser(id: $id)
       }`, { id })
 

@@ -21,11 +21,26 @@
             @close="close"
           />
         </v-dialog>
+        <v-spacer />
+        <v-btn @click="createNewUserDialog">
+          Add user
+        </v-btn>
+        <v-dialog
+          v-model="newUserDialog"
+          max-width="500px"
+        >
+          <CreateUserForm
+            :userProp="user"
+            @onSubmit="createNewUser"
+            @close="close"
+          />
+        </v-dialog>
       </v-card-title>
       <v-data-table class="elevation-1"
         :headers="headers"
         :items="drivers"
         :search="search"
+        :loading="loading"
         disable-pagination
         hide-default-footer
       >
@@ -36,7 +51,13 @@
           {{ getValue(item.roles) }}
         </template>
         <template v-slot:item.state="{ item }">
-          {{ getValue(item.state) }}
+          <v-tooltip bottom v-if="item.description">
+            <template v-slot:activator="{ on }">
+              <span v-on="on" style="cursor: help">{{ getValue(item.state) }}</span>
+            </template>
+            <span>{{ item.description }}</span>
+          </v-tooltip>
+          <span v-else>{{ getValue(item.state) }}</span>
         </template>
         <template v-slot:item.edit="{ item }">
           <v-btn x-small color="primary" @click="editItem(item)">
@@ -61,11 +82,13 @@ import { Component } from 'vue-property-decorator'
 import { User, UserInterface } from '@/domain/User'
 import Information from '@/components/Information.vue'
 import UserForm from '@/components/forms/User.vue'
+import CreateUserForm from '@/components/forms/CreateUser.vue'
 
 @Component({
   components: {
     Information,
     UserForm,
+    CreateUserForm,
   },
 })
 export default class Users extends Vue {
@@ -82,11 +105,13 @@ export default class Users extends Vue {
     { text: 'Remove', value: 'remove', sortable: false },
   ]
 
-  drivers = []
+  drivers = [] as UserInterface[]
 
   search = ''
   dialog = false
+  newUserDialog = false
   user = {}
+  loading = false
 
   mounted () {
     this.loadDrivers()
@@ -108,6 +133,7 @@ export default class Users extends Vue {
   }
 
   async loadDrivers () {
+    this.loading = true
     try {
       const drivers = await User.getAll()
       this.drivers = drivers.map(driver => ({
@@ -118,6 +144,8 @@ export default class Users extends Vue {
       this.drivers = []
       // @ts-ignore
       this.$refs.info.showError(e.message as string)
+    } finally {
+      this.loading = false
     }
   }
 
@@ -125,9 +153,9 @@ export default class Users extends Vue {
     try {
       const { state, firstName, lastName, plate, phone, id, roles, description } = user
       const res = await User.updateUser(state, firstName, lastName, plate, phone, id, roles, description)
-      // @ts-ignore
       if (res) {
         await this.loadDrivers()
+        // @ts-ignore
         this.$refs.info.showInfo('User updated')
       } else {
         throw new Error(res)
@@ -161,6 +189,29 @@ export default class Users extends Vue {
 
   getValue (data: string): string {
     return !data ? '-' : data
+  }
+
+  createNewUserDialog () {
+    this.user = {}
+    this.newUserDialog = true
+  }
+
+  async createNewUser (user: UserInterface) {
+    this.newUserDialog = false
+    try {
+      const { email, password, state, firstName, lastName, plate, phone, roles, description } = user
+      const res = await User.createUser(email, password, state, firstName, lastName, plate, phone, roles, description)
+      if (res) {
+        await this.loadDrivers()
+        // @ts-ignore
+        this.$refs.info.showInfo('User created')
+      } else {
+        throw new Error(res)
+      }
+    } catch (e) {
+      // @ts-ignore
+      this.$refs.info.showError(e.message as string)
+    }
   }
 }
 </script>

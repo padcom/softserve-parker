@@ -21,6 +21,7 @@ export interface RankingUser {
   rank: number | null
   numberOfTimesParked: number
   requestTimestamp: Date | null
+  request: ReservationRequest
 }
 
 export interface Ranking {
@@ -40,8 +41,12 @@ export async function calculateUserRankings (users: User[], history: History[], 
       .reduce((acc, entry) => acc + (entry.userId === userId ? 1 : 0), 0)
   }
 
+  function getUserRequest (userId) {
+    return requests.find(request => request.userId === userId)
+  }
+
   function getUserRequestTimestamp (userId) {
-    const request = requests.find(request => request.userId === userId)
+    const request = getUserRequest(userId)
     return new Date(request?.date || NO_REQUEST_TIMESTAMP)
   }
   
@@ -59,6 +64,7 @@ export async function calculateUserRankings (users: User[], history: History[], 
       rank: null,
       numberOfTimesParked: getNumberOfTimesUserParked(user.id),
       requestTimestamp: getUserRequestTimestamp(user.id),
+      request: getUserRequest(user.id),
     }
   }
 
@@ -178,6 +184,16 @@ function dumpWinners (users: RankingUser[]) {
   })
 }
 
+export function calculateLoosers (users: RankingUser[], numberOfParkingSpots: number) {
+  function hasRequestedParkingSpot (user: RankingUser) {
+    return user.requestTimestamp != null
+  }
+
+  return users
+    .filter(hasRequestedParkingSpot)
+    .skip(numberOfParkingSpots)
+}
+
 async function createHistoryEntriesForWinners (timestamp: Date, winners: RankingUser[]): Promise<number[]> {
   return Promise.all(winners.map(async (user) => {
     return await History.create(timestamp, user.id)
@@ -199,6 +215,18 @@ async function createRandomReservationRequests (timestamp: Date) {
   }))
 }
 
+async function updateWinnerRequests (timestamp: Date, winners: RankingUser[]) {
+  return Promise.all(winners.map(user => {
+    ReservationRequest.updateStatus(user.request.id, 'won')
+  }))
+}
+
+async function updateLoosersRequests (timestamp: Date, winners: RankingUser[]) {
+  return Promise.all(winners.map(user => {
+    ReservationRequest.updateStatus(user.request.id, 'lost')
+  }))
+}
+
 export async function engine (): Promise<void> {
   console.log('Engine running')
 
@@ -212,5 +240,8 @@ export async function engine (): Promise<void> {
   const winners = calculateWinners(users, numberOfParkingSpots)
   dumpWinners(winners)
   await createHistoryEntriesForWinners(timestamp, winners)
+  await updateWinnerRequests(timestamp, winners)
+  const loosers = calculateLoosers(users, numberOfParkingSpots)
+  await updateLoosersRequests(timestamp, loosers)
   // await sendConfirmationEmails(winners)
 }

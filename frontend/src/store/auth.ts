@@ -77,7 +77,7 @@ const actions: ActionTree<AuthState, RootState> = {
           'id',
           'email',
           'rank',
-          'enabled',
+          'state',
         ])
         commit('setUser', user)
 

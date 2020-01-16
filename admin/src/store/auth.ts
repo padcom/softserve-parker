@@ -64,7 +64,7 @@ const actions: ActionTree<AuthState, RootState> = {
         const token = await API.login(email, password)
         commit('setToken', token)
 
-        const user = await User.getByEmail(email, [ 'email', 'rank', 'enabled' ])
+        const user = await User.getByEmail(email, [ 'email', 'rank', 'state' ])
         commit('setUser', user)
 
         bus.emit('user-logged-in', user)

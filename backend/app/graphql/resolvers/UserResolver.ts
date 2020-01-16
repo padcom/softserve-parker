@@ -1,4 +1,4 @@
-import { Arg, Int, Query, Resolver, Mutation } from 'type-graphql'
+import { Arg, Int, Query, Resolver, Mutation, ID } from 'type-graphql'
 import { User } from '../../domain/User'
 
 @Resolver(User)
@@ -20,8 +20,8 @@ export class UserResolver {
     return User.getByEmail(email)
   }
 
-  @Mutation(() => Int, {
-    description: 'Returns newly created user',
+  @Mutation(() => ID, {
+    description: 'Returns newly created user id',
   })
   async createUser (
     @Arg('email', () => String!)
@@ -36,8 +36,19 @@ export class UserResolver {
     plate: string,
     @Arg('phone', () => String!)
     phone: string,
+    @Arg('roles', () => String!)
+    roles: string,
+    @Arg('state', () => String!)
+    state: string,
+    @Arg('description', () => String, { nullable: true })
+    description: string,
   ) {
-    return User.create(email, password, firstName, lastName, plate, phone)
+    const newUserId = await User.create(email, password, firstName, lastName, plate, phone, roles, state, description)
+    if (description) {
+      await User.updateDescription(newUserId, description)
+    }
+
+    return newUserId
   }
 
   @Mutation(() => Int, {
@@ -52,8 +63,8 @@ export class UserResolver {
     lastName: string, 
     @Arg('plate', () => String!)
     plate: string,
-    @Arg('id', () => String!)
-    id: string,
+    @Arg('id', () => ID!)
+    id: number,
     @Arg('phone', () => String!)
     phone: string,
     @Arg('roles', () => String!)
@@ -68,8 +79,8 @@ export class UserResolver {
     description: 'Remove user',
   })
   async removeUser (
-    @Arg('id', () => String!)
-    id: string,
+    @Arg('id', () => ID!)
+    id: number,
   ) {
     return User.deleteByID(id)
   }

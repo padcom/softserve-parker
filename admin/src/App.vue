@@ -21,7 +21,7 @@
       <v-toolbar-title class="headline text-uppercase">
         <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
         <span>PARKER</span>
-        <span class="font-weight-light">ADMIN PANEL</span>
+        <span class="font-weight-light"> - ADMIN PANEL</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn to="/logout">

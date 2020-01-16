@@ -12,6 +12,13 @@ interface Array<T> {
   take(count: number): Array<T>
 
   /**
+   * Skip first @param count elements from the array
+   *
+   * @param count number of elements to take
+   */
+  skip(count: number): Array<T>
+
+  /**
    * Randomize the order in the array
    */
   randomize(): Array<T>
@@ -26,6 +33,12 @@ if (Array.prototype.clone === undefined) {
 if (Array.prototype.take === undefined) {
   Array.prototype.take = function (count) {
     return this.slice(0, count)
+  }
+}
+
+if (Array.prototype.skip === undefined) {
+  Array.prototype.skip = function (count) {
+    return this.slice(0).splice(count)
   }
 }
 

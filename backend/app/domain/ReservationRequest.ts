@@ -86,16 +86,20 @@ export class ReservationRequest {
     return result.affectedRows
   }
 
-  static async cancelById (id: number) {
+  static async updateStatus (id: number, status: string) {
     const [ result ] = await db.execute(
-      `UPDATE reservationRequest SET state='cancelled' WHERE id = ?`,
-      [id]) as OkPacket[]
+      `UPDATE reservationRequest SET status=? WHERE id = ?`,
+      [status, id]) as OkPacket[]
 
       if (result.affectedRows == 0) {
         throw new Error('Requests not found')
       } 
 
     return result.affectedRows
+  }
+
+  static async cancelById (id: number) {
+    return ReservationRequest.updateStatus(id, 'cancelled')
   }
 
   static async getAllByDay (from: Date, to: Date): Promise<ReservationRequest[]> {
