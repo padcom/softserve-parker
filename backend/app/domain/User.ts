@@ -28,8 +28,8 @@ export class User {
   @Field(() => String)
   plate: string
 
-  @Field(() => Number, { nullable: true })
-  phone?: number
+  @Field(() => String, { nullable: true })
+  phone?: string
 
   @Field(() => Date)
   created: Date
@@ -46,7 +46,7 @@ export class User {
     const user = ranking.users.find(user => user.id === this.id)
 
     if (!user) {
-      throw new Error(`Ranking for user ${this.email} not calculated`)
+      return -1;
     }
 
     return user.rank
@@ -58,7 +58,7 @@ export class User {
   @Field(() => String, { nullable: true })
   description?: string
 
-  static async create (email: string, password: string, firstName: string, lastName: string, plate: string, phone: number) {
+  static async create (email: string, password: string, firstName: string, lastName: string, plate: string, phone: string) {
     const hashedPassword = await bcrypt.hash(password, 10)
 
     const [ result ] = await db.execute(
@@ -73,7 +73,7 @@ export class User {
     return result.insertId
   }
 
-  static async update (id: string, state: string, firstName: string, lastName: string, plate: string, phone: number, roles: string, description: string) {
+  static async update (id: string, state: string, firstName: string, lastName: string, plate: string, phone: string, roles: string, description: string) {
     const [ result ] = await db.execute(
       `UPDATE user
       SET state=?, firstName=?, lastName=?, plate=?, phone=?, roles=?

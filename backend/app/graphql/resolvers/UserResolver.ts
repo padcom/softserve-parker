@@ -34,8 +34,8 @@ export class UserResolver {
     lastName: string, 
     @Arg('plate', () => String!)
     plate: string,
-    @Arg('phone', () => Int!)
-    phone: number,
+    @Arg('phone', () => String!)
+    phone: string,
   ) {
     return User.create(email, password, firstName, lastName, plate, phone)
   }
@@ -54,8 +54,8 @@ export class UserResolver {
     plate: string,
     @Arg('id', () => String!)
     id: string,
-    @Arg('phone', () => Int!)
-    phone: number,
+    @Arg('phone', () => String!)
+    phone: string,
     @Arg('roles', () => String!)
     roles: string,
     @Arg('description', () => String, { nullable: true })

@@ -110,7 +110,10 @@ export default class Users extends Vue {
   async loadDrivers () {
     try {
       const drivers = await User.getAll()
-      this.drivers = drivers
+      this.drivers = drivers.map(driver => ({
+        ...driver,
+        rank: driver.rank !== -1 ? driver.rank : '',
+      }))
     } catch (e) {
       this.drivers = []
       // @ts-ignore

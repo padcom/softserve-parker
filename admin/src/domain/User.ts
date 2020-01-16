@@ -5,7 +5,7 @@ export interface UserInterface {
   lastName: string
   plate: string
   id: string
-  phone: number
+  phone: string
   email: string
   state: string
   roles: string
@@ -49,7 +49,7 @@ export class User {
         $firstName: String!,
         $lastName: String!,
         $plate: String!,
-        $phone: Int!,
+        $phone: String!,
         $roles: String!,
         $description: String
         $id: String!,
