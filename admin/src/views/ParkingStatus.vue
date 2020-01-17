@@ -66,7 +66,11 @@ export default class ParkingStatus extends Vue {
   async mounted () {
     this.loading = true
     try {
-      this.drivers = await User.getAll()
+      const drivers = await User.getAll()
+      this.drivers = drivers.map(driver => ({
+        ...driver,
+        rank: driver.rank === -1 ? '' : driver.rank,
+      }))
     } catch (e) {
       this.drivers = []
       // @ts-ignore
