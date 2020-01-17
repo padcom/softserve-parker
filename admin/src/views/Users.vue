@@ -53,7 +53,7 @@
         <template v-slot:item.state="{ item }">
           <v-tooltip bottom v-if="item.description">
             <template v-slot:activator="{ on }">
-              <span v-on="on" style="cursor: help">{{ getValue(item.state) }}</span>
+              <span v-on="on" style="cursor: help; font-weight: bold;">{{ getValue(item.state) }}</span>
             </template>
             <span>{{ item.description }}</span>
           </v-tooltip>
