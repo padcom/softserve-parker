@@ -31,8 +31,8 @@ import moment from 'moment'
 
 @Component({})
 export default class DateRangeSelector extends Vue {
-  @Prop({ type: Date, required: true }) value: Date
-  @Prop({ type: String, required: false, default: 'Label' }) label
+  @Prop({ type: Date, required: true }) value?: Date
+  @Prop({ type: String, required: false, default: 'Label' }) label?: string
 
   calendar = false
   date = moment(this.value).format('YYYY-MM-DD')
