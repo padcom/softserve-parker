@@ -4,12 +4,6 @@
       <v-card-title>
         Parking utilization statistics
         <v-spacer />
-        <v-text-field
-          v-model="search"
-          append-icon="mdi-filter"
-          label="Search"
-          single-line
-          hide-details />
       </v-card-title>
       <v-card-title>
         <v-container>
@@ -25,7 +19,6 @@
       <v-data-table class="elevation-1"
         :headers="headers"
         :items="statistics"
-        :search="search"
         :loading="loading"
         disable-pagination
         hide-default-footer
@@ -51,7 +44,7 @@ import { Component, Vue } from 'vue-property-decorator'
 import Information from '@/components/Information.vue'
 import DateSelector from '@/components/DateSelector.vue'
 import { Statistics, StatisticsAPI } from '@/domain/Statistics'
-import DygraphChart from '@/components/DygraphChart'
+import DygraphChart from '@/components/DygraphChart.vue'
 
 function getUtilizationPercentage (entry: Statistics): number {
   if (entry.capacity && entry.utilization) {
@@ -90,7 +83,6 @@ export default class ParkingStatistics extends Vue {
   ]
 
   statistics = [] as Statistics[]
-  search = ''
   startDate = subMonths(new Date(), 3)
   endDate = new Date()
   openCalendar = false
@@ -118,10 +110,6 @@ export default class ParkingStatistics extends Vue {
   onDatesChanged () {
     this.openCalendar = false
     this.load()
-  }
-
-  get chartLabels () {
-    return this.statistics.map(entry => format(entry.date, 'YYYY-MM-DD HH:mm:ss'))
   }
 
   get chartValues () {

@@ -1,5 +1,5 @@
 <template>
-  <div style="margin: 0 0 20px 0;">
+  <div style="margin: 0 20px 20px 0;">
     <div ref="legend" style="margin: 10px 0 10px 55px;"></div>
     <div ref="root" style="width: 100%;"></div>
   </div>
@@ -14,7 +14,7 @@ import Dygraph from 'dygraphs'
 export default class DygraphChart extends Vue {
   @Prop({ type: Array, required: true }) data?: number[]
 
-  instance: Dygraph = undefined
+  instance: Dygraph | null = null
 
   @Watch('data')
   onDataChanged (newValue: any[]) {
@@ -25,27 +25,28 @@ export default class DygraphChart extends Vue {
     this.createGraph(this.data)
   }
 
-  createGraph (data: any[]) {
-    console.log('Creating graph from', data)
+  createGraph (data: any[] | undefined) {
     if (this.instance) {
       this.instance.destroy()
+      this.instance = null
     }
-    // @ts-ignore
-    this.instance = new Dygraph(this.$refs.root, data, {
-      labels: [ 'Date', 'Utilization (%)' ],
-      labelsDiv: this.$refs.legend,
-      legend: 'always',
-      ylabel: 'Utilization',
-      labelsKMB: true,
-      legendFormatter (data: dygraphs.LegendData) {
-        if (data.x) return format(data.x, 'YYYY-MM-DD HH:mm:ss') + ': Utilization ' + data.series[0].y + '%'
-        else return '&nbsp;'
-      },
-      yRangePad: 10,
-      xRangePad: 10,
-      showRangeSelector: true,
-
-    })
+    if (data && data.length > 0) {
+      // @ts-ignore
+      this.instance = new Dygraph(this.$refs.root, data, {
+        labels: [ 'Date', 'Utilization (%)' ],
+        labelsDiv: this.$refs.legend,
+        legend: 'always',
+        ylabel: 'Utilization',
+        labelsKMB: true,
+        legendFormatter (data: dygraphs.LegendData) {
+          if (data.x) return format(data.x, 'YYYY-MM-DD HH:mm:ss') + ': Utilization ' + data.series[0].y + '%'
+          else return '&nbsp;'
+        },
+        yRangePad: 10,
+        xRangePad: 10,
+        showRangeSelector: true,
+      })
+    }
   }
 }
 </script>
