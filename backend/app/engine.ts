@@ -19,6 +19,7 @@ export interface RankingUser {
   email: string
   roles: string
   rank: number | null
+  plate: string
   numberOfTimesParked: number
   requestTimestamp: Date | null
   request: ReservationRequest
@@ -62,6 +63,7 @@ export async function calculateUserRankings (users: User[], history: History[], 
       email: user.email,
       roles: user.roles,
       rank: null,
+      plate: user.plate,
       numberOfTimesParked: getNumberOfTimesUserParked(user.id),
       requestTimestamp: getUserRequestTimestamp(user.id),
       request: getUserRequest(user.id),
@@ -196,7 +198,7 @@ export function calculateLoosers (users: RankingUser[], numberOfParkingSpots: nu
 
 async function createHistoryEntriesForWinners (timestamp: Date, winners: RankingUser[]): Promise<number[]> {
   return Promise.all(winners.map(async (user) => {
-    return await History.create(timestamp, user.id)
+    return await History.create(timestamp, user.id, user.plate)
   }))
 }
 

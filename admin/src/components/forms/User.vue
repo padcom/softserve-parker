@@ -23,7 +23,7 @@
             <v-select v-model="user.roles" label="Role" :items="[ 'user', 'admin', 'vip' ]" required/>
           </v-col>
           <v-col cols="12" sm="6">
-            <v-select v-model="user.state" label="State" :items="[ 'active', 'inactive', 'deleted' ]" :disabled="user.state === 'deleted'" />
+            <v-select v-model="user.state" label="State" :items="[ 'active', 'inactive', 'deleted' ]" />
           </v-col>
           <v-col cols="12" sm="12">
             <v-textarea v-model="user.description" label="Description" rows="2" counter="255" :error="!isDescriptionValid" />

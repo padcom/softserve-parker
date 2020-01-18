@@ -48,7 +48,7 @@
           {{ getValue(item.phone) }}
         </template>
         <template v-slot:item.roles="{ item }">
-          {{ getValue(item.roles) }}
+          <span v-if="item.state !== 'deleted'">{{ getValue(item.roles) }}</span>
         </template>
         <template v-slot:item.state="{ item }">
           <v-tooltip bottom v-if="item.description">
@@ -63,12 +63,12 @@
           {{ item.rank | rank }}
         </template>
         <template v-slot:item.edit="{ item }">
-          <v-btn x-small color="primary" @click="editItem(item)">
+          <v-btn x-small color="primary" @click="editUser(item)">
             edit
           </v-btn>
         </template>
         <template v-slot:item.remove="{ item }">
-          <v-btn x-small color="error" @click="onRemoveItem(item)">
+          <v-btn x-small v-if="item.state !== 'deleted'" color="error" @click="deleteUser(item)">
             remove
           </v-btn>
         </template>
@@ -128,12 +128,12 @@ export default class Users extends Vue {
     this.saveEditedUser(user)
   }
 
-  editItem (item: UserInterface) {
+  editUser (item: UserInterface) {
     this.user = item
     this.dialog = true
   }
 
-  async onRemoveItem (user: UserInterface) {
+  async deleteUser (user: UserInterface) {
     const agree = confirm(`Do you want to remove?`)
     if (agree) this.removeUser(user)
   }
@@ -170,8 +170,7 @@ export default class Users extends Vue {
 
   async removeUser (user: UserInterface) {
     try {
-      const { id } = user
-      const res = await User.removeUser(id)
+      const res = await User.removeUser(user.id)
       // @ts-ignore
       if (res) this.$refs.info.showInfo('User removed')
       this.loadDrivers()
@@ -190,7 +189,7 @@ export default class Users extends Vue {
   }
 
   getValue (data: string): string {
-    return !data ? '-' : data
+    return !data ? '' : data
   }
 
   createNewUserDialog () {

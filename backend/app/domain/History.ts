@@ -16,6 +16,9 @@ export class History {
   @Field(() => String)
   state: string
 
+  @Field(() => String, { nullable: true })
+  plate: string
+
   @Field(() => Number)
   userId: number
 
@@ -24,10 +27,10 @@ export class History {
     return User.getById(this.userId)
   }
 
-  static async create (date: Date, userId: number, state = 'used'): Promise<number> {
+  static async create (date: Date, userId: number, plate: string, state = 'used'): Promise<number> {
     const [ result ] = await db.execute(
-      'INSERT INTO history (date, userId, state) VALUES (?,?,?)',
-      [ date, userId, state ]
+      'INSERT INTO history (date, userId, plate, state) VALUES (?,?,?,?)',
+      [ date, userId, plate, state ]
     ) as OkPacket[];
 
     if (result.affectedRows !== 1) {
@@ -41,6 +44,15 @@ export class History {
     const [ rows ]: [ RowDataPacket[], FieldPacket[] ] = await db.execute(
       'SELECT * FROM history WHERE date > ?',
       [ date ]
+    )
+
+    return rows as History[]
+  }
+
+  static async getHistoryBetween (from: Date, to: Date): Promise<History[]> {
+    const [ rows ]: [ RowDataPacket[], FieldPacket[] ] = await db.execute(
+      'SELECT * FROM history WHERE date >= ? AND date <= ?',
+      [ from, to ]
     )
 
     return rows as History[]

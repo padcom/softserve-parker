@@ -82,6 +82,6 @@ export class UserResolver {
     @Arg('id', () => ID!)
     id: number,
   ) {
-    return User.deleteByID(id)
+    return User.delete(id)
   }
 }

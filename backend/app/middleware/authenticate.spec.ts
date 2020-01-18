@@ -9,7 +9,7 @@ beforeEach(async () => {
 })
 
 afterEach(async () => {
-  await User.delete('fake@softserveinc.com')
+  await User.deleteByEmail('fake@softserveinc.com')
 })
 
 describe('Authentication', () => {

@@ -141,7 +141,7 @@ export class User {
     return id
   }
 
-  static async delete (email: string) {
+  static async deleteByEmail (email: string) {
     const [ result ] = await db.execute(
       'DELETE FROM user WHERE email=?',
       [ email ]
@@ -156,16 +156,16 @@ export class User {
     return result.affectedRows
   }
 
-  static async deleteByID (id: number) {
+  static async delete (id: number) {
     const [ result ] = await db.execute(
-      'DELETE FROM user WHERE id=?',
+      `UPDATE user SET firstName='', lastName='', plate='', phone='', roles='user', state='deleted' WHERE id=?`,
       [ id ]
     ) as OkPacket[]
 
     if (result.affectedRows == 0) {
       throw new Error('User not found')
     } else if (result.affectedRows > 1) {
-      logger.warn('Multiple users deleted')
+      logger.warn('Multiple users anonymized!')
     }
 
     return result.affectedRows

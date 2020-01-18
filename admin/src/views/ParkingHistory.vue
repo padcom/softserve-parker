@@ -40,7 +40,7 @@
       </v-card-title>
       <v-data-table class="elevation-1"
         :headers="headers"
-        :items="requests"
+        :items="history"
         :search="search"
         :loading="loading"
         disable-pagination
@@ -59,7 +59,7 @@ import moment from 'moment'
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 import Information from '@/components/Information.vue'
-import { Requests } from '@/domain/Requests'
+import { History, HistoryAPI } from '@/domain/History'
 
 @Component({
   components: {
@@ -72,34 +72,29 @@ export default class ParkingStatus extends Vue {
     { text: 'Last name', align: 'left', sortable: true, value: 'user.lastName' },
     { text: 'Email', align: 'left', sortable: true, value: 'user.email' },
     { text: 'Phone', align: 'left', sortable: true, value: 'user.phone' },
-    { text: 'Plate', align: 'left', sortable: true, value: 'user.plate' },
+    { text: 'Plate', align: 'left', sortable: true, value: 'plate' },
     { text: 'Date', align: 'left', sortable: true, value: 'date' },
-    { text: 'Status', align: 'left', sortable: true, value: 'status' },
+    { text: 'Status', align: 'left', sortable: true, value: 'state' },
   ]
 
-  requests = []
+  history = []
   search = ''
   inputDate = this.date
   openCalendar = false
   loading = false
 
   mounted () {
-    this.loadRequests()
+    this.load()
   }
 
-  async loadRequests () {
+  async load () {
     this.loading = true
     const startOfDay = moment(this.inputDate).toDate()
     const endOfDay = moment(this.inputDate).endOf('day').toDate()
-    this.requests = []
+    this.history = []
     try {
-      const requests = await Requests.getAllInDay(startOfDay, endOfDay)
-      this.requests = requests.map((request: any) => ({
-        ...request,
-        status: request.status === '' ? 'used' : request.status,
-      }))
+      this.history = await HistoryAPI.getForDates(startOfDay, endOfDay)
     } catch (e) {
-      this.requests = []
       // @ts-ignore
       this.$refs.info.showError(e.message as string)
     } finally {
@@ -109,7 +104,7 @@ export default class ParkingStatus extends Vue {
 
   onCalendarClose () {
     this.openCalendar = false
-    this.loadRequests()
+    this.load()
   }
 
   allowedDates (val: string) {

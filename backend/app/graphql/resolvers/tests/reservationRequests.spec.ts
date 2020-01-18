@@ -23,7 +23,7 @@ beforeAll(async () => {
 })
 
 afterAll(async () => {
-  await User.delete(email)
+  await User.deleteByEmail(email)
 })
 
 const rr = new ReservationRequestResolver()
