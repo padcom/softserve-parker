@@ -20,11 +20,7 @@
         </v-container>
       </v-card-title>
 
-      <v-sparkline
-        :labels="chartLabels"
-        :value="chartValues"
-        line-width="0.1"
-      />
+      <DygraphChart :data="chartValues" />
 
       <v-data-table class="elevation-1"
         :headers="headers"
@@ -50,10 +46,12 @@
 import subMonths from 'date-fns/sub_months'
 import endOfDay from 'date-fns/end_of_day'
 import format from 'date-fns/format'
+import parse from 'date-fns/parse'
 import { Component, Vue } from 'vue-property-decorator'
 import Information from '@/components/Information.vue'
 import DateSelector from '@/components/DateSelector.vue'
 import { Statistics, StatisticsAPI } from '@/domain/Statistics'
+import DygraphChart from '@/components/DygraphChart'
 
 function getUtilizationPercentage (entry: Statistics): number {
   if (entry.capacity && entry.utilization) {
@@ -66,6 +64,7 @@ function getUtilizationPercentage (entry: Statistics): number {
 @Component({
   components: {
     DateSelector,
+    DygraphChart,
     Information,
   },
   filters: {
@@ -126,7 +125,10 @@ export default class ParkingStatistics extends Vue {
   }
 
   get chartValues () {
-    return this.statistics.map(entry => getUtilizationPercentage(entry))
+    return this.statistics.map(entry => ([
+      parse(entry.date),
+      getUtilizationPercentage(entry),
+    ]))
   }
 }
 </script>
