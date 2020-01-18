@@ -14,13 +14,20 @@ exports.setup = function(options, seedLink) {
   seed = seedLink;
 };
 
-exports.up = function(db) {
-  db.addColumn('user', 'state', { type: 'string' }, (err) => {
-    if (!err) {
-      db.runSql(`UPDATE user SET state='active' WHERE enabled=1`)
-      db.runSql(`UPDATE user SET state='inactive' WHERE enabled=0`)
+exports.up = function(db, callback) {
+  db.addColumn('user', 'state', { type: 'string' }, err1 => {
+    if (!err1) {
+      db.runSql(`UPDATE user SET state='active' WHERE enabled=1`, err2 => {
+        if (!err2) {
+          db.runSql(`UPDATE user SET state='inactive' WHERE enabled=0`, callback)
+        } else {
+          console.log('err', err2)
+          callback()
+        }
+      })
     } else {
-      console.log('err', err)
+      console.log('err', err1)
+      callback()
     }
   })
 

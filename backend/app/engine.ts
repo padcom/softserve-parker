@@ -196,9 +196,9 @@ export function calculateLoosers (users: RankingUser[], numberOfParkingSpots: nu
     .skip(numberOfParkingSpots)
 }
 
-async function createHistoryEntriesForWinners (timestamp: Date, winners: RankingUser[]): Promise<number[]> {
+async function createHistoryEntriesForWinners (timestamp: Date, numberOfParkingSpots: number, winners: RankingUser[]): Promise<number[]> {
   return Promise.all(winners.map(async (user) => {
-    return await History.create(timestamp, user.id, user.plate)
+    return await History.create(timestamp, numberOfParkingSpots, user.id, user.plate)
   }))
 }
 
@@ -241,7 +241,7 @@ export async function engine (): Promise<void> {
   const numberOfParkingSpots = 2
   const winners = calculateWinners(users, numberOfParkingSpots)
   dumpWinners(winners)
-  await createHistoryEntriesForWinners(timestamp, winners)
+  await createHistoryEntriesForWinners(timestamp, numberOfParkingSpots, winners)
   await updateWinnerRequests(timestamp, winners)
   const loosers = calculateLoosers(users, numberOfParkingSpots)
   await updateLoosersRequests(timestamp, loosers)

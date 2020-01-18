@@ -6,6 +6,7 @@ import { ReservationRequestResolver } from './resolvers/ReservationRequestResolv
 import { SettingsResolver } from './resolvers/SettingsResolver'
 import { RankingResolver } from './resolvers/RankingResolver'
 import { HistoryResolver } from './resolvers/HistoryResolver'
+import { StatisticsResolver } from './resolvers/StatisticsResolver'
 
 const resolvers = [
   SettingsResolver,
@@ -14,6 +15,7 @@ const resolvers = [
   ReservationRequestResolver,
   RankingResolver,
   HistoryResolver,
+  StatisticsResolver,
 ]
 
 export const schema = buildSchema({ resolvers, authChecker })
