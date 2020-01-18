@@ -77,7 +77,7 @@ export default class ParkingStatus extends Vue {
     { text: 'Status', align: 'left', sortable: true, value: 'state' },
   ]
 
-  history = []
+  history = [] as History[]
   search = ''
   inputDate = this.date
   openCalendar = false

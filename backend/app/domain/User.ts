@@ -158,7 +158,7 @@ export class User {
 
   static async delete (id: number) {
     const [ result ] = await db.execute(
-      `UPDATE user SET firstName='', lastName='', plate='', phone='', roles='user', state='deleted' WHERE id=?`,
+      `UPDATE user SET firstName='', lastName='', plate='', phone='', state='deleted' WHERE id=?`,
       [ id ]
     ) as OkPacket[]
 
