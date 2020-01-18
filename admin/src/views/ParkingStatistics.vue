@@ -12,17 +12,33 @@
           hide-details />
       </v-card-title>
       <v-card-title>
-        <DateSelector label="Select date" v-model="date" @input="onDateChanged" />
+        <v-container>
+          <v-row>
+            <DateSelector label="Select start date" v-model="startDate" @input="onDatesChanged" />
+            <DateSelector label="Select end date" v-model="endDate" @input="onDatesChanged" />
+          </v-row>
+        </v-container>
       </v-card-title>
+
+      <v-sparkline
+        :labels="chartLabels"
+        :value="chartValues"
+        line-width="0.1"
+      />
+
       <v-data-table class="elevation-1"
         :headers="headers"
         :items="statistics"
         :search="search"
         :loading="loading"
         disable-pagination
-        hide-default-footer>
+        hide-default-footer
+      >
         <template v-slot:item.date="{ item }">
-          {{ parseDate(item.date) }}
+          {{ item.date | date }}
+        </template>
+        <template v-slot:item.percentage="{ item }">
+          {{ item | percentage }}
         </template>
       </v-data-table>
     </v-card>
@@ -31,32 +47,53 @@
 </template>
 
 <script lang="ts">
-import moment from 'moment'
+import subMonths from 'date-fns/sub_months'
+import endOfDay from 'date-fns/end_of_day'
+import format from 'date-fns/format'
 import { Component, Vue } from 'vue-property-decorator'
 import Information from '@/components/Information.vue'
 import DateSelector from '@/components/DateSelector.vue'
 import { Statistics, StatisticsAPI } from '@/domain/Statistics'
+
+function getUtilizationPercentage (entry: Statistics): number {
+  if (entry.capacity && entry.utilization) {
+    return Math.floor(entry.utilization / entry.capacity * 100)
+  } else {
+    return 0
+  }
+}
 
 @Component({
   components: {
     DateSelector,
     Information,
   },
+  filters: {
+    date (value: Date) {
+      return format(value, 'YYYY-MM-DD HH:mm:ss')
+    },
+    percentage (entry: Statistics) {
+      const percentage = getUtilizationPercentage(entry)
+      return percentage ? `${percentage}%` : ''
+    },
+    json (value: any) {
+      return JSON.stringify(value, null, 2)
+    },
+  },
 })
 export default class ParkingStatistics extends Vue {
   headers = [
-    { text: 'First name', align: 'left', sortable: true, value: 'user.firstName' },
-    { text: 'Last name', align: 'left', sortable: true, value: 'user.lastName' },
-    { text: 'Email', align: 'left', sortable: true, value: 'user.email' },
-    { text: 'Phone', align: 'left', sortable: true, value: 'user.phone' },
-    { text: 'Plate', align: 'left', sortable: true, value: 'plate' },
     { text: 'Date', align: 'left', sortable: true, value: 'date' },
-    { text: 'Status', align: 'left', sortable: true, value: 'state' },
+    { text: 'Capacity', align: 'left', sortable: true, value: 'capacity' },
+    { text: 'Number of requests', align: 'left', sortable: true, value: 'requests' },
+    { text: 'Utilization', align: 'left', sortable: true, value: 'utilization' },
+    { text: 'Percentage', align: 'left', sortable: true, value: 'percentage' },
   ]
 
   statistics = [] as Statistics[]
   search = ''
-  date = new Date()
+  startDate = subMonths(new Date(), 3)
+  endDate = new Date()
   openCalendar = false
   loading = false
 
@@ -66,11 +103,11 @@ export default class ParkingStatistics extends Vue {
 
   async load () {
     this.loading = true
-    const startOfDay = this.date
-    const endOfDay = moment(this.date).endOf('day').toDate()
+    const from = this.startDate
+    const to = endOfDay(this.endDate)
     this.statistics = []
     try {
-      this.statistics = await StatisticsAPI.getForDates(startOfDay, endOfDay)
+      this.statistics = await StatisticsAPI.getForDates(from, to)
     } catch (e) {
       // @ts-ignore
       this.$refs.info.showError(e.message as string)
@@ -79,13 +116,17 @@ export default class ParkingStatistics extends Vue {
     }
   }
 
-  onDateChanged () {
+  onDatesChanged () {
     this.openCalendar = false
     this.load()
   }
 
-  parseDate (date: string) {
-    return moment(new Date(date)).format('YYYY-MM-DD')
+  get chartLabels () {
+    return this.statistics.map(entry => format(entry.date, 'YYYY-MM-DD HH:mm:ss'))
+  }
+
+  get chartValues () {
+    return this.statistics.map(entry => getUtilizationPercentage(entry))
   }
 }
 </script>

@@ -36,7 +36,6 @@
     <v-content>
       <router-view />
     </v-content>
-
   </v-app>
 </template>
 
@@ -55,6 +54,7 @@ export default class App extends Vue {
   items = [
     { icon: 'mdi-view-dashboard', text: 'Parking status', url: '/' },
     { icon: 'mdi-comment-text', text: 'Parking history', url: '/parking-history' },
+    { icon: 'mdi-clipboard-text', text: 'Parking statistics', url: '/statistics' },
     { icon: 'mdi-account-multiple', text: 'Users', url: '/users' },
     { icon: 'mdi-clipboard-text', text: 'User\'s history', url: '/users-history' },
     { icon: 'mdi-settings', text: 'Settings', url: '/settings' },
