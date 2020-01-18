@@ -2,6 +2,7 @@ import addSeconds from 'date-fns/addSeconds'
 import { User } from './domain/User'
 import { History } from './domain/History'
 import { ReservationRequest } from './domain/ReservationRequest'
+import { Settings } from './domain/Settings'
 
 // Example apache benchmark enchantation to test the performance of the engine through ranking
 //
@@ -196,9 +197,9 @@ export function calculateLoosers (users: RankingUser[], numberOfParkingSpots: nu
     .skip(numberOfParkingSpots)
 }
 
-async function createHistoryEntriesForWinners (timestamp: Date, numberOfParkingSpots: number, winners: RankingUser[]): Promise<number[]> {
+async function createHistoryEntriesForWinners (timestamp: Date, numberOfParkingSpots: number, numberOfRequests: number, winners: RankingUser[]): Promise<number[]> {
   return Promise.all(winners.map(async (user) => {
-    return await History.create(timestamp, numberOfParkingSpots, user.id, user.plate)
+    return await History.create(timestamp, numberOfParkingSpots, numberOfRequests, user.id, user.plate)
   }))
 }
 
@@ -235,15 +236,15 @@ export async function engine (): Promise<void> {
   // TESTING: create a set of random requests
   await createRandomReservationRequests(new Date())
 
-  const { users, timestamp } = await calculateCurrentRanking()
+  const { users, requests, timestamp } = await calculateCurrentRanking()
   dumpRankingUsers(users)
 
-  const numberOfParkingSpots = 2
-  const winners = calculateWinners(users, numberOfParkingSpots)
+  const settings = await Settings.retrieve()
+  const winners = calculateWinners(users, settings.numberOfParkingSpots)
   dumpWinners(winners)
-  await createHistoryEntriesForWinners(timestamp, numberOfParkingSpots, winners)
+  await createHistoryEntriesForWinners(timestamp, settings.numberOfParkingSpots, requests.length, winners)
   await updateWinnerRequests(timestamp, winners)
-  const loosers = calculateLoosers(users, numberOfParkingSpots)
+  const loosers = calculateLoosers(users, settings.numberOfParkingSpots)
   await updateLoosersRequests(timestamp, loosers)
   // await sendConfirmationEmails(winners)
 }

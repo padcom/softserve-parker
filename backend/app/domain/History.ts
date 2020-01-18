@@ -16,6 +16,9 @@ export class History {
   @Field(() => Number, { nullable: true })
   capacity?: number
 
+  @Field(() => Number, { nullable: true })
+  requests?: number
+
   @Field(() => String)
   state: string
 
@@ -30,10 +33,10 @@ export class History {
     return User.getById(this.userId)
   }
 
-  static async create (date: Date, numberOfParkingSpots: number, userId: number, plate: string, state = 'used'): Promise<number> {
+  static async create (date: Date, numberOfParkingSpots: number, numberOfRequests: number, userId: number, plate: string, state = 'used'): Promise<number> {
     const [ result ] = await db.execute(
-      'INSERT INTO history (date, capacity, userId, plate, state) VALUES (?,?,?,?,?)',
-      [ date, numberOfParkingSpots, userId, plate, state ]
+      'INSERT INTO history (date, capacity, requests, userId, plate, state) VALUES (?,?,?,?,?,?)',
+      [ date, numberOfParkingSpots, numberOfRequests, userId, plate, state ]
     ) as OkPacket[];
 
     if (result.affectedRows !== 1) {

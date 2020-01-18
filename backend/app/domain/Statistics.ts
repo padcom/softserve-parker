@@ -15,12 +15,15 @@ export class Statistics {
   @Field(() => Number, { nullable: true })
   capacity: number
 
-  @Field(() => String)
+  @Field(() => Number, { nullable: true })
+  requests: number
+
+  @Field(() => Number)
   utilization: number
 
   static async getStatisticsBetween (from: Date, to: Date): Promise<Statistics[]> {
     const [ rows ]: [ RowDataPacket[], FieldPacket[] ] = await db.execute(
-      'SELECT date, capacity, count(id) AS utilization FROM history WHERE date >= ? AND date <= ? GROUP BY date,capacity',
+      'SELECT date, capacity, requests, count(id) AS utilization FROM history WHERE date >= ? AND date <= ? GROUP BY date,capacity,requests',
       [ from, to ]
     )
 

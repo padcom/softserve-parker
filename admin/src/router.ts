@@ -2,9 +2,6 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 import Login from './views/Login.vue'
-import ParkingStatus from './views/ParkingStatus.vue'
-import ParkingHistory from './views/ParkingHistory.vue'
-import Users from './views/Users.vue'
 
 import store from '@/store'
 import logger from '@/logger'
@@ -25,17 +22,17 @@ const router = new Router({
     {
       path: '/',
       name: 'parking-status',
-      component: ParkingStatus,
+      component: () => import(/* webpackChunkName: "parking-status" */ './views/ParkingStatus.vue'),
     },
     {
       path: '/parking-history',
       name: 'parking-history',
-      component: ParkingHistory,
+      component: () => import(/* webpackChunkName: "parking-history" */ './views/ParkingHistory.vue'),
     },
     {
       path: '/users',
       name: 'users',
-      component: Users,
+      component: () => import(/* webpackChunkName: "users" */ './views/Users.vue'),
     },
     {
       path: '/users-history',
@@ -46,6 +43,11 @@ const router = new Router({
       path: '/settings',
       name: 'settings',
       component: () => import(/* webpackChunkName: "settings" */ './views/Settings.vue'),
+    },
+    {
+      path: '/statistics',
+      name: 'statistics',
+      component: () => import(/* webpackChunkName: "statistics" */ './views/ParkingStatistics.vue'),
     },
   ],
 })

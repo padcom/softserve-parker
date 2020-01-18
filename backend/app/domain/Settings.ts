@@ -25,7 +25,7 @@ export class Settings {
     const [ results ] = await db.execute(`SELECT name, value FROM settings`) as RowDataPacket[][]
     const settings = results.reduce((acc, value) => Object.assign({}, acc, { [value.name]: value.value }), {})
 
-    return settings
+    return settings as Settings
   }
 
   static async update (setting, value) {
