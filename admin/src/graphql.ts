@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-export async function query (query: string, variables: object = {}) {
+export async function query<T> (query: string, variables: object = {}) {
   const store = require('@/store').default
   const headers = {
     'Authorization': `Bearer ${store.state.auth.token} `,
@@ -15,7 +15,7 @@ export async function query (query: string, variables: object = {}) {
         const messages = response.data.errors.map((error: any) => JSON.stringify(error.message))
         throw new Error(messages.join('\n'))
       } else {
-        return response.data.data
+        return response.data.data as T
       }
     })
 }

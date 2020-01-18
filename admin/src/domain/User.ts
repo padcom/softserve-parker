@@ -10,13 +10,17 @@ export interface UserInterface {
   phone: string
   state: string
   roles: string
-  rank: number | string
+  rank: number
   description: string
+}
+
+export function formatRank (rank: number | undefined): string {
+  return rank === undefined || rank === -1 ? '' : String(rank + 1)
 }
 
 export class User {
   static async getAll () {
-    const { allUsers } = await query(`query {
+    const { allUsers } = await query<{ allUsers: UserInterface[] }>(`query {
       allUsers {
         id
         firstName
@@ -31,7 +35,7 @@ export class User {
       }
     }`)
 
-    return allUsers as UserInterface[]
+    return allUsers
   }
 
   static async getByEmail (email: string, fields: string[] = [ 'email' ]) {

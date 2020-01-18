@@ -59,6 +59,9 @@
           </v-tooltip>
           <span v-else>{{ getValue(item.state) }}</span>
         </template>
+        <template v-slot:item.rank="{ item }">
+          {{ item.rank | rank }}
+        </template>
         <template v-slot:item.edit="{ item }">
           <v-btn x-small color="primary" @click="editItem(item)">
             edit
@@ -79,7 +82,7 @@
 import moment from 'moment'
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
-import { User, UserInterface } from '@/domain/User'
+import { User, UserInterface, formatRank } from '@/domain/User'
 import Information from '@/components/Information.vue'
 import UserForm from '@/components/forms/User.vue'
 import CreateUserForm from '@/components/forms/CreateUser.vue'
@@ -89,6 +92,9 @@ import CreateUserForm from '@/components/forms/CreateUser.vue'
     Information,
     UserForm,
     CreateUserForm,
+  },
+  filters: {
+    rank: formatRank,
   },
 })
 export default class Users extends Vue {
@@ -135,11 +141,7 @@ export default class Users extends Vue {
   async loadDrivers () {
     this.loading = true
     try {
-      const drivers = await User.getAll()
-      this.drivers = drivers.map(driver => ({
-        ...driver,
-        rank: driver.rank !== -1 ? driver.rank : '',
-      }))
+      this.drivers = await User.getAll()
     } catch (e) {
       this.drivers = []
       // @ts-ignore

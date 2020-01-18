@@ -22,8 +22,11 @@
         <template v-slot:item.phone="{ item }">
           {{ getValue(item.phone) }}
         </template>
+        <template v-slot:item.rank="{ item }">
+          {{ item.rank | rank }}
+        </template>
         <template v-slot:item.role="{ item }">
-          {{ getValue(item.role) }}
+          {{ getValue(item.roles) }}
         </template>
         <template v-slot:item.state="{ item }">
           {{ getValue(item.state) }}
@@ -40,11 +43,14 @@ import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 import { User } from '@/domain/User'
 import Information from '@/components/Information.vue'
-import { UserInterface } from '../domain/User'
+import { UserInterface, formatRank } from '../domain/User'
 
 @Component({
   components: {
     Information,
+  },
+  filters: {
+    rank: formatRank,
   },
 })
 export default class ParkingStatus extends Vue {
@@ -66,11 +72,7 @@ export default class ParkingStatus extends Vue {
   async mounted () {
     this.loading = true
     try {
-      const drivers = await User.getAll()
-      this.drivers = drivers.map(driver => ({
-        ...driver,
-        rank: driver.rank === -1 ? '' : driver.rank,
-      }))
+      this.drivers = await User.getAll()
     } catch (e) {
       this.drivers = []
       // @ts-ignore
