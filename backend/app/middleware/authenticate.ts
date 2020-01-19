@@ -54,7 +54,7 @@ function getErrorMessage (e: Error): string {
 export async function login (req: Request, res: Response) {
   try {
     validateParams(req);
-    const user = await User.getByEmail(req.body.email)
+    const user = await User.byEmail(req.body.email)
     await assertPasswordsMatching(req.body.password, user.password)
     const token = await getJSONToken(user.id, user.email)
     await Session.create(token)
@@ -83,7 +83,7 @@ export async function signUp (req: Request, res: Response) {
 export async function confirmSignUp (req: Request, res: Response) {
   try {
     const { userId } = req.body
-    await User.getById(userId)
+    await User.byId(userId)
     await User.setEnabled(userId, true)
     res.status(200).end('OK')
   } catch (e) {

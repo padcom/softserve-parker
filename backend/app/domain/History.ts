@@ -33,7 +33,7 @@ export class History {
 
   @Field(() => User)
   user (): Promise<User> {
-    return User.getById(this.userId)
+    return User.byId(this.userId)
   }
 
   static async create (date: Date, numberOfParkingSpots: number, numberOfRequests: number, userId: number, plate: string, rank: number, state = 'used'): Promise<number> {
@@ -49,7 +49,7 @@ export class History {
     return result.insertId
   }
 
-  static async getHistorySince (date: Date): Promise<History[]> {
+  static async since (date: Date): Promise<History[]> {
     const [ rows ]: [ RowDataPacket[], FieldPacket[] ] = await db.execute(
       'SELECT * FROM history WHERE date > ?',
       [ date ]
@@ -58,9 +58,9 @@ export class History {
     return rows as History[]
   }
 
-  static async getHistoryBetween (from: Date, to: Date): Promise<History[]> {
+  static async between (from: Date, to: Date): Promise<History[]> {
     const [ rows ]: [ RowDataPacket[], FieldPacket[] ] = await db.execute(
-      'SELECT * FROM history WHERE date >= ? AND date <= ?',
+      'SELECT * FROM history WHERE date BETWEEN ? AND ?',
       [ from, to ]
     )
 

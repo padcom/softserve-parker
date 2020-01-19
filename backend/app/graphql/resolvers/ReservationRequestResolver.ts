@@ -16,7 +16,7 @@ export class ReservationRequestResolver {
     })
     to: Date,
   ) {
-    return ReservationRequest.getAllByDay(from, to)
+    return ReservationRequest.between(from, to)
   }
 
   @Query(() => [ ReservationRequest ], {
@@ -32,7 +32,7 @@ export class ReservationRequestResolver {
     })
     from: Date,
   ) {
-    return ReservationRequest.fetchByUserId(userId, from)
+    return ReservationRequest.byUserId(userId, from)
   }
   
   @Mutation(() => [ ReservationRequest ], {

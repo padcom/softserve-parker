@@ -7,7 +7,7 @@ export const authChecker: AuthChecker<GraphQLContext> = async ({ context }, role
     return context.user !== undefined;
   }
 
-  const user = await User.getByEmail(context.user)
+  const user = await User.byEmail(context.user)
 
   return user.roles.split(',').some(role => roles.includes(role))
 }

@@ -7,6 +7,6 @@ export class RankingResolver {
     description: 'Returns current ranking',
   })
   async ranking () {
-    return Ranking.getCurrentRanking()
+    return Ranking.current()
   }
 }

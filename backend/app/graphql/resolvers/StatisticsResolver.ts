@@ -12,6 +12,6 @@ export class StatisticsResolver {
     @Arg('to', () => Date!)
     to: Date,
   ) {
-    return Statistics.getStatisticsBetween(from, to)
+    return Statistics.between(from, to)
   }
 }

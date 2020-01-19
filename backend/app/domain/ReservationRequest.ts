@@ -29,10 +29,10 @@ export class ReservationRequest {
 
   @Field(() => User)
   user (): Promise<User> {
-    return User.getById(this.userId)
+    return User.byId(this.userId)
   }
 
-  static async fetchByUserId (userId: number, from: Date): Promise<ReservationRequest[]> {
+  static async byUserId (userId: number, from: Date): Promise<ReservationRequest[]> {
     const [rows]: [RowDataPacket[], FieldPacket[]] = await db.execute(
       `SELECT * FROM reservationRequest
        WHERE userId = ? AND date >= ?
@@ -51,7 +51,7 @@ export class ReservationRequest {
       [ dates.map(date => [ userId, date, '' ]) ],
     )
 
-    return this.fetchByUserIdAndDates(userId, dates)
+    return this.byUserIdAndDates(userId, dates)
   }
 
   private static validateDates (dates: Date[]): void | Error {
@@ -63,11 +63,11 @@ export class ReservationRequest {
   }
 
   static async assertRequestsDoesntExist (userId: number, dates: Date[]): Promise<void | Error> {
-    const records = await this.fetchByUserIdAndDates(userId, dates)
+    const records = await this.byUserIdAndDates(userId, dates)
     if (records && records.length) throw new Error('Request already exist')
   }
 
-  static async fetchByUserIdAndDates (userId: number, dates: Date[]): Promise<ReservationRequest[]> {
+  static async byUserIdAndDates (userId: number, dates: Date[]): Promise<ReservationRequest[]> {
     const [rows]: [RowDataPacket[], FieldPacket[]] = await db.query(
       `SELECT * FROM reservationRequest
         WHERE userId = ? AND date IN(?)
@@ -119,7 +119,7 @@ export class ReservationRequest {
     return ReservationRequest.updateStatus(id, 'cancelled')
   }
 
-  static async getAllByDay (from: Date, to: Date): Promise<ReservationRequest[]> {
+  static async between (from: Date, to: Date): Promise<ReservationRequest[]> {
     const [ result ] = await db.execute(`
       SELECT  * FROM parker.reservationRequest
       WHERE date BETWEEN ? AND ?

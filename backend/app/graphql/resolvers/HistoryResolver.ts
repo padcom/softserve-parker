@@ -12,6 +12,6 @@ export class HistoryResolver {
     @Arg('to', () => Date!)
     to: Date,
   ) {
-    return History.getHistoryBetween(from, to)
+    return History.between(from, to)
   }
 }

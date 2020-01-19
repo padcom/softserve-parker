@@ -23,7 +23,7 @@ export class ParkingSpot {
    * @returns First X parking spots
    * @memberof Service
    */
-  static async getOne (id: number) {
+  static async byId (id: number) {
     const [rows]: [RowDataPacket[], FieldPacket[]] = await db.execute(
       `
       SELECT *
@@ -57,7 +57,7 @@ export class ParkingSpot {
     if (rows.affectedRows === 0)
       throw new Error("Can't find such parking spot ID")
 
-    const [updated] = await this.getOne(id)
+    const [updated] = await this.byId(id)
 
     return updated
   }

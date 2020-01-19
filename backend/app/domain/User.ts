@@ -113,7 +113,7 @@ export class User {
     const re = /@softserveinc.com\s*$/;
     if (!re.test(email.toLowerCase())) throw new Error('Invalid email address.')
     try {
-     const user = await this.getByEmail(email)
+     const user = await this.byEmail(email)
      if (user) throw new Error('User with provided email address already exist.')
     } catch (e) {}
   }
@@ -171,7 +171,7 @@ export class User {
     return result.affectedRows
   }
 
-  static async getByEmail (email: string): Promise<User> {
+  static async byEmail (email: string): Promise<User> {
     const [ rows ] = await db.execute(
       'SELECT * FROM user WHERE email = ?',
       [ email ]
@@ -181,7 +181,7 @@ export class User {
     return rows[0] as User
   }
 
-  static async getById (id: number): Promise<User> {
+  static async byId (id: number): Promise<User> {
     const [ rows ] = await db.execute(
       'SELECT * FROM user WHERE id = ?',
       [ id ]
@@ -191,7 +191,7 @@ export class User {
     return rows[0] as User
   }
 
-  static async getAll (): Promise<User[]> {
+  static async all (): Promise<User[]> {
     const [ rows ] = await db.execute(
       'SELECT * FROM user'
     )
@@ -200,7 +200,7 @@ export class User {
     return rows as User[]
   }
 
-  static async getAllActiveUsers (): Promise<User[]> {
+  static async active (): Promise<User[]> {
     const [ rows ] = await db.execute(
       `SELECT * FROM user WHERE state='active'`
     )

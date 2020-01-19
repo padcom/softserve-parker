@@ -7,7 +7,7 @@ export class UserResolver {
     description: 'Returns all users',
   })
   async allUsers () {
-    return User.getAll()
+    return User.all()
   }
 
   @Query(() => User!, {
@@ -17,7 +17,7 @@ export class UserResolver {
     @Arg('email', () => String!)
     email: string,
   ) {
-    return User.getByEmail(email)
+    return User.byEmail(email)
   }
 
   @Mutation(() => ID, {

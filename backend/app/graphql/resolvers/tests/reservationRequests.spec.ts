@@ -18,7 +18,7 @@ const email = "fakeemailfortesting@testing.fake.com"
 
 beforeAll(async () => {
   await User.create(email, "supersecurepassword", "John", "Lock", "BO PARKER", '123123123', 'user', 'active')
-  user = await User.getByEmail(email)
+  user = await User.byEmail(email)
   await ReservationRequest.create(user.id, [date, date2, date3])
 })
 

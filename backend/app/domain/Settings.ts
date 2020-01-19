@@ -21,7 +21,7 @@ export class Settings {
   @Field(() => Number)
   daysForRequests = 30
 
-  static async retrieve () {
+  static async all () {
     const [ results ] = await db.execute(`SELECT name, value FROM settings`) as RowDataPacket[][]
     const settings = results.reduce((acc, value) => Object.assign({}, acc, { [value.name]: value.value }), {})
 

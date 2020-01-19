@@ -1,8 +1,8 @@
-import addSeconds from 'date-fns/addSeconds'
 import { User } from './domain/User'
 import { History } from './domain/History'
 import { ReservationRequest } from './domain/ReservationRequest'
 import { Settings } from './domain/Settings'
+import { format, addMinutes, addDays } from 'date-fns'
 
 // Example apache benchmark enchantation to test the performance of the engine through ranking
 //
@@ -132,9 +132,9 @@ async function calculateRankingForDates (timestamp: Date, timeOfRankingStart: Da
   console.log('Calculating ranking from history starting at', timeOfRankingStart)
   console.log('Requests from', timeOfFirstRequest, 'to', timestamp)
 
-  const users = await User.getAllActiveUsers()
-  const history = await History.getHistorySince(timeOfRankingStart)
-  const requests = await ReservationRequest.getAllByDay(timeOfFirstRequest, timestamp)
+  const users = await User.active()
+  const history = await History.between(timeOfRankingStart, timestamp)
+  const requests = await ReservationRequest.between(timeOfFirstRequest, timestamp)
 
   dumpUsers(users)
   dumpHistoryEntries(history)
@@ -148,10 +148,10 @@ async function calculateRankingForDates (timestamp: Date, timeOfRankingStart: Da
   }
 }
 
-export async function calculateCurrentRanking (numberOfSeconds = 8): Promise<Ranking> {
+export async function calculateCurrentRanking (numberOfDays = 8): Promise<Ranking> {
   const timestamp = new Date()
-  const timeOfRankingStart = addSeconds(timestamp, -((numberOfSeconds + 2) * 10))
-  const timeOfFirstRequest = addSeconds(timestamp, -numberOfSeconds - 2)
+  const timeOfRankingStart = addDays(timestamp, -numberOfDays)
+  const timeOfFirstRequest = addDays(timestamp, -1)
 
   return {
     timestamp,
@@ -208,12 +208,12 @@ async function createHistoryEntriesForWinners (timestamp: Date, numberOfParkingS
 // }
 
 async function createRandomReservationRequests (timestamp: Date) {
-  const users = await User.getAllActiveUsers()
+  const users = await User.active()
   const numberOfRequests = Math.floor(Math.random() * users.length) + 1
 
   // create reservation requests 
   await Promise.all(users.clone().randomize().take(numberOfRequests).map(async (user, index) => {
-    const date = addSeconds(timestamp, -index - 1)
+    const date = addMinutes(timestamp, -index - 1)
     return await ReservationRequest.create(user.id, [ date ], false)
   }))
 }
@@ -232,8 +232,12 @@ async function updateLoosersRequests (timestamp: Date, winners: RankingUser[]) {
   }))
 }
 
+function isTimeToRunTheEngine(deadlineHour: string): boolean {
+  return deadlineHour === format(new Date(), 'HH:mm')
+}
+
 export async function engine (): Promise<void> {
-  console.log('Engine running')
+  console.log('Engine running at', new Date())
 
   // TESTING: create a set of random requests
   await createRandomReservationRequests(new Date())
@@ -241,7 +245,7 @@ export async function engine (): Promise<void> {
   const { users, requests, timestamp } = await calculateCurrentRanking()
   dumpRankingUsers(users)
 
-  const settings = await Settings.retrieve()
+  const settings = await Settings.all()
   const winners = calculateWinners(users, settings.numberOfParkingSpots)
   dumpWinners(winners)
   await createHistoryEntriesForWinners(timestamp, settings.numberOfParkingSpots, requests.length, winners)
@@ -249,4 +253,9 @@ export async function engine (): Promise<void> {
   const loosers = calculateLoosers(users, settings.numberOfParkingSpots)
   await updateLoosersRequests(timestamp, loosers)
   // await sendConfirmationEmails(winners)
+}
+
+export async function task (): Promise<void> {
+  const settings = await Settings.all()
+  if (isTimeToRunTheEngine(settings.deadlineHour)) engine()
 }

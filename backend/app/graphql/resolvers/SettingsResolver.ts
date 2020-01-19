@@ -6,7 +6,7 @@ export class SettingsResolver {
   @Authorized('admin')
   @Query(() => Settings!)
   async settings () {
-    return Settings.retrieve()
+    return Settings.all()
   }
 
   @Authorized('admin')

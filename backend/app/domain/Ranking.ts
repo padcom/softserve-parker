@@ -31,10 +31,10 @@ export class Ranking {
 
   @Field(() => User)
   user (): Promise<User> {
-    return User.getById(this.id)
+    return User.byId(this.id)
   }
 
-  static async getCurrentRanking(): Promise<Ranking[]> {
+  static async current(): Promise<Ranking[]> {
     const ranking = await calculateCurrentRanking()
     return ranking.users.map(convertRankingUserToRanking)
   }
