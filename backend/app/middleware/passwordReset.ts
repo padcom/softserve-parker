@@ -20,7 +20,7 @@ router.post('/request-reset-link', async (req, res) => {
       html: `
         <p>Click the following link to reset your password</p>
         <p>
-          <a href="${CONFIRM_URL_BASE}/password/reset?token=${token}">Link</a>
+          <a href="${CONFIRM_URL_BASE}/#/reset?token=${token}">Link</a>
         </p>
       `,
     })
