@@ -35,6 +35,13 @@ export class ReservationRequestResolver {
     return ReservationRequest.byUserId(userId, from)
   }
   
+  @Query(() => [ ReservationRequest ], {
+    description: 'Returns a list of upcoming reservation requests'
+  })
+  async upcomingReservations () {
+    return ReservationRequest.upcoming()
+  }
+
   @Mutation(() => [ ReservationRequest ], {
     description:
       'Creates reservation requests.',

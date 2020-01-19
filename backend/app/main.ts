@@ -9,6 +9,7 @@ import { graphql } from './graphql'
 import { logger } from './logger'
 import { isAuthorized } from './middleware/authorization'
 import { login, logout, signUp, confirmSignUp } from './middleware/authenticate'
+import password from './middleware/passwordReset'
 
 import { CronJob } from 'cron'
 import { task } from './engine'
@@ -26,6 +27,7 @@ async function main () {
   app.use('/logout', logout)
   app.use('/signup', signUp)
   app.use('/confirm-registration', confirmSignUp)
+  app.use('/password', password)
 
   const server = await graphql
   // @ts-ignore

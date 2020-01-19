@@ -217,4 +217,19 @@ export class User {
   private static assertFound (user: RowDataPacket) {
     if (!user) throw new Error(`User doesn't exist.`)
   }
+
+  static async setPassword (userId: number, password: string) {
+    const hashedPassword = await bcrypt.hash(password, 10)
+
+    const [ rows ] = await db.execute(
+      'UPDATE user SET password = ? WHERE id = ?',
+      [ hashedPassword, userId ]
+    ) as OkPacket[]
+
+    if (rows.affectedRows == 0) {
+      throw new Error('User not found')
+    }
+
+    return userId
+  }
 }

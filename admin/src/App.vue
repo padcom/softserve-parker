@@ -53,6 +53,7 @@ export default class App extends Vue {
 
   items = [
     { icon: 'mdi-view-dashboard', text: 'Parking status', url: '/' },
+    { icon: 'mdi-account-multiple', text: 'Upcoming reservations', url: '/reservations' },
     { icon: 'mdi-comment-text', text: 'Parking history', url: '/parking-history' },
     { icon: 'mdi-clipboard-text', text: 'Parking statistics', url: '/statistics' },
     { icon: 'mdi-account-multiple', text: 'Users', url: '/users' },

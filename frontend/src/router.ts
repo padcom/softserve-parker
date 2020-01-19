@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Login from './views/Login.vue'
+import ResetPassword from './views/ResetPassword.vue'
 
 import store from '@/store'
 import logger from './logger'
@@ -18,6 +19,11 @@ const router = new Router({
     {
       path: '/logout',
       name: 'logout',
+    },
+    {
+      path: '/reset',
+      name: 'reset-password',
+      component: ResetPassword,
     },
     {
       path: '/confirm-registration/:userId',
@@ -55,7 +61,7 @@ router.beforeEach(async (to, from, next) => {
   if (to.name === 'login') {
     if (isLoggedIn) next('/')
     next()
-  } else if (!isLoggedIn && to.name !== 'signup' && to.name !== 'confirmRegistration') {
+  } else if (!isLoggedIn && to.name !== 'signup' && to.name !== 'confirmRegistration' && to.name !== 'reset-password') {
     next('/login')
   } else if (to.name === 'logout' || to.name === '/logout') {
     await store.dispatch('auth/logout')

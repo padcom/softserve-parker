@@ -1,0 +1,65 @@
+<template>
+  <section class="singup">
+    <ResetPasswordForm v-if="!success && !loading && !error" @submit="resetPassword" />
+    <Loader :loading="loading && !success && !error" />
+    <div v-if="success || error" class="singup__done">
+      <p v-if="success" class="singup__done__text">Almost there! We've just sent an<br /> email with activation link.</p>
+      <p v-if="error" class="singup__done__text">Ups somehting went wrong.</p>
+      <Btn name="ok" text="ok" v-on:click="redirectToLoginPage" outlined fullWidth/>
+    </div>
+  </section>
+</template>
+
+<script>
+import { Vue, Component } from 'vue-property-decorator'
+import Btn from '../components/Btn'
+import Loader from '../components/Loader'
+import ResetPasswordForm from '../components/ResetPasswordForm'
+import { User } from '../domain/User'
+
+@Component({
+  components: {
+    Btn,
+    Loader,
+    ResetPasswordForm,
+  },
+})
+export default class ResetPassword extends Vue {
+  loading = false
+  success = false
+  error = false
+
+  async resetPassword (user, password) {
+    try {
+      this.loading = true
+      await User.resetPassword(user.id, user.password)
+      this.success = true
+    } catch (e) {
+      this.error = true
+    }
+  }
+
+  redirectToLoginPage () {
+    this.$router.push('/login')
+  }
+}
+</script>
+
+<style lang="scss">
+.singup {
+  &__done {
+    height: calc(95vh - 65px);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    &__text {
+      margin-top: auto;
+      margin-bottom: auto;
+      text-align: center;
+    }
+  }
+}
+</style>

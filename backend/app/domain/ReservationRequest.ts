@@ -121,9 +121,18 @@ export class ReservationRequest {
 
   static async between (from: Date, to: Date): Promise<ReservationRequest[]> {
     const [ result ] = await db.execute(`
-      SELECT  * FROM parker.reservationRequest
+      SELECT * FROM parker.reservationRequest
       WHERE date BETWEEN ? AND ?
     `, [from, to])
+
+    return result as ReservationRequest[]
+  }
+
+  static async upcoming (): Promise<ReservationRequest[]> {
+    const [ result ] = await db.execute(`
+      SELECT * from reservationRequest
+      WHERE status = '' AND date > ?
+    `, [ new Date() ])
 
     return result as ReservationRequest[]
   }

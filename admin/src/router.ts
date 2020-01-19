@@ -49,6 +49,11 @@ const router = new Router({
       name: 'statistics',
       component: () => import(/* webpackChunkName: "statistics" */ './views/ParkingStatistics.vue'),
     },
+    {
+      path: '/reservations',
+      name: 'reservations',
+      component: () => import(/* webpackChunkName: "reservations" */ './views/UpcomingReservations.vue'),
+    },
   ],
 })
 
