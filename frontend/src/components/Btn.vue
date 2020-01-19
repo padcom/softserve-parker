@@ -15,7 +15,7 @@
     ]"
   >
     <img class="btn__icon" v-if="icon" :src="icon" />
-    {{ text }}
+    <slot />
   </button>
 </template>
 
@@ -25,7 +25,6 @@ import { AuthAction } from '@/store/auth'
 
 @Component()
 export default class Btn extends Vue {
-  @Prop({ type: String, default: '' }) text
   @Prop(String) name
   @Prop({ type: String, default: 'button' }) type
   @Prop({ type: String, default: 'black' }) color

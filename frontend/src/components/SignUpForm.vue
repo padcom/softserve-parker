@@ -50,7 +50,9 @@
       :iconSrc="'/img/password-lookup.png'"
       :iconClb="() => { passwordConfirmationFieldType = switchPasswordVisibility(passwordConfirmationFieldType) }"
     />
-    <Btn name="signup" text="sign up" fullWidth :disabled="!isFormValid()" v-on:click="() => onSubmit({...user})" />
+    <Btn name="signup" fullWidth :disabled="!isFormValid()" v-on:click="() => onSubmit({...user})">
+      Sign up
+    </Btn>
     <p class="text-center">
       Got account?
       <router-link to="/login">Log in here</router-link>

@@ -1,15 +1,16 @@
 <template>
   <div class="modal">
     <div class="modal__wrapper">
-      <p class="modal__text"><slot /></p>
-
+      <p class="modal__text">
+        <slot />
+      </p>
       <div class="modal__actions">
         <Btn
           v-for="(action, index) in actions"
           :key="index"
           v-bind="action"
           @click="$emit(action.emitType)"
-        />
+        >{{ action.text }}</Btn>
       </div>
     </div>
   </div>

@@ -26,17 +26,15 @@
         <div class="home-page__content__actions">
           <Btn
             outlined
-            text="pick tomorrow"
             fullWidth
             @click="pickTomorrow"
             :disabled="tomorrowAlreadyRequested || tommorowWeekendDay"
-          />
-          <Btn
-            icon="/img/calendar.png"
-            text="pick a parking date"
-            fullWidth
-            @click="openCalendar"
-          />
+          >
+            pick tomorrow
+          </Btn>
+          <Btn icon="/img/calendar.png" fullWidth @click="openCalendar">
+            pick a parking date
+          </Btn>
         </div>
       </div>
     </div>

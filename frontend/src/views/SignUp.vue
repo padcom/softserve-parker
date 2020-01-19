@@ -5,7 +5,7 @@
     <div v-if="success || error" class="singup__done">
       <p v-if="success" class="singup__done__text">Almost there! We've just sent an<br /> email with activation link.</p>
       <p v-if="error" class="singup__done__text">Ups somehting went wrong.</p>
-      <Btn name="ok" text="ok" v-on:click="redirectToLoginPage" outlined fullWidth/>
+      <Btn @click="redirectToLoginPage" outlined fullWidth>OK</Btn>
     </div>
   </section>
 </template>

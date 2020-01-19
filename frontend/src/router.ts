@@ -1,7 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Login from './views/Login.vue'
+import RequestPasswordReset from './views/RequestPasswordReset.vue'
 import ResetPassword from './views/ResetPassword.vue'
+import PasswordResetLinkSent from './views/PasswordResetLinkSent.vue'
 
 import store from '@/store'
 import logger from './logger'
@@ -21,9 +23,19 @@ const router = new Router({
       name: 'logout',
     },
     {
+      path: '/forgot',
+      name: 'forgot-password',
+      component: RequestPasswordReset,
+    },
+    {
       path: '/reset',
       name: 'reset-password',
       component: ResetPassword,
+    },
+    {
+      path: '/reset-link-sent',
+      name: 'reset-link-sent',
+      component: PasswordResetLinkSent,
     },
     {
       path: '/confirm-registration/:userId',
@@ -55,13 +67,14 @@ const router = new Router({
 })
 
 router.beforeEach(async (to, from, next) => {
-  logger.debug('ROUTER: to', to, ', from', from)
+  logger.debug('ROUTER: to', to, ', from', from, 'to.name', to.name)
   const isLoggedIn = store.getters['auth/isLoggedIn']
 
   if (to.name === 'login') {
     if (isLoggedIn) next('/')
     next()
-  } else if (!isLoggedIn && to.name !== 'signup' && to.name !== 'confirmRegistration' && to.name !== 'reset-password') {
+  } else if (!isLoggedIn && to.name !== 'signup' && to.name !== 'confirmRegistration' && to.name !== 'reset-password' && to.name !== 'reset-link-sent' && to.name !== 'forgot-password') {
+    console.log('Here')
     next('/login')
   } else if (to.name === 'logout' || to.name === '/logout') {
     await store.dispatch('auth/logout')

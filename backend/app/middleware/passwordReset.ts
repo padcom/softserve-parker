@@ -10,7 +10,8 @@ const router = Router()
 router.post('/request-reset-link', async (req, res) => {
   const { EMAIL, CONFIRM_URL_BASE } = env
   try {
-    const user = await User.byId(req.body.id)
+    console.log('Requesting password reset link for', req.body)
+    const user = await User.byEmail(req.body.email)
     const token = await SingleUseToken.generate(user.email)
     const response = await mailer().sendMail({
       from: EMAIL,
@@ -41,6 +42,7 @@ router.get('/reset', async (req, res) => {
 
 router.post('/reset', async (req, res) => {
   try {
+    console.log('Resetting password for', req.body)
     const token = await SingleUseToken.byToken(req.body.token)
     if (!req.body.password) {
       throw new Error('No password specified')

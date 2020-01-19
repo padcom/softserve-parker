@@ -1,19 +1,11 @@
 <template>
   <form @submit.prevent="submit">
-    <TextField name="email" label="Email" placeholder="Email" v-model="email" fullWidth />
-
-    <TextField
-      name="password"
-      label="Password"
-      type="password"
-      placeholder="Password"
-      v-model="password"
-      fullWidth
-    />
+    <EmailField v-model="email" fullWidth />
+    <PasswordField placeholder="Password" v-model="password" fullWidth />
 
     <p v-if="error" class="error">{{ error }}</p>
 
-    <Btn name="login" type="submit" text="sign in" fullWidth />
+    <Btn type="submit" text="sign in" fullWidth>Login</Btn>
     <p class="signup-link text-center">No account? <router-link to="/signup">Sign up here</router-link></p>
   </form>
 </template>
@@ -23,13 +15,15 @@ import Vue from 'vue'
 import { Component, Watch } from 'vue-property-decorator'
 import { AuthAction } from '@/store/auth'
 import Btn from './Btn'
-import TextField from './TextField'
+import EmailField from './EmailField'
+import PasswordField from './PasswordField'
 import logger from '../logger'
 
 @Component({
   components: {
     Btn,
-    TextField,
+    EmailField,
+    PasswordField,
   },
 })
 export default class LoginForm extends Vue {

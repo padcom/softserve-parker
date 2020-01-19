@@ -15,6 +15,7 @@ function validateParams (req: Request): void | UnauthenticatedError {
 }
 
 async function assertPasswordsMatching (password: string, hash: string): Promise<void | UnauthenticatedError> {
+  console.log('password:',password,'hash',hash)
   const match: boolean = await bcrypt.compare(password, hash)
   if (!match) throw new UnauthenticatedError('Incorrect password.')
 }
@@ -53,8 +54,10 @@ function getErrorMessage (e: Error): string {
 
 export async function login (req: Request, res: Response) {
   try {
+    console.log('LOGIN:', req.body)
     validateParams(req);
     const user = await User.byEmail(req.body.email)
+    console.log('USER:',user)
     await assertPasswordsMatching(req.body.password, user.password)
     const token = await getJSONToken(user.id, user.email)
     await Session.create(token)

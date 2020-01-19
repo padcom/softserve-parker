@@ -58,8 +58,12 @@ export class User {
   @Field(() => String, { nullable: true })
   description?: string
 
+  static async password (password: string): Promise<string> {
+    return bcrypt.hash(password, 10)
+  }
+
   static async create (email: string, password: string, firstName: string, lastName: string, plate: string, phone: string, roles: string, state: string, description: string = null) {
-    const hashedPassword = await bcrypt.hash(password, 10)
+    const hashedPassword = await this.password(password)
 
     const [ result ] = await db.execute(
       `INSERT INTO user (email, password, firstName, lastName, plate, phone, roles, state) 
@@ -177,6 +181,7 @@ export class User {
   }
 
   static async byEmail (email: string): Promise<User> {
+    console.log('Fetching user by email', email)
     const [ rows ] = await db.execute(
       'SELECT * FROM user WHERE email = ?',
       [ email ]
@@ -219,7 +224,7 @@ export class User {
   }
 
   static async setPassword (userId: number, password: string) {
-    const hashedPassword = await bcrypt.hash(password, 10)
+    const hashedPassword = await this.password(password)
 
     const [ rows ] = await db.execute(
       'UPDATE user SET password = ? WHERE id = ?',

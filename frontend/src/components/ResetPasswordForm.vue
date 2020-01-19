@@ -1,90 +1,49 @@
 <template>
   <form @submit.prevent="submit" class="singup-form">
-    <TextField
-      name="password"
-      placeholder="Password"
-      :type="passwordFieldType"
-      v-model="user.password"
-      :isEmpty="!user.password"
-      :iconSrc="'/img/password-lookup.png'"
-      :iconClb="passwordFieldType = switchPasswordVisibility(passwordFieldType)"
-    />
-    <TextField
-      name="passwordConfirmation"
-      :type="passwordConfirmationFieldType"
+    <PasswordField v-model="password" :isValid="isPasswordValid" />
+    <PasswordField
       placeholder="Retype Passwrod"
       v-model="passwordConfirmation"
-      :isEmpty="!passwordConfirmation"
-      :isInvalid="markInvalid(passwordConfirmation, passwordsAreMatching)"
-      :iconSrc="'/img/password-lookup.png'"
-      :iconClb="passwordConfirmationFieldType = switchPasswordVisibility(passwordConfirmationFieldType)"
+      :isValid="isPasswordConfirmationValid"
     />
-    <Btn name="signup" text="Reset password" fullWidth :disabled="!isFormValid()" @click="submit" />
+    <Btn fullWidth :disabled="!isFormCompleted" @click="submit">Reset password</Btn>
   </form>
 </template>
 
 <script>
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import Btn from './Btn'
-import TextField from './TextField'
+import EmailField from './EmailField'
+import PasswordField from './PasswordField'
 
 @Component({
   components: {
     Btn,
-    TextField,
+    PasswordField,
   },
 })
 export default class ResetPasswordForm extends Vue {
-  @Prop({ type: Number, required: true }) id
-  user = {
-    id: this.id,
-    password: '',
-  }
+  password = ''
   passwordConfirmation = ''
 
-  passwordFieldType = 'password'
-  passwordConfirmationFieldType = 'password'
-
-  markInvalid (field, validationFn) {
-    return field ? !validationFn() : false
+  get isPasswordValid () {
+    return this.password.length > 3
   }
 
-  isFormValid () {
-    return (
-      this.isFormFilledUp() &&
-      this.passwordsAreMatching() &&
-      this.isEmailValid()
-    )
+  get isPasswordConfirmationValid () {
+    return this.password === this.passwordConfirmation
   }
 
-  isEmailValid () {
-    const re = /@softserveinc.com\s*$/
-    return !this.user.email || re.test(this.user.email.toLowerCase())
-  }
-
-  passwordsAreMatching () {
-    return this.user.password === this.passwordConfirmation
-  }
-
-  isFormFilledUp () {
+  get isFormCompleted () {
     return Boolean(
-      this.user.firstName &&
-      this.user.lastName &&
-      this.user.email &&
-      this.user.plateNumber &&
-      this.user.phoneNumber &&
-      this.user.password &&
-      this.passwordConfirmation,
+      this.isPasswordValid &&
+      this.isPasswordConfirmationValid
     )
-  }
-
-  switchPasswordVisibility (currentType) {
-    return currentType === 'password' ? 'text' : 'password'
   }
 
   submit () {
-    if (this.user.password === this.passwordConfirmation) {
-      this.$emit('save', this.user)
+    if (this.isFormCompleted) {
+      this.$emit('submit', this.password)
     }
   }
 }

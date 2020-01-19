@@ -1,13 +1,13 @@
 <template>
-  <div class="text-field">
+  <div class="email-field">
     <input type="text"
       :name="name"
       :class="[
-        'text-field__input',
+        'email-field__input',
         {
-          'text-field--full-width': fullWidth,
-          'text-field__input--empty': isEmpty,
-          'text-field__input--invalid': !isValid
+          'email-field--full-width': fullWidth,
+          'email-field__input--empty': isEmpty,
+          'email-field__input--invalid': !isValid
         }
       ]"
       :placeholder="placeholder"
@@ -21,18 +21,22 @@
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
 
 @Component()
-export default class TextField extends Vue {
+export default class EmailField extends Vue {
   @Prop({ type: String, required: true }) value
-  @Prop(String) placeholder
   @Prop({ type: String, default: '' }) name
+  @Prop({ type: String, default: 'Email' }) placeholder
   @Prop({ type: Boolean, default: false }) fullWidth
-  @Prop({ type: Boolean, default: false }) isValid
 
   input = ''
 
   @Watch('value')
   onValueChanged (newValue) {
     this.input = newValue
+  }
+
+  get isValid () {
+    const re = /@softserveinc.com\s*$/
+    return !this.input || re.test(this.input.toLowerCase())
   }
 
   get isEmpty () {
@@ -44,7 +48,7 @@ export default class TextField extends Vue {
 <style lang="scss">
 @import '../styles/variables';
 
-.text-field {
+.email-field {
   margin-bottom: 20px;
   width: 100%;
   position: relative;

@@ -1,19 +1,21 @@
 <template>
-  <div class="text-field">
-    <input type="text"
+  <div class="password-field">
+    <input
       :name="name"
+      :type="type"
       :class="[
-        'text-field__input',
+        'password-field__input',
         {
-          'text-field--full-width': fullWidth,
-          'text-field__input--empty': isEmpty,
-          'text-field__input--invalid': !isValid
+          'password-field--full-width': fullWidth,
+          'password-field__input--empty': isEmpty,
+          'password-field__input--invalid': isEmpty
         }
       ]"
       :placeholder="placeholder"
-      :value="value"
+      :value="input"
       @input="$emit('input', $event.target.value)"
     />
+    <img src="/img/password-lookup.png" @click="togglePasswordVisibility" class="password-field__icon" />
   </div>
 </template>
 
@@ -21,18 +23,27 @@
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
 
 @Component()
-export default class TextField extends Vue {
+export default class PasswordField extends Vue {
   @Prop({ type: String, required: true }) value
-  @Prop(String) placeholder
-  @Prop({ type: String, default: '' }) name
-  @Prop({ type: Boolean, default: false }) fullWidth
-  @Prop({ type: Boolean, default: false }) isValid
+  @Prop({ type: String, required: false, default: '' }) placeholder
+  @Prop({ type: String, required: false, default: '' }) name
+  @Prop({ type: Boolean, required: false, default: false }) fullWidth
+  @Prop({ type: Boolean, required: false, default: false }) isValid
 
   input = ''
+  type = 'password'
 
   @Watch('value')
   onValueChanged (newValue) {
     this.input = newValue
+  }
+
+  togglePasswordVisibility () {
+    if (this.type === 'password') {
+      this.type = 'text'
+    } else {
+      this.type = 'password'
+    }
   }
 
   get isEmpty () {
@@ -44,7 +55,7 @@ export default class TextField extends Vue {
 <style lang="scss">
 @import '../styles/variables';
 
-.text-field {
+.password-field {
   margin-bottom: 20px;
   width: 100%;
   position: relative;

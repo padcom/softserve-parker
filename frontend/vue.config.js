@@ -13,7 +13,8 @@ module.exports = {
       '/logout': { target: 'http://localhost:3000/logout' },
       '/signup': { target: 'http://localhost:3000/signup' },
       '/confirm-registration': { target: 'http://localhost:3000/confirm-registration' },
-      '/graphql': { target: 'http://localhost:3000/graphql' }
-    }
-  }
+      '/graphql': { target: 'http://localhost:3000/graphql' },
+      '/': { target: 'http://localhost:3000/' },
+    },
+  },
 }

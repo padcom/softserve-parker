@@ -20,10 +20,11 @@
       class="calendar__button"
       icon="/img/plus.png"
       outlined
-      text="add this date"
       fullWidth
       @click="saveDate"
-    />
+    >
+      add this date
+    </Btn>
   </div>
 </template>
 
