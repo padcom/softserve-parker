@@ -5,12 +5,16 @@ export interface History {
   date: Date
   state: string
   plate: string
+  rank: number
+  capacity: number
+  requests: number
   user: {
     firstName: string
     lastName: string
     email: string
     phone: string
     plate: string
+    roles: string
   }
 }
 
@@ -23,12 +27,16 @@ export class HistoryAPI {
           date
           state
           plate
+          rank
+          capacity
+          requests
           user {
             firstName
             lastName
             email
             phone
             plate
+            roles
           }
         }
       }

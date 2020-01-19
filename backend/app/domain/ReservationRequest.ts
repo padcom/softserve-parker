@@ -24,6 +24,9 @@ export class ReservationRequest {
   @Field(() => String)
   status: string
 
+  @Field(() => Number, { nullable: true })
+  rank?: number
+
   @Field(() => User)
   user (): Promise<User> {
     return User.getById(this.userId)
@@ -89,11 +92,25 @@ export class ReservationRequest {
   static async updateStatus (id: number, status: string) {
     const [ result ] = await db.execute(
       `UPDATE reservationRequest SET status=? WHERE id = ?`,
-      [status, id]) as OkPacket[]
+      [ status, id ]
+    ) as OkPacket[]
 
-      if (result.affectedRows == 0) {
-        throw new Error('Requests not found')
-      } 
+    if (result.affectedRows == 0) {
+      throw new Error('Requests not found')
+    } 
+
+    return result.affectedRows
+  }
+
+  static async updateRank (id: number, rank: number) {
+    const [ result ] = await db.execute(
+      'UPDATE reservationRequest SET `rank`=? WHERE id = ?',
+      [ rank, id ]
+    ) as OkPacket[]
+
+    if (result.affectedRows == 0) {
+      throw new Error('Requests not found')
+    } 
 
     return result.affectedRows
   }

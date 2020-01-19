@@ -2,7 +2,7 @@
   <v-container fluid>
     <v-card>
       <v-card-title>
-        Parking status for {{ date }}; Places 68/70
+        Parking status for {{ date }}; {{ usage }}
         <v-spacer />
         <v-text-field
           v-model="search"
@@ -13,7 +13,7 @@
       </v-card-title>
       <v-data-table class="elevation-1"
         :headers="headers"
-        :items="drivers"
+        :items="history"
         :search="search"
         :loading="loading"
         disable-pagination
@@ -38,10 +38,13 @@
 </template>
 
 <script lang="ts">
-import moment from 'moment'
+import format from 'date-fns/format'
+import startOfDay from 'date-fns/start_of_day'
+import endOfDay from 'date-fns/end_of_day'
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 import { User } from '@/domain/User'
+import { History, HistoryAPI } from '@/domain/History'
 import Information from '@/components/Information.vue'
 import { UserInterface, formatRank } from '../domain/User'
 
@@ -55,26 +58,28 @@ import { UserInterface, formatRank } from '../domain/User'
 })
 export default class ParkingStatus extends Vue {
   headers = [
-    { text: 'First Name', align: 'left', sortable: true, value: 'firstName' },
-    { text: 'Last Name', align: 'left', sortable: true, value: 'lastName' },
-    { text: 'Phone number', align: 'left', sortable: true, value: 'phone' },
+    { text: 'First Name', align: 'left', sortable: true, value: 'user.firstName' },
+    { text: 'Last Name', align: 'left', sortable: true, value: 'user.lastName' },
+    { text: 'Phone number', align: 'left', sortable: true, value: 'user.phone' },
     { text: 'Plate number', align: 'left', sortable: true, value: 'plate' },
-    { text: 'Role', align: 'left', value: 'role' },
+    { text: 'Role', align: 'left', value: 'user.role' },
     { text: 'State', align: 'left', value: 'state' },
     { text: 'Ranking', align: 'left', value: 'rank' },
   ]
 
-  drivers = [] as UserInterface[]
+  history = [] as History[]
 
   search = ''
   loading = false
 
   async mounted () {
     this.loading = true
+    this.history = []
     try {
-      this.drivers = await User.getAll()
+      const from = startOfDay(new Date())
+      const to = endOfDay(new Date())
+      this.history = await HistoryAPI.getForDates(from, to)
     } catch (e) {
-      this.drivers = []
       // @ts-ignore
       this.$refs.info.showError(e.message as string)
     } finally {
@@ -83,7 +88,11 @@ export default class ParkingStatus extends Vue {
   }
 
   get date () {
-    return moment(new Date()).format('YYYY-MM-DD')
+    return format(new Date(), 'YYYY-MM-DD')
+  }
+
+  get usage () {
+    return this.history.length > 0 ? `${this.history.length}/${this.history[0].capacity}` : ''
   }
 
   getValue (data: string): string {

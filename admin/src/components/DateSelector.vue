@@ -27,7 +27,8 @@
 
 <script lang="ts">
 import { Component, Prop, Watch, Vue } from 'vue-property-decorator'
-import moment from 'moment'
+import format from 'date-fns/format'
+import parse from 'date-fns/parse'
 
 @Component({})
 export default class DateRangeSelector extends Vue {
@@ -35,11 +36,11 @@ export default class DateRangeSelector extends Vue {
   @Prop({ type: String, required: false, default: 'Label' }) label?: string
 
   calendar = false
-  date = moment(this.value).format('YYYY-MM-DD')
+  date = format(this.value || new Date(), 'YYYY-MM-DD')
 
   @Watch('value')
   onValueChanged (newValue: Date) {
-    this.date = moment(newValue).format('YYYY-MM-DD')
+    this.date = format(newValue, 'YYYY-MM-DD')
   }
 
   getAllowedDates (val: string) {
@@ -47,7 +48,7 @@ export default class DateRangeSelector extends Vue {
   }
 
   get selectedValueAsDate () {
-    return moment(this.date).toDate()
+    return parse(this.date)
   }
 }
 </script>

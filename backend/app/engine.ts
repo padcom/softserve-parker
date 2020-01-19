@@ -199,7 +199,7 @@ export function calculateLoosers (users: RankingUser[], numberOfParkingSpots: nu
 
 async function createHistoryEntriesForWinners (timestamp: Date, numberOfParkingSpots: number, numberOfRequests: number, winners: RankingUser[]): Promise<number[]> {
   return Promise.all(winners.map(async (user) => {
-    return await History.create(timestamp, numberOfParkingSpots, numberOfRequests, user.id, user.plate)
+    return await History.create(timestamp, numberOfParkingSpots, numberOfRequests, user.id, user.plate, user.rank)
   }))
 }
 
@@ -221,12 +221,14 @@ async function createRandomReservationRequests (timestamp: Date) {
 async function updateWinnerRequests (timestamp: Date, winners: RankingUser[]) {
   return Promise.all(winners.map(user => {
     ReservationRequest.updateStatus(user.request.id, 'won')
+    ReservationRequest.updateRank(user.request.id, user.rank)
   }))
 }
 
 async function updateLoosersRequests (timestamp: Date, winners: RankingUser[]) {
   return Promise.all(winners.map(user => {
     ReservationRequest.updateStatus(user.request.id, 'lost')
+    ReservationRequest.updateRank(user.request.id, user.rank)
   }))
 }
 

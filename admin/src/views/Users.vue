@@ -18,7 +18,7 @@
           <UserForm
             :userProp="user"
             @onSubmit="onSubmit"
-            @close="close"
+            @close="editUserDialog = false"
           />
         </v-dialog>
         <v-spacer />
@@ -79,7 +79,7 @@
 </template>
 
 <script lang="ts">
-import moment from 'moment'
+import format from 'date-fns/format'
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 import { User, UserInterface, formatRank } from '@/domain/User'
@@ -114,7 +114,7 @@ export default class Users extends Vue {
   drivers = [] as UserInterface[]
 
   search = ''
-  dialog = false
+  editUserDialog = false
   newUserDialog = false
   user = {}
   loading = false
@@ -124,13 +124,13 @@ export default class Users extends Vue {
   }
 
   onSubmit (user: UserInterface) {
-    this.dialog = false
+    this.editUserDialog = false
     this.saveEditedUser(user)
   }
 
   editUser (item: UserInterface) {
     this.user = item
-    this.dialog = true
+    this.editUserDialog = true
   }
 
   async deleteUser (user: UserInterface) {
@@ -178,14 +178,6 @@ export default class Users extends Vue {
       // @ts-ignore
       this.$refs.info.showError(e.message as string)
     }
-  }
-
-  close () {
-    this.dialog = false
-  }
-
-  get date () {
-    return moment(new Date()).format('YYYY-MM-DD')
   }
 
   getValue (data: string): string {
