@@ -134,7 +134,7 @@ export default class Users extends Vue {
   }
 
   async deleteUser (user: UserInterface) {
-    const agree = confirm(`Do you want to remove?`)
+    const agree = confirm(`Are you sure you want to remove this user?`)
     if (agree) this.removeUser(user)
   }
 

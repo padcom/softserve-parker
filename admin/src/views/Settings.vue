@@ -8,19 +8,20 @@
         <v-form @submit.prevent="submit">
           <v-text-field type="number"
             v-model.number="numberOfParkingSpots"
-            label="Number of parking spots" />
+            label="Number of parking spots"
+            @input="modified = true" />
           <TimePicker
             v-model="deadlineHour"
-            label="Time when system will assign parking space to Drivers" />
-          <TimePicker
-            v-model="cancelHour"
-            label="Time when system closes the window for opportunity to cancel reservation and taking cancelled parking reservation" />
+            label="Time when system will assign parking space to Drivers"
+            @input="modified = true" />
           <v-text-field type="number"
             v-model.number="daysForCalculation"
-            label="The period of time that is taken into account when calculating the ranking" />
+            label="The period of time that is taken into account when calculating the ranking"
+            @input="modified = true" />
           <v-text-field type="number"
             v-model.number="daysForRequests"
-            label="The period of time that is allowed to request dates up front" />
+            label="The period of time that is allowed to request dates up front"
+            @input="modified = true" />
           <input type="submit" style="display: none">
           <v-btn @click="submit">Save settings</v-btn>
         </v-form>
@@ -44,6 +45,14 @@ import { Settings as SettingsInterface, SettingsAPI } from '@/domain/Settings'
     TimePicker,
     Information,
   },
+  beforeRouteLeave (to: any, from: any, next: any) {
+    if (this.modified) {
+      const answer = confirm(`Are you sure you want to leave without saving changes?`)
+      next(answer)
+    } else {
+      next()
+    }
+  },
 })
 export default class Settings extends Vue {
   numberOfParkingSpots = 50
@@ -51,6 +60,8 @@ export default class Settings extends Vue {
   cancelHour = '07:00'
   daysForCalculation = 90
   daysForRequests = 30
+
+  modified = false
 
   async mounted () {
     const settings = await (new SettingsAPI().fetchSettings())
@@ -60,6 +71,8 @@ export default class Settings extends Vue {
     this.cancelHour = settings.cancelHour
     this.daysForCalculation = settings.daysForCalculation
     this.daysForRequests = settings.daysForRequests
+
+    this.modified = false
   }
 
   async submit () {
@@ -72,6 +85,7 @@ export default class Settings extends Vue {
         api.updateDaysForCalculation(this.daysForCalculation),
         api.updateDaysForRequests(this.daysForRequests),
       ])
+      this.modified = false
       // @ts-ignore
       this.$refs.info.showInfo('Settings saved')
     } catch (e) {
