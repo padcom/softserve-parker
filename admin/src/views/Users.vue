@@ -12,7 +12,7 @@
           hide-details
         />
         <v-dialog
-          v-model="dialog"
+          v-model="editUserDialog"
           max-width="500px"
         >
           <UserForm
@@ -66,9 +66,10 @@
           <v-btn x-small color="primary" @click="editUser(item)">
             edit
           </v-btn>
-        </template>
-        <template v-slot:item.remove="{ item }">
-          <v-btn x-small v-if="item.state !== 'deleted'" color="error" @click="deleteUser(item)">
+          <v-btn v-if="item.state === 'inactive'" x-small color="warning" @click="resendConfirmationEmail(item)" style="margin-left: 5px;">
+            resend
+          </v-btn>
+          <v-btn v-if="item.state !== 'deleted'" x-small color="error" @click="deleteUser(item)" style="margin-left: 5px;">
             remove
           </v-btn>
         </template>
@@ -108,7 +109,6 @@ export default class Users extends Vue {
     { text: 'State', align: 'left', value: 'state' },
     { text: 'Ranking', align: 'left', value: 'rank' },
     { text: 'Actions', value: 'edit', sortable: false },
-    { text: 'Remove', value: 'remove', sortable: false },
   ]
 
   drivers = [] as UserInterface[]
@@ -201,6 +201,17 @@ export default class Users extends Vue {
       } else {
         throw new Error(res)
       }
+    } catch (e) {
+      // @ts-ignore
+      this.$refs.info.showError(e.message as string)
+    }
+  }
+
+  async resendConfirmationEmail (user: UserInterface) {
+    try {
+      const email = await User.sendConfirmationEmail(user.id)
+      // @ts-ignore
+      this.$refs.info.showInfo(`Confirmation email sent to ${email}`)
     } catch (e) {
       // @ts-ignore
       this.$refs.info.showError(e.message as string)

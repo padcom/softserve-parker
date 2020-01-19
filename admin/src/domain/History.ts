@@ -19,7 +19,7 @@ export interface History {
 }
 
 export class HistoryAPI {
-  static async getForDates (from: Date, to: Date) {
+  static async between (from: Date, to: Date) {
     const { history } = await query<{ history: History[] }>(`query
       history($from: DateTime!, $to: DateTime!) {
         history(from: $from, to: $to) {

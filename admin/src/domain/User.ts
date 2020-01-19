@@ -131,4 +131,12 @@ export class User {
 
     return removeUser
   }
+
+  static async sendConfirmationEmail (id: number) {
+    const { sendConfirmationEmail } = await query(`mutation sendConfirmationEmail($id: ID!) {
+      sendConfirmationEmail(id: $id)
+    }`, { id })
+
+    return sendConfirmationEmail
+  }
 }

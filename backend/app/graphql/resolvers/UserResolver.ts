@@ -84,4 +84,22 @@ export class UserResolver {
   ) {
     return User.delete(id)
   }
+
+  @Mutation(() => String!, {
+    description: 'Send confirmation email, returns email',
+  })
+  async sendConfirmationEmail (
+    @Arg('id', () => ID!)
+    id
+  ) {
+    const user = await User.byId(id)
+    if (user.state === 'inactive') {
+      await User.sendConfirmationEmail(user.email, id)
+      return user.email
+    } else if (user.state === 'active') {
+      throw new Error(`User with id ${id} already activated`)
+    } else if (user && user.state === 'deleted') {
+      throw new Error(`User with id ${id} is deleted`)
+    }
+  }
 }

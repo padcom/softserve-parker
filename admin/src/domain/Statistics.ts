@@ -9,7 +9,7 @@ export interface Statistics {
 }
 
 export class StatisticsAPI {
-  static async getForDates (from: Date, to: Date) {
+  static async between (from: Date, to: Date) {
     const { statistics } = await query<{ statistics: Statistics[] }>(`query
     statistics($from: DateTime!, $to: DateTime!) {
       statistics(from: $from, to: $to) {

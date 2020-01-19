@@ -42,7 +42,7 @@ async function main () {
     logger.error(`Error! Failed to start Apollo server. Error message: ${e}`)
   }
 
-  // start cron that will run every minute and recalculate parking spaces
+  // // start cron that will run every minute and recalculate parking spaces
   new CronJob('0 * * * * *', task, null, true, 'Europe/Warsaw')
 }
 

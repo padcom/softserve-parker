@@ -98,7 +98,7 @@ export default class ParkingStatistics extends Vue {
     const to = endOfDay(this.endDate)
     this.statistics = []
     try {
-      this.statistics = await StatisticsAPI.getForDates(from, to)
+      this.statistics = await StatisticsAPI.between(from, to)
     } catch (e) {
       // @ts-ignore
       this.$refs.info.showError(e.message as string)

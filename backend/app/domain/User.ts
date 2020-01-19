@@ -74,6 +74,10 @@ export class User {
       User.updateDescription(result.insertId, description)
     }
 
+    if (state === 'inactive') {
+      await User.sendConfirmationEmail(email, result.insertId)
+    }
+
     return result.insertId
   }
 
@@ -119,8 +123,7 @@ export class User {
   }
 
   static async sendConfirmationEmail (email: string, userId: number) {
-    const transporter = mailer()
-    await transporter.sendMail({
+    await mailer().sendMail({
           from: EMAIL,
           to: email,
           subject: 'Email Confirmation', 

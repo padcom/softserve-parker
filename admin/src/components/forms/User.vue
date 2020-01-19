@@ -81,11 +81,3 @@ export default class UserForm extends Vue {
   }
 }
 </script>
-
-<style lang="scss">
-.user-editor {
-  &__user-roles {
-    cursor: pointer;
-  }
-}
-</style>

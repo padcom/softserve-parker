@@ -71,7 +71,6 @@ export async function signUp (req: Request, res: Response) {
     const { firstName, lastName, email, plate, phone, password } = req.body
     await User.validateUserCreation(email)
     const result = await User.create(email, password, firstName, lastName, plate, phone, 'user', 'inactive')
-    await User.sendConfirmationEmail(email, result)
     res.send({data: { userId: result }})
   } catch (e) {
     logger.error(e)

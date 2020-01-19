@@ -78,7 +78,7 @@ export default class ParkingStatus extends Vue {
     try {
       const from = startOfDay(new Date())
       const to = endOfDay(new Date())
-      this.history = await HistoryAPI.getForDates(from, to)
+      this.history = await HistoryAPI.between(from, to)
     } catch (e) {
       // @ts-ignore
       this.$refs.info.showError(e.message as string)
