@@ -123,12 +123,14 @@ export class User {
   }
 
   static async sendConfirmationEmail (email: string, userId: number) {
-    await mailer().sendMail({
+    const response = await mailer().sendMail({
           from: EMAIL,
           to: email,
           subject: 'Email Confirmation', 
           html: `<p>Please confirm your email address <a href='${CONFIRM_URL_BASE}/#/confirm-registration/${userId}'>here</a>.<p/>`,
       });
+
+    logger.info(`EMAIL: ${JSON.stringify(response)}`)
   }
 
   static async setEnabled (id: number, value: boolean) {

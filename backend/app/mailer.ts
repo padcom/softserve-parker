@@ -21,9 +21,11 @@ export function mailer () {
   }
   if (SMTP_HOST !== 'localhost' && SMTP_USER && SMTP_PASSWORD) {
     settings.auth = {
+      secure: true,
       user: SMTP_USER,
       pass: SMTP_PASSWORD,
     }
   }
+
   return nodemailer.createTransport(settings)
 }
