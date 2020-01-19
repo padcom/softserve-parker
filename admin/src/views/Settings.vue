@@ -46,6 +46,7 @@ import { Settings as SettingsInterface, SettingsAPI } from '@/domain/Settings'
     Information,
   },
   beforeRouteLeave (to: any, from: any, next: any) {
+    // @ts-ignore
     if (this.modified) {
       const answer = confirm(`Are you sure you want to leave without saving changes?`)
       next(answer)

@@ -12,31 +12,7 @@
           hide-details />
       </v-card-title>
       <v-card-title>
-        <v-menu
-          v-model="openCalendar"
-          :close-on-content-click="false"
-          :nudge-right="40"
-          transition="scale-transition"
-          offset-y
-          min-width="290px"
-        >
-          <template v-slot:activator="{ on }">
-            <v-text-field
-              v-model="inputDate"
-              label="Picker without buttons"
-              readonly
-              v-on="on"
-            ></v-text-field>
-          </template>
-          <v-date-picker
-            v-model="inputDate"
-            :dark="true"
-            :allowed-dates='allowedDates'
-            first-day-of-week="1"
-            @input="onCalendarClose"
-            >
-          </v-date-picker>
-        </v-menu>
+        <DateSelector label="Select date" v-model="inputDate" @input="load" />
       </v-card-title>
       <v-data-table class="elevation-1"
         :headers="headers"
@@ -46,7 +22,7 @@
         disable-pagination
         hide-default-footer>
         <template v-slot:item.date="{ item }">
-          {{ parseDate(item.date) }}
+          {{ item.date | date }}
         </template>
       </v-data-table>
     </v-card>
@@ -55,15 +31,24 @@
 </template>
 
 <script lang="ts">
-import moment from 'moment'
+import startOfDay from 'date-fns/start_of_day'
+import endOfDay from 'date-fns/end_of_day'
+import format from 'date-fns/format'
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 import Information from '@/components/Information.vue'
+import DateSelector from '@/components/DateSelector.vue'
 import { History, HistoryAPI } from '@/domain/History'
 
 @Component({
   components: {
+    DateSelector,
     Information,
+  },
+  filters: {
+    date (value: Date) {
+      return format(value, 'YYYY-MM-DD HH:mm:ss')
+    },
   },
 })
 export default class ParkingStatus extends Vue {
@@ -79,8 +64,7 @@ export default class ParkingStatus extends Vue {
 
   history = [] as History[]
   search = ''
-  inputDate = this.date
-  openCalendar = false
+  inputDate = new Date()
   loading = false
 
   mounted () {
@@ -89,34 +73,17 @@ export default class ParkingStatus extends Vue {
 
   async load () {
     this.loading = true
-    const startOfDay = moment(this.inputDate).toDate()
-    const endOfDay = moment(this.inputDate).endOf('day').toDate()
+    const from = startOfDay(this.inputDate)
+    const to = endOfDay(this.inputDate)
     this.history = []
     try {
-      this.history = await HistoryAPI.getForDates(startOfDay, endOfDay)
+      this.history = await HistoryAPI.getForDates(from, to)
     } catch (e) {
       // @ts-ignore
       this.$refs.info.showError(e.message as string)
     } finally {
       this.loading = false
     }
-  }
-
-  onCalendarClose () {
-    this.openCalendar = false
-    this.load()
-  }
-
-  allowedDates (val: string) {
-    return ![0, 6].includes(new Date(val).getDay())
-  }
-
-  get date () {
-    return moment(new Date()).format('YYYY-MM-DD')
-  }
-
-  parseDate (date: string) {
-    return moment(new Date(date)).format('YYYY-MM-DD')
   }
 }
 </script>
