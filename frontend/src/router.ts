@@ -74,7 +74,6 @@ router.beforeEach(async (to, from, next) => {
     if (isLoggedIn) next('/')
     next()
   } else if (!isLoggedIn && to.name !== 'signup' && to.name !== 'confirmRegistration' && to.name !== 'reset-password' && to.name !== 'reset-link-sent' && to.name !== 'forgot-password') {
-    console.log('Here')
     next('/login')
   } else if (to.name === 'logout' || to.name === '/logout') {
     await store.dispatch('auth/logout')

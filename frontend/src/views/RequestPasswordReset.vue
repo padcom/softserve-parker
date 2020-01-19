@@ -28,15 +28,11 @@ export default class RequestPasswordReset extends Vue {
     this.error = ''
     try {
       this.loading = true
-      console.log('1')
       await User.requestPasswordReset(email)
-      console.log('2')
       this.$router.push('/reset-link-sent')
     } catch (e) {
-      console.log('3')
       this.error = e.message
     } finally {
-      console.log('4')
       this.loading = false
     }
   }

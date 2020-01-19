@@ -181,7 +181,6 @@ export class User {
   }
 
   static async byEmail (email: string): Promise<User> {
-    console.log('Fetching user by email', email)
     const [ rows ] = await db.execute(
       'SELECT * FROM user WHERE email = ?',
       [ email ]

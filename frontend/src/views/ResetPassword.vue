@@ -1,7 +1,7 @@
 <template>
   <section class="reset-password">
     <ResetPasswordForm @submit="resetPassword" />
-    <div v-if="error">{{ error }}</div>
+    <div v-if="error" class="error">{{ error }}</div>
   </section>
 </template>
 
@@ -28,7 +28,11 @@ export default class ResetPassword extends Vue {
       await User.resetPassword(this.$route.query.token, password)
       this.$router.push('/login')
     } catch (e) {
-      this.error = true
+      if (e.response && e.response.data) {
+        this.error = e.response.data
+      } else {
+        this.error = e
+      }
     }
   }
 }
