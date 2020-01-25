@@ -8,8 +8,6 @@
     "db:migrate": "db-migrate up",
     "db:migrate-down": "db-migrate down",
     "db:create-migration": "db-migrate create",
-    "ci:lint": "eslint \"app/**/*.ts\" --max-warnings 1",
-    "ci:prettier": "prettier \"app/**/*.ts\" --check",
     "test": "NODE_ENV=development jest",
     "engine": "ts-node run-engine.ts"
   },

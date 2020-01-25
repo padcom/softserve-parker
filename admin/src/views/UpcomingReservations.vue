@@ -31,9 +31,9 @@
 </template>
 
 <script lang="ts">
-import subMonths from 'date-fns/sub_months'
-import endOfDay from 'date-fns/end_of_day'
-import addDays from 'date-fns/add_days'
+import subMonths from 'date-fns/subMonths'
+import endOfDay from 'date-fns/endOfDay'
+import addDays from 'date-fns/addDays'
 import format from 'date-fns/format'
 import parse from 'date-fns/parse'
 import { Component, Vue } from 'vue-property-decorator'

@@ -36,8 +36,8 @@
 </template>
 
 <script lang="ts">
-import subMonths from 'date-fns/sub_months'
-import endOfDay from 'date-fns/end_of_day'
+import subMonths from 'date-fns/subMonths'
+import endOfDay from 'date-fns/endOfDay'
 import format from 'date-fns/format'
 import parse from 'date-fns/parse'
 import { Component, Vue } from 'vue-property-decorator'
@@ -114,7 +114,7 @@ export default class ParkingStatistics extends Vue {
 
   get chartValues () {
     return this.statistics.map(entry => ([
-      parse(entry.date),
+      entry.date,
       getUtilizationPercentage(entry),
     ]))
   }

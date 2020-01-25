@@ -48,7 +48,7 @@ export default class DateRangeSelector extends Vue {
   }
 
   get selectedValueAsDate () {
-    return parse(this.date)
+    return parse(this.date, 'YYYY-MM-DD', new Date())
   }
 }
 </script>
