@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="submit" class="singup-form">
+  <form @submit.prevent="submit">
     <TextField
       name="firstName"
       placeholder="First Name"
@@ -102,15 +102,3 @@ export default class SignUpForm extends Vue {
   }
 }
 </script>
-
-<style lang="scss">
-  .singup-form {
-    margin: 4rem auto 0 auto;
-    width: 95%;
-    .text-field {
-      .text-field__input {
-        padding: 10px;
-      }
-    }
-  }
-</style>

@@ -51,15 +51,16 @@ export default class RequestPasswordReset extends Vue {
 .request-password-reset {
   height: calc(100vh - #{$header-height});
   position: relative;
+  padding-bottom: 32px;
 
   display: flex;
   flex-direction: column;
+  justify-content: flex-end;
 
   &__links {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    margin-bottom: 16px;
   }
 }
 </style>

@@ -1,7 +1,10 @@
 <template>
-  <section class="reset-password">
+  <section class="reset-password container">
     <ResetPasswordForm @submit="resetPassword" />
     <div v-if="error" class="error">{{ error }}</div>
+    <div class="reset-password__links">
+      <router-link to="/login">Go back</router-link>
+    </div>
   </section>
 </template>
 
@@ -39,8 +42,19 @@ export default class ResetPassword extends Vue {
 </script>
 
 <style lang="scss">
+@import '../styles/variables';
+
 .reset-password {
+  height: calc(100vh - #{$header-height});
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-bottom: 32px;
+
+  &__links {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
 }
 </style>

@@ -1,12 +1,17 @@
 <template>
-  <form @submit.prevent="submit" class="singup-form">
-    <PasswordField v-model="password" :isValid="isPasswordValid" />
+  <form @submit.prevent="submit">
+    <PasswordField
+      placeholder="Password"
+      v-model="password"
+      :isValid="isPasswordValid"
+    />
     <PasswordField
       placeholder="Retype Passwrod"
       v-model="passwordConfirmation"
       :isValid="isPasswordConfirmationValid"
     />
-    <Btn fullWidth :disabled="!isFormCompleted" @click="submit">Reset password</Btn>
+    <Btn fullWidth :disabled="!isFormCompleted" @click="submit">Update password</Btn>
+    <Divider />
   </form>
 </template>
 
@@ -15,11 +20,13 @@ import { Vue, Component, Prop } from 'vue-property-decorator'
 import Btn from './Btn'
 import EmailField from './EmailField'
 import PasswordField from './PasswordField'
+import Divider from './Divider'
 
 @Component({
   components: {
     Btn,
     PasswordField,
+    Divider,
   },
 })
 export default class ResetPasswordForm extends Vue {
@@ -48,15 +55,3 @@ export default class ResetPasswordForm extends Vue {
   }
 }
 </script>
-
-<style lang="scss">
-  .singup-form {
-    margin: 4rem auto 0 auto;
-    width: 95%;
-    .text-field {
-      .text-field__input {
-        padding: 10px;
-      }
-    }
-  }
-</style>
