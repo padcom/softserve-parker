@@ -36,7 +36,7 @@ This information can be obtained from either your trusty IT department. You need
 Once you have the IP address at hand start the following command which will automatically create the swarm for you:
 
 ```
-$ docker swarm init --advertise-addr YOUR-IP-ADDRESS-GOES-HERE
+$ docker swarm init --advertise-addr YOUR-IP-ADDRESS-GOES-HERE:9000
 ```
 
 And that's it! Your Docker is now the Swarm Master and you can run stacks on it. Easy!
@@ -78,10 +78,4 @@ The last thing to do is to deploy database migrations. Database migrations conta
 ```
 $ npm run db:migrate -- --env production
 ```
-
-
-
-
-
-
 

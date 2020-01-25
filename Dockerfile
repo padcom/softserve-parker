@@ -2,7 +2,8 @@ FROM parker-runtime
 
 MAINTAINER Matthias Hryniszak <padcom@gmail.com>
 
-ARG domain=parker-qa.aplaline.com
+ARG domain=parker.aplaline.com
+ARG port=3000
 
 ENV CONFIRM_URL_BASE=http://$domain
 
