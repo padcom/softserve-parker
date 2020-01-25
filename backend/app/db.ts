@@ -3,7 +3,7 @@ import mysql from 'mysql2'
 import config from '../database.json'
 import { logger } from './logger'
 
-const { NODE_ENV } = process.env
+const NODE_ENV = process.env.NODE_ENV || 'development'
 
 const {
   MYSQL_HOST = config[NODE_ENV].host,
