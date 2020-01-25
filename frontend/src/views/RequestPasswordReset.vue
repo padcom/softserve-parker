@@ -1,8 +1,12 @@
 <template>
   <section class="request-password-reset">
-    <RequestPasswordResetForm @submit="requestPasswordReset" />
     <Loader :loading="loading" />
     <div v-if="error">{{ error }}</div>
+    <RequestPasswordResetForm @submit="requestPasswordReset" />
+    <Divider />
+    <div class="request-password-reset__links">
+      <router-link to="/login">Go back</router-link>
+    </div>
   </section>
 </template>
 
@@ -10,6 +14,7 @@
 import { Vue, Component } from 'vue-property-decorator'
 import Btn from '../components/Btn'
 import Loader from '../components/Loader'
+import Divider from '@/components/Divider'
 import RequestPasswordResetForm from '../components/RequestPasswordResetForm'
 import { User } from '../domain/User'
 
@@ -17,6 +22,7 @@ import { User } from '../domain/User'
   components: {
     Btn,
     Loader,
+    Divider,
     RequestPasswordResetForm,
   },
 })
@@ -40,7 +46,20 @@ export default class RequestPasswordReset extends Vue {
 </script>
 
 <style lang="scss">
+@import '../styles/variables';
+
 .request-password-reset {
-  margin-top: 30px;
+  height: calc(100vh - #{$header-height});
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+
+  &__links {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 16px;
+  }
 }
 </style>

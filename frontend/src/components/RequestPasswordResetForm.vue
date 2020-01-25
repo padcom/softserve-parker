@@ -1,7 +1,7 @@
 <template>
   <form ref="form" @submit.prevent="submit" class="request-password-reset-form">
     <EmailField ref="email" v-model="email" />
-    <Btn fullWidth :disabled="!isFormCompleted" @click="submit">Request password reset</Btn>
+    <Btn fullWidth :disabled="!isFormCompleted" @click="submit">Reset my password</Btn>
   </form>
 </template>
 
@@ -30,3 +30,12 @@ export default class RequestPasswordResetForm extends Vue {
   }
 }
 </script>
+
+<style lang="scss">
+.request-password-reset-form {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+</style>

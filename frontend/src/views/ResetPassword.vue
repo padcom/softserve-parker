@@ -37,3 +37,10 @@ export default class ResetPassword extends Vue {
   }
 }
 </script>
+
+<style lang="scss">
+.reset-password {
+  display: flex;
+  flex-direction: row;
+}
+</style>
