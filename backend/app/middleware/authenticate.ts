@@ -94,10 +94,11 @@ export async function confirmSignUp (req: Request, res: Response) {
 
 export async function logout (req: Request, res: Response) {
   try {
-    await Session.delete(getTokenFromRequest(req))
+    await Session.forceDelete(getTokenFromRequest(req))
     res.status(200).end('User logged out successfuly')
   } catch (e) {
     logger.error(e)
+    console.log('Here..', e)
     const status = getErrorStatus(e)
     res.status(status).end(e.message)
   }

@@ -1,5 +1,5 @@
 <template>
-  <section class="reset-password container">
+  <section class="container reset-password">
     <ResetPasswordForm @submit="resetPassword" />
     <div v-if="error" class="error">{{ error }}</div>
     <div class="reset-password__links">

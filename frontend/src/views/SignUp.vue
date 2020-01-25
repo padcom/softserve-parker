@@ -1,5 +1,5 @@
 <template>
-  <section class="singup">
+  <section class="container singup">
     <SignUpForm v-if="!success && !loading && !error" @submit="createUser" />
     <Loader :loading="loading && !success && !error" />
     <div v-if="success || error" class="singup__done">

@@ -1,5 +1,5 @@
 <template>
-  <section class="password-reset-link-sent container">
+  <section class="container password-reset-link-sent">
     <p class="password-reset-link-sent__text">Password reset link has been sent, please check your email.</p>
     <Btn @click="redirectToLoginPage" outlined fullWidth>OK</Btn>
   </section>

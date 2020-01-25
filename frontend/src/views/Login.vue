@@ -1,5 +1,5 @@
 <template>
-  <section class="login-page container">
+  <section class="container login-page">
     <div class="login-page__avatar">
       <img src="../assets/circle.svg" class="login-page__avatar-image">
     </div>

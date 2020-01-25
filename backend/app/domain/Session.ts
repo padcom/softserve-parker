@@ -27,6 +27,13 @@ export class Session {
     return result.affectedRows
   }
 
+  static async forceDelete (token: string) {
+    try {
+      this.delete(token)
+    } catch {
+    }
+  }
+
   static async fetch (token: string) {
     const [ rows ]: [ RowDataPacket[], FieldPacket[] ] = await db.execute(
       'SELECT * FROM sessions WHERE token=?',
