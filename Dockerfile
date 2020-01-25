@@ -10,6 +10,10 @@ COPY backend/dist /app/
 COPY backend/node_modules /app/node_modules
 COPY backend/private.key /app/
 COPY backend/public.key /app/
+
+COPY backend/migrations /app/migrations
+COPY backend/package.json /app/package.json
+
 COPY frontend/dist /app/public
 COPY admin/dist /app/public/admin
 
