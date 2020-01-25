@@ -8,12 +8,12 @@
         {
           'password-field--full-width': fullWidth,
           'password-field__input--empty': isEmpty,
-          'password-field__input--invalid': isEmpty
+          'password-field__input--invalid': !valid
         }
       ]"
       :placeholder="placeholder"
       :value="input"
-      @input="$emit('input', $event.target.value)"
+      @input="modified = true; $emit('input', $event.target.value)"
     />
     <img src="/img/password-lookup.png" @click="togglePasswordVisibility" class="password-field__icon" />
   </div>
@@ -28,8 +28,9 @@ export default class PasswordField extends Vue {
   @Prop({ type: String, required: false, default: '' }) placeholder
   @Prop({ type: String, required: false, default: '' }) name
   @Prop({ type: Boolean, required: false, default: false }) fullWidth
-  @Prop({ type: Boolean, required: false, default: false }) isValid
+  @Prop({ type: Boolean, required: false, default: true }) isValid
 
+  modified = false
   input = ''
   type = 'password'
 
@@ -48,6 +49,10 @@ export default class PasswordField extends Vue {
 
   get isEmpty () {
     return this.input.length === 0
+  }
+
+  get valid () {
+    return !this.modified || this.isValid
   }
 }
 </script>

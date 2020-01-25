@@ -17,7 +17,7 @@ import EmailField from './EmailField'
   },
 })
 export default class RequestPasswordResetForm extends Vue {
-  email = 'mhryn@softserveinc.com'
+  email = ''
 
   get isFormCompleted () {
     return this.email && this.$refs.email && this.$refs.email.isValid

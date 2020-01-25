@@ -1,5 +1,5 @@
 <template>
-  <section class="request-password-reset">
+  <section class="request-password-reset container">
     <Loader :loading="loading" />
     <div v-if="error">{{ error }}</div>
     <RequestPasswordResetForm @submit="requestPasswordReset" />

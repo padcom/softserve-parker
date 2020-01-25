@@ -1,5 +1,5 @@
 <template>
-  <section class="password-reset-link-sent">
+  <section class="password-reset-link-sent container">
     <p class="password-reset-link-sent__text">Password reset link has been sent, please check your email.</p>
     <Btn @click="redirectToLoginPage" outlined fullWidth>OK</Btn>
   </section>
@@ -30,6 +30,8 @@ export default class PasswordResetLinkSent extends Vue {
 
   display: flex;
   flex-direction: column;
+
+  padding-bottom: 32px;
 
   &__text {
     margin-top: 30px;

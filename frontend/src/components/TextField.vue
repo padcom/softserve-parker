@@ -7,12 +7,12 @@
         {
           'text-field--full-width': fullWidth,
           'text-field__input--empty': isEmpty,
-          'text-field__input--invalid': !isValid
+          'text-field__input--invalid': !valid
         }
       ]"
       :placeholder="placeholder"
       :value="value"
-      @input="$emit('input', $event.target.value)"
+      @input="modified = true; $emit('input', $event.target.value)"
     />
   </div>
 </template>
@@ -26,8 +26,9 @@ export default class TextField extends Vue {
   @Prop(String) placeholder
   @Prop({ type: String, default: '' }) name
   @Prop({ type: Boolean, default: false }) fullWidth
-  @Prop({ type: Boolean, default: false }) isValid
+  @Prop({ type: Boolean, default: true }) isValid
 
+  modified = false
   input = ''
 
   @Watch('value')
@@ -37,6 +38,10 @@ export default class TextField extends Vue {
 
   get isEmpty () {
     return this.input.length === 0
+  }
+
+  get valid () {
+    return !this.modified || this.isValid
   }
 }
 </script>

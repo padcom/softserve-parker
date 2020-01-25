@@ -4,53 +4,44 @@
       name="firstName"
       placeholder="First Name"
       v-model="user.firstName"
-      :isEmpty="!user.firstName"
+      :isValid="user.firstName !== ''"
     />
     <TextField
       name="lasttName"
       placeholder="Last Name"
       v-model="user.lastName"
-      :isEmpty="!user.lastName"
+      :isValid="user.lastName !== ''"
     />
-    <TextField
+    <EmailField
       name="email"
       placeholder="Email"
       v-model="user.email"
-      :isEmpty="!user.email"
-      :isInvalid="markInvalid(user.email, isEmailValid)"
     />
     <TextField
       name="plateNumber"
       placeholder="Plate Number"
       v-model="user.plateNumber"
-      :isEmpty="!user.plateNumber"
+      :isValid="user.plateNumber !== ''"
     />
     <TextField
       name="phoneNumber"
       placeholder="Phone Number"
       v-model="user.phoneNumber"
-      :isEmpty="!user.phoneNumber"
+      :isValid="user.phoneNumber !== ''"
     />
-    <TextField
+    <PasswordField
       name="password"
       placeholder="Password"
-      :type="passwordFieldType"
       v-model="user.password"
-      :isEmpty="!user.password"
-      :iconSrc="'/img/password-lookup.png'"
-      :iconClb="() => { passwordFieldType = switchPasswordVisibility(passwordFieldType) }"
+      :isValid="user.password.length > 3"
     />
-    <TextField
+    <PasswordField
       name="passwordConfirmation"
-      :type="passwordConfirmationFieldType"
       placeholder="Retype Passwrod"
       v-model="passwordConfirmation"
-      :isEmpty="!passwordConfirmation"
-      :isInvalid="markInvalid(passwordConfirmation, passwordsAreMatching)"
-      :iconSrc="'/img/password-lookup.png'"
-      :iconClb="() => { passwordConfirmationFieldType = switchPasswordVisibility(passwordConfirmationFieldType) }"
+      :isValid="passwordsAreMatching"
     />
-    <Btn name="signup" fullWidth :disabled="!isFormValid()" v-on:click="() => onSubmit({...user})">
+    <Btn name="signup" fullWidth :disabled="!isFormValid()" @click="$emit('submit', user)">
       Sign up
     </Btn>
     <p class="text-center">
@@ -64,15 +55,18 @@
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import Btn from './Btn'
 import TextField from './TextField'
+import EmailField from './EmailField'
+import PasswordField from './PasswordField'
 
 @Component({
   components: {
     Btn,
     TextField,
+    EmailField,
+    PasswordField,
   },
 })
 export default class SignUpForm extends Vue {
-  @Prop({ type: Function, default: () => {} }) onSubmit
   user = {
     firstName: '',
     lastName: '',
@@ -82,29 +76,17 @@ export default class SignUpForm extends Vue {
     password: '',
   }
 
-  passwordFieldType = 'password'
   passwordConfirmation = ''
-  passwordConfirmationFieldType = 'password'
 
-  markInvalid (field, validationFn) {
-    return field ? !validationFn() : false
+  get passwordsAreMatching () {
+    return this.user.password === this.passwordConfirmation
   }
 
   isFormValid () {
     return (
       this.isFormFilledUp() &&
-      this.passwordsAreMatching() &&
-      this.isEmailValid()
+      this.passwordsAreMatching
     )
-  }
-
-  isEmailValid () {
-    const re = /@softserveinc.com\s*$/
-    return !this.user.email || re.test(this.user.email.toLowerCase())
-  }
-
-  passwordsAreMatching () {
-    return this.user.password === this.passwordConfirmation
   }
 
   isFormFilledUp () {
@@ -117,10 +99,6 @@ export default class SignUpForm extends Vue {
       this.user.password &&
       this.passwordConfirmation,
     )
-  }
-
-  switchPasswordVisibility (currentType) {
-    return currentType === 'password' ? 'text' : 'password'
   }
 }
 </script>

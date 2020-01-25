@@ -7,12 +7,12 @@
         {
           'email-field--full-width': fullWidth,
           'email-field__input--empty': isEmpty,
-          'email-field__input--invalid': !isValid
+          'email-field__input--invalid': !valid
         }
       ]"
       :placeholder="placeholder"
       :value="value"
-      @input="$emit('input', $event.target.value)"
+      @input="modified = true; $emit('input', $event.target.value)"
     />
   </div>
 </template>
@@ -27,6 +27,7 @@ export default class EmailField extends Vue {
   @Prop({ type: String, default: 'Email' }) placeholder
   @Prop({ type: Boolean, default: false }) fullWidth
 
+  modified = false
   input = ''
 
   @Watch('value')
@@ -36,11 +37,15 @@ export default class EmailField extends Vue {
 
   get isValid () {
     const re = /@softserveinc.com\s*$/
-    return !this.input || re.test(this.input.toLowerCase())
+    return re.test(this.input.toLowerCase())
   }
 
   get isEmpty () {
     return this.input.length === 0
+  }
+
+  get valid () {
+    return !this.modified || this.isValid
   }
 }
 </script>

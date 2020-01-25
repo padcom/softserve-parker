@@ -1,6 +1,6 @@
 <template>
   <section class="singup">
-    <SignUpForm v-if="!success && !loading && !error" :onSubmit="createUser" />
+    <SignUpForm v-if="!success && !loading && !error" @submit="createUser" />
     <Loader :loading="loading && !success && !error" />
     <div v-if="success || error" class="singup__done">
       <p v-if="success" class="singup__done__text">Almost there! We've just sent an<br /> email with activation link.</p>

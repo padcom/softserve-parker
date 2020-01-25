@@ -1,7 +1,7 @@
 <template>
   <form @submit.prevent="submit">
     <EmailField v-model="email" fullWidth />
-    <PasswordField placeholder="Password" v-model="password" fullWidth />
+    <PasswordField placeholder="Password" v-model="password" :isValid="password !== ''" fullWidth />
 
     <p v-if="error" class="error">{{ error }}</p>
 
