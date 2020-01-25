@@ -1,6 +1,6 @@
 <template>
   <section class="password-reset-link-sent">
-    <p class="password-reset-link-sent__text">Almost there! We've just sent an email with activation link.</p>
+    <p class="password-reset-link-sent__text">Password reset link has been sent, please check your email.</p>
     <Btn @click="redirectToLoginPage" outlined fullWidth>OK</Btn>
   </section>
 </template>
@@ -22,10 +22,20 @@ export default class PasswordResetLinkSent extends Vue {
 </script>
 
 <style lang="scss">
+@import '../styles/variables';
+
 .password-reset-link-sent {
+  height: calc(100vh - #{$header-height});
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+
   &__text {
     margin-top: 30px;
     margin-bottom: 50px;
+    margin: auto 10px;
+    text-align: center;
   }
 }
 </style>
