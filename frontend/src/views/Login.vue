@@ -3,7 +3,7 @@
     <section class="login-page__avatar">
     </section>
     <LoginForm id="login" class="login-page__form"/>
-    <router-link class="text-center" to="/forgot">Forgot password?</router-link>
+    <router-link class="text-center login-page__forgot-password" to="/forgot">Forgot password?</router-link>
   </section>
 </template>
 
@@ -44,7 +44,12 @@ export default class Login extends Vue {}
     width: 100%;
     align-self: flex-end;
     padding-bottom: 16px;
-    margin-bottom: 16px;
+  }
+
+  &__forgot-password {
+    border-top: 1px solid gray;
+    padding-top: 16px;
+    padding-bottom: 16px;
   }
 }
 </style>
