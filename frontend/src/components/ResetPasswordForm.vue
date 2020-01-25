@@ -1,12 +1,12 @@
 <template>
   <form @submit.prevent="submit">
     <PasswordField
-      placeholder="Password"
+      placeholder="New password"
       v-model="password"
       :isValid="isPasswordValid"
     />
     <PasswordField
-      placeholder="Retype Passwrod"
+      placeholder="Confirm new passwrod"
       v-model="passwordConfirmation"
       :isValid="isPasswordConfirmationValid"
     />
