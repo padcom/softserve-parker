@@ -82,33 +82,41 @@ export class ReservationRequest {
     const [ result ] = await db.execute(`DELETE from reservationRequest WHERE userId = ? AND date = ?`,
       [userId, date]) as OkPacket[]
 
-      if (result.affectedRows == 0) {
-        throw new Error('Requests not found')
-      }
+    if (result.affectedRows === 0) {
+      throw new Error('Requests not found')
+    }
 
     return result.affectedRows
   }
 
   static async updateStatus (id: number, status: string) {
+    console.log('Updating status of request', id, 'to', status)
+
     const [ result ] = await db.execute(
       `UPDATE reservationRequest SET status=? WHERE id = ?`,
       [ status, id ]
     ) as OkPacket[]
 
-    if (result.affectedRows == 0) {
+    if (result.affectedRows === 0) {
       throw new Error('Requests not found')
+    } 
+
+    if (result.affectedRows !== 1) {
+      throw new Error('More than one request has been updated!')
     } 
 
     return result.affectedRows
   }
 
   static async updateRank (id: number, rank: number) {
+    console.log('Updating rank of request', id, 'to', rank)
+
     const [ result ] = await db.execute(
       'UPDATE reservationRequest SET `rank`=? WHERE id = ?',
       [ rank, id ]
     ) as OkPacket[]
 
-    if (result.affectedRows == 0) {
+    if (result.affectedRows === 0) {
       throw new Error('Requests not found')
     } 
 

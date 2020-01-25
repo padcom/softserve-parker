@@ -15,7 +15,7 @@
       class="reservation__date"
       v-bind:class="{'reservation__date--animeted-movement': animetedMovementActive}"
     >
-      {{ formattedDate }}
+      {{ this.request.date | date }} - {{ this.request.status }}
     </p>
     <button
       class="reservation__cancel-desktop-btn"
@@ -26,40 +26,43 @@
   </div>
 </template>
 
-<script>
-import { Vue, Component, Prop } from 'vue-property-decorator'
+<script lang="ts">
 import moment from 'moment'
+import { Vue, Component, Prop } from 'vue-property-decorator'
+import { ReservationRequest } from '../../domain/ReservationRequest'
 
 let initialX = 0
 const CANCELABLE_POSITION = -125
 
-@Component()
+@Component({
+  filters: {
+    date (value: Date) {
+      return moment(value)
+        .format('DD.MM.YYYY, ddd')
+        .toString()
+    },
+  },
+})
 export default class ParkingDatesListItem extends Vue {
-  @Prop({ type: Object, required: true }) request
-  @Prop({ type: Boolean }) touchedDevice
+  @Prop({ type: Object, required: true }) request?: ReservationRequest
+  @Prop({ type: Boolean }) touchedDevice?: boolean
   leftPosition = 0
   positionUnit = 'px'
   animetedMovementActive = false
   cancelIconActive = false
 
-  get formattedDate () {
-    return moment(this.request.date)
-      .format('DD.MM.YYYY, ddd')
-      .toString()
-  }
-
-  handleTouchStart (event) {
+  handleTouchStart (event: TouchEvent) {
     const { clientX } = event.touches[0]
     initialX = clientX
   }
 
-  handleSwipe (event) {
+  handleSwipe (event: TouchEvent) {
     const { clientX } = event.touches[0]
     this.leftPosition = (initialX - clientX) * -1 > 0 ? 0 : (initialX - clientX) * -1
     this.cancelIconActive = this.leftPosition < CANCELABLE_POSITION
   }
 
-  handleTouchEnd (event) {
+  handleTouchEnd (event: TouchEvent) {
     this.animetedMovementActive = true
     if (this.leftPosition > CANCELABLE_POSITION) {
       this.leftPosition = 0

@@ -2,9 +2,14 @@
 
 import 'reflect-metadata'
 import './app/polyfills'
-import { engine } from './app/engine'
+import { engine, createRandomReservationRequests } from './app/engine'
 
 async function main () {
+  if (process.argv.includes('--test')) {
+    // TESTING: create a set of random requests
+    await createRandomReservationRequests(new Date())
+  }
+
   await engine()
   console.log('Done')
 }

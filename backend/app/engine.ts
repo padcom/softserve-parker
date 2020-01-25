@@ -134,7 +134,8 @@ async function calculateRankingForDates (timestamp: Date, timeOfRankingStart: Da
 
   const users = await User.active()
   const history = await History.between(timeOfRankingStart, timestamp)
-  const requests = await ReservationRequest.between(timeOfFirstRequest, timestamp)
+  const requests = (await ReservationRequest.between(timeOfFirstRequest, timestamp))
+    .filter(request => request.status === '')
 
   dumpUsers(users)
   dumpHistoryEntries(history)
@@ -171,6 +172,7 @@ function dumpRankingUsers (users: RankingUser[]) {
 }
 
 export function calculateWinners (users: RankingUser[], numberOfParkingSpots: number) {
+  console.log('--- calculating list of winners')
   function hasRequestedParkingSpot (user: RankingUser) {
     return user.requestTimestamp != null
   }
@@ -188,6 +190,7 @@ function dumpWinners (users: RankingUser[]) {
 }
 
 export function calculateLoosers (users: RankingUser[], numberOfParkingSpots: number) {
+  console.log('--- calculating list of loosers')
   function hasRequestedParkingSpot (user: RankingUser) {
     return user.requestTimestamp != null
   }
@@ -198,8 +201,25 @@ export function calculateLoosers (users: RankingUser[], numberOfParkingSpots: nu
 }
 
 async function createHistoryEntriesForWinners (timestamp: Date, numberOfParkingSpots: number, numberOfRequests: number, winners: RankingUser[]): Promise<number[]> {
+  console.log('--- creating history entries for winners')
   return Promise.all(winners.map(async (user) => {
     return await History.create(timestamp, numberOfParkingSpots, numberOfRequests, user.id, user.plate, user.rank)
+  }))
+}
+
+async function updateWinnerRequests (winners: RankingUser[]) {
+  console.log('--- updating won requests')
+  return Promise.all(winners.map(async (user) => {
+    await ReservationRequest.updateStatus(user.request.id, 'won')
+    await ReservationRequest.updateRank(user.request.id, user.rank)
+  }))
+}
+
+async function updateLoosersRequests (winners: RankingUser[]) {
+  console.log('--- updating lost requests')
+  return Promise.all(winners.map(async (user) => {
+    await ReservationRequest.updateStatus(user.request.id, 'lost')
+    await ReservationRequest.updateRank(user.request.id, user.rank)
   }))
 }
 
@@ -207,7 +227,33 @@ async function createHistoryEntriesForWinners (timestamp: Date, numberOfParkingS
 // async function sendConfirmationEmails (winners: RankingUser[]) {
 // }
 
-async function createRandomReservationRequests (timestamp: Date) {
+export async function engine (): Promise<void> {
+  console.log('Engine running at', new Date())
+
+  const settings = await Settings.all()
+
+  const { users, requests, timestamp } = await calculateCurrentRanking(settings.daysForCalculation)
+  dumpRankingUsers(users)
+
+  const winners = calculateWinners(users, settings.numberOfParkingSpots)
+  dumpWinners(winners)
+  await createHistoryEntriesForWinners(timestamp, settings.numberOfParkingSpots, requests.length, winners)
+  await updateWinnerRequests(winners)
+  const loosers = calculateLoosers(users, settings.numberOfParkingSpots)
+  await updateLoosersRequests(loosers)
+  // await sendConfirmationEmails(winners)
+}
+
+function isTimeToRunTheEngine (deadlineHour: string): boolean {
+  return deadlineHour === format(new Date(), 'HH:mm')
+}
+
+export async function task (): Promise<void> {
+  const settings = await Settings.all()
+  if (isTimeToRunTheEngine(settings.deadlineHour)) engine()
+}
+
+export async function createRandomReservationRequests (timestamp: Date) {
   const users = await User.active()
   const numberOfRequests = Math.floor(Math.random() * users.length) + 1
 
@@ -216,46 +262,4 @@ async function createRandomReservationRequests (timestamp: Date) {
     const date = addMinutes(timestamp, -index - 1)
     return await ReservationRequest.create(user.id, [ date ], false)
   }))
-}
-
-async function updateWinnerRequests (timestamp: Date, winners: RankingUser[]) {
-  return Promise.all(winners.map(user => {
-    ReservationRequest.updateStatus(user.request.id, 'won')
-    ReservationRequest.updateRank(user.request.id, user.rank)
-  }))
-}
-
-async function updateLoosersRequests (timestamp: Date, winners: RankingUser[]) {
-  return Promise.all(winners.map(user => {
-    ReservationRequest.updateStatus(user.request.id, 'lost')
-    ReservationRequest.updateRank(user.request.id, user.rank)
-  }))
-}
-
-function isTimeToRunTheEngine(deadlineHour: string): boolean {
-  return deadlineHour === format(new Date(), 'HH:mm')
-}
-
-export async function engine (): Promise<void> {
-  console.log('Engine running at', new Date())
-
-  // TESTING: create a set of random requests
-  await createRandomReservationRequests(new Date())
-
-  const { users, requests, timestamp } = await calculateCurrentRanking()
-  dumpRankingUsers(users)
-
-  const settings = await Settings.all()
-  const winners = calculateWinners(users, settings.numberOfParkingSpots)
-  dumpWinners(winners)
-  await createHistoryEntriesForWinners(timestamp, settings.numberOfParkingSpots, requests.length, winners)
-  await updateWinnerRequests(timestamp, winners)
-  const loosers = calculateLoosers(users, settings.numberOfParkingSpots)
-  await updateLoosersRequests(timestamp, loosers)
-  // await sendConfirmationEmails(winners)
-}
-
-export async function task (): Promise<void> {
-  const settings = await Settings.all()
-  if (isTimeToRunTheEngine(settings.deadlineHour)) engine()
 }

@@ -11,7 +11,7 @@
     "ci:lint": "eslint \"app/**/*.ts\" --max-warnings 1",
     "ci:prettier": "prettier \"app/**/*.ts\" --check",
     "test": "NODE_ENV=development jest",
-    "run-engine": "ts-node run-engine.ts"
+    "engine": "ts-node run-engine.ts"
   },
   "//": "DO NOT REMOVE the graphql package - it's not used in code but it's a peer dependency",
   "dependencies": {
