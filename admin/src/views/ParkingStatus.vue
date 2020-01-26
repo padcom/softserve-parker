@@ -88,7 +88,7 @@ export default class ParkingStatus extends Vue {
   }
 
   get date () {
-    return format(new Date(), 'YYYY-MM-DD')
+    return format(new Date(), 'yyyy-MM-dd')
   }
 
   get usage () {

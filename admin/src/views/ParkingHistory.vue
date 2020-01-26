@@ -40,6 +40,9 @@ import Information from '@/components/Information.vue'
 import DateSelector from '@/components/DateSelector.vue'
 import { History, HistoryAPI } from '@/domain/History'
 
+// @ts-ignore
+window.formatDate = format
+
 @Component({
   components: {
     DateSelector,
@@ -47,7 +50,7 @@ import { History, HistoryAPI } from '@/domain/History'
   },
   filters: {
     date (value: Date) {
-      return format(value, 'YYYY-MM-DD HH:mm:ss')
+      return format(new Date(value), 'yyyy-MM-dd HH:mm:ss')
     },
   },
 })

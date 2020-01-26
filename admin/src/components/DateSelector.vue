@@ -36,11 +36,11 @@ export default class DateRangeSelector extends Vue {
   @Prop({ type: String, required: false, default: 'Label' }) label?: string
 
   calendar = false
-  date = format(this.value || new Date(), 'YYYY-MM-DD')
+  date = format(this.value || new Date(), 'yyyy-MM-dd')
 
   @Watch('value')
   onValueChanged (newValue: Date) {
-    this.date = format(newValue, 'YYYY-MM-DD')
+    this.date = format(newValue, 'yyyy-MM-dd')
   }
 
   getAllowedDates (val: string) {
@@ -48,7 +48,7 @@ export default class DateRangeSelector extends Vue {
   }
 
   get selectedValueAsDate () {
-    return parse(this.date, 'YYYY-MM-DD', new Date())
+    return parse(this.date, 'yyyy-MM-dd', new Date())
   }
 }
 </script>

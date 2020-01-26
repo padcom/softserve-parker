@@ -62,7 +62,7 @@ function getUtilizationPercentage (entry: Statistics): number {
   },
   filters: {
     date (value: Date) {
-      return format(value, 'YYYY-MM-DD HH:mm:ss')
+      return format(new Date(value), 'yyyy-MM-dd HH:mm:ss')
     },
     percentage (entry: Statistics) {
       const percentage = getUtilizationPercentage(entry)
@@ -114,7 +114,7 @@ export default class ParkingStatistics extends Vue {
 
   get chartValues () {
     return this.statistics.map(entry => ([
-      entry.date,
+      new Date(entry.date),
       getUtilizationPercentage(entry),
     ]))
   }
