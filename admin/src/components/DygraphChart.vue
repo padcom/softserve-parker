@@ -39,7 +39,7 @@ export default class DygraphChart extends Vue {
         ylabel: 'Utilization',
         labelsKMB: true,
         legendFormatter (data: dygraphs.LegendData) {
-          if (data.x) return format(data.x, 'YYYY-MM-DD HH:mm:ss') + ': Utilization ' + data.series[0].y + '%'
+          if (data.x) return format(data.x, 'yyyy-MM-dd HH:mm:ss') + ': Utilization ' + data.series[0].y + '%'
           else return '&nbsp;'
         },
         yRangePad: 10,

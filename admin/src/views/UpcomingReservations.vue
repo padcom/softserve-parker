@@ -48,7 +48,7 @@ import { RequestAPI, Request } from '../domain/Requests'
   },
   filters: {
     date (value: Date) {
-      return format(value, 'YYYY-MM-DD HH:mm:ss')
+      return format(new Date(value), 'yyyy-MM-dd')
     },
     json (value: any) {
       return JSON.stringify(value, null, 2)

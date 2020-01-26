@@ -50,7 +50,7 @@ window.formatDate = format
   },
   filters: {
     date (value: Date) {
-      return format(new Date(value), 'yyyy-MM-dd HH:mm:ss')
+      return format(new Date(value), 'yyyy-MM-dd')
     },
   },
 })
