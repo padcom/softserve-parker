@@ -135,14 +135,6 @@ export default class Home extends Vue {
     }
   }
 
-  async updateRequestStatusForDate (date, status) {
-    logger.debug('updateRequestStatusForDate(', date, ',', status, ')')
-
-    const startOfDay = moment(date).startOf('day')
-    const request = this.getRequestByDate(startOfDay)
-    return this.updateRequestStatus(request, status)
-  }
-
   // --------------------------------------------------------------------------
   // handle Today's date changes
   // --------------------------------------------------------------------------
