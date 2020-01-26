@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { Vue, Component, Prop } from 'vue-property-decorator'
+import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
 import moment from 'moment'
 import Defocuser from 'defocuser'
 
@@ -37,6 +37,8 @@ import WeekDays from './WeekDays'
 import MonthNavigator from './MonthNavigator'
 import Month from './Month'
 import Btn from '../Btn'
+
+window.moment = moment
 
 @Component({
   components: {
@@ -47,13 +49,21 @@ import Btn from '../Btn'
   },
 })
 export default class Calendar extends Vue {
+  @Prop({ type: Object, required: false }) value // moment.range
   @Prop({ type: Boolean, required: false, default: false }) bottom
   @Prop({ type: Array, required: false, default: () => [] }) disabledDates
-  @Prop({ type: Boolean, required: false, default: false })
-  tomorrowWeekendOrAlreadyRequested
+  @Prop({ type: Boolean, required: false, default: false }) tomorrowWeekendOrAlreadyRequested
 
   date = moment().startOf('month')
-  selectedDay = null
+  selectedDay = this.value ? moment.range(this.value) : null
+  mode = 'start' // 'start' | 'end'
+  htmlBody = document.querySelector('body')
+
+  @Watch('value')
+  onValueChanged (newValue) {
+    logger.debug('Calendar.onValueChange(', newValue, ')')
+    this.selectedDay = newValue === null ? null : moment.range(newValue)
+  }
 
   mounted () {
     const defocuser = new Defocuser()
@@ -62,13 +72,11 @@ export default class Calendar extends Vue {
       if (iteration > 0) this.closeCalendar()
       iteration++
     })
+    this.htmlBody.classList.add('no-scroll')
+  }
 
-    if (!this.tomorrowWeekendOrAlreadyRequested) {
-      this.selectedDay = moment.range(
-        moment().add(1, 'day'),
-        moment().add(1, 'day'),
-      )
-    }
+  beforeDestroy () {
+    this.htmlBody.classList.remove('no-scroll')
   }
 
   closeCalendar () {
@@ -76,11 +84,18 @@ export default class Calendar extends Vue {
   }
 
   saveDate () {
-    this.$emit('save', this.selectedDay.start)
+    this.$emit('input', moment.range(this.selectedDay.start, this.selectedDay.end))
+    this.$emit('close')
   }
 
   daySelected (day) {
-    this.selectedDay = moment.range(day, day)
+    if (this.mode === 'start' || day.isBefore(this.selectedDay.start)) {
+      this.selectedDay = moment.range(day, day)
+      this.mode = 'end'
+    } else {
+      this.selectedDay = moment.range(this.selectedDay.start, day)
+      this.mode = 'start'
+    }
   }
 
   nextMonth () {

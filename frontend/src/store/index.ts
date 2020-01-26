@@ -4,7 +4,6 @@ import Vuex from 'vuex'
 import { RootState } from './root-state'
 import auth from './auth'
 import ui from './ui'
-import reservationRequests from './reservationRequests'
 
 import bus from '../bus'
 
@@ -14,7 +13,6 @@ const store = new Vuex.Store<RootState>({
   modules: {
     auth,
     ui,
-    reservationRequests,
   },
 })
 

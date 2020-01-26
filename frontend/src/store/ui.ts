@@ -1,36 +1,47 @@
 import { namespace } from 'vuex-class'
-import { MutationTree, ActionTree } from 'vuex'
+import { MutationTree, ActionTree, GetterTree } from 'vuex'
 import { RootState } from './root-state'
 
 export interface UIState {
-  loading: boolean
+  loadingCount: number
 }
 
 const state: UIState = {
-  loading: false,
+  loadingCount: 0,
+}
+
+const getters: GetterTree<UIState, RootState> = {
+  loading: state => state.loadingCount > 0,
 }
 
 const mutations: MutationTree<UIState> = {
-  setLoading (state, loading) {
-    state.loading = loading
+  startLoading (state) {
+    state.loadingCount++
+  },
+  stopLoading (state) {
+    if (state.loadingCount > 0) {
+      state.loadingCount--
+    }
   },
 }
 
 const actions: ActionTree<UIState, RootState> = {
   startLoading () {
-    this.commit('ui/setLoading', true)
+    this.commit('ui/startLoading')
   },
   stopLoading () {
-    this.commit('ui/setLoading', false)
+    this.commit('ui/stopLoading')
   },
 }
 
 export default {
   namespaced: true,
   state,
+  getters,
   mutations,
   actions,
 }
 
 export const UIState = namespace('ui').State
+export const UIGetter = namespace('ui').Getter
 export const UIAction = namespace('ui').Action

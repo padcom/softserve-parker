@@ -12,7 +12,7 @@
           :class="{
             month__day: true,
             'month__day--disabled':
-              day.isBefore(today) || isWeekend(day) || isInDisabledDates(day),
+              day.isBefore(today) || isWeekend(day) || isInDisabledDates(day) || !day.isSame(date, 'month'),
             'month__day--highlighted':
               day.within(highlighted) && day.isSame(date, 'month'),
             'month__day--selected':
@@ -23,7 +23,7 @@
             'month__day--selected-end':
               day.isSame(selected.end, 'day') && day.isSame(date, 'month'),
             'month__day--in-range':
-              day.within(selected) && day.isSame(date, 'month')
+              day.within(selected)
           }"
         >
           <span>{{ day.format('D') }}</span>

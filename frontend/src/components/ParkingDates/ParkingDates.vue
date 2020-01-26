@@ -13,34 +13,22 @@
       v-for="request in requests"
       :key="request.id"
       :request="request"
-      :touchedDevice="touchedDevice"
-      @action="onRemoveStart"
+      @action="remove(request)"
     />
 
-    <Modal
-      v-if="showModalConfirm"
-      :actions="confirmActions"
-      @close="closeConfirmModal"
-      @remove="removeItem"
-      >
+    <Modal ref="confirmation" :actions="[ { result: 'ok', text: 'Yes' }, { result: 'cancel', text: 'No' }]">
       Do you want to revoke your parking request?
     </Modal>
 
-    <Modal
-      :actions="infoActions"
-      @revoke="closeInfoModal"
-      v-if="showModalInfo"
-      >
-      {{infoMessage}}
+    <Modal ref="information" :actions="[ { result: 'ok', text: 'OK' } ]">
+      Do you want to revoke your parking request?
     </Modal>
   </div>
 </template>
 
 <script>
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import isTouchDevice from 'is-touch-device'
-import { ReservationRequestsAction } from '@/store/reservationRequests'
-import { APP_MESSAGES } from '@/app-statuses'
+
 import Modal from '@/components/Modal.vue'
 import ParkingDatesListItem from './ParkingDatesListItem'
 
@@ -52,70 +40,12 @@ import ParkingDatesListItem from './ParkingDatesListItem'
 })
 export default class ParkingDates extends Vue {
   @Prop({ type: Array, default: () => [] }) requests
-  @ReservationRequestsAction cancelRequest
 
-  touchedDevice = false
-  activeElement = null
-  showModalConfirm = false
-  confirmActions = [
-    {
-      outlined: false,
-      fullWidth: true,
-      emitType: 'close',
-      text: 'No',
-    },
-    {
-      outlined: true,
-      fullWidth: true,
-      emitType: 'remove',
-      text: 'Yes',
-    },
-  ]
-
-  showModalInfo = false
-  infoMessage = ''
-  infoActions = [
-    {
-      outlined: true,
-      fullWidth: true,
-      emitType: 'revoke',
-      text: 'Ok',
-    },
-  ]
-
-  mounted () {
-    this.touchedDevice = isTouchDevice()
-  }
-
-  onRemoveStart (element) {
-    this.activeElement = element
-    this.showModalConfirm = true
-  }
-
-  async removeItem () {
-    const id = this?.activeElement?.request?.id
-
-    try {
-      if (id) await this.cancelRequest(id)
-      this.activeElement = null
-      this.infoMessage = APP_MESSAGES.REVOKE_SUUCCESS
-    } catch (e) {
-      this.infoMessage = APP_MESSAGES.ERROR
-    } finally {
-      this.showModalConfirm = false
-      this.showModalInfo = true
+  async remove (request) {
+    const action = await this.$refs.confirmation.show()
+    if (action === 'ok') {
+      this.$emit('revoke', request)
     }
-  }
-
-  closeConfirmModal () {
-    if (this?.activeElement?.leftPosition) {
-      this.activeElement.leftPosition = 0
-    }
-    this.showModalConfirm = false
-  }
-
-  closeInfoModal () {
-    this.showModalInfo = false
   }
 }
 </script>

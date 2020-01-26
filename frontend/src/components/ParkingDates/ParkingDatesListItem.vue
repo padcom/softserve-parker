@@ -28,6 +28,7 @@
 
 <script lang="ts">
 import moment from 'moment'
+import isTouchDevice from 'is-touch-device'
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import { ReservationRequest } from '../../domain/ReservationRequest'
 
@@ -45,11 +46,14 @@ const CANCELABLE_POSITION = -125
 })
 export default class ParkingDatesListItem extends Vue {
   @Prop({ type: Object, required: true }) request?: ReservationRequest
-  @Prop({ type: Boolean }) touchedDevice?: boolean
   leftPosition = 0
   positionUnit = 'px'
   animetedMovementActive = false
   cancelIconActive = false
+
+  get touchedDevice () {
+    return isTouchDevice()
+  }
 
   handleTouchStart (event: TouchEvent) {
     const { clientX } = event.touches[0]

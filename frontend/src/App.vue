@@ -15,7 +15,8 @@ import AppHeader from './components/AppHeader'
 import Loader from './components/Loader'
 import OfflineInfo from './components/OfflineInfo'
 import { AuthGetter } from '@/store/auth'
-import { UIState, UIAction } from '@/store/ui'
+import { UIGetter, UIAction } from '@/store/ui'
+import logger from './logger'
 
 @Component({
   components: {
@@ -26,15 +27,17 @@ import { UIState, UIAction } from '@/store/ui'
 })
 export default class App extends Vue {
   @AuthGetter isLoggedIn
-  @UIState loading
+  @UIGetter loading
   @UIAction startLoading
   @UIAction stopLoading
 
   mounted () {
     this.$bus.on('request-begin', () => {
+      logger.debug('started loading')
       this.startLoading()
     })
     this.$bus.on('request-end', () => {
+      logger.debug('finished loading')
       this.stopLoading()
     })
   }

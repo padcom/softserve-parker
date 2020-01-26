@@ -60,12 +60,16 @@ export class ReservationRequestResolver {
   }
 
   @Mutation(() => Number)
-  async cancelReservationRequest (
+  async setReservationRequestStatus (
     @Arg('id', () => Int!, {
       description: 'Id of request for cancelation',
     })
-    id: number
+    id: number,
+    @Arg('status', () => String!, {
+      description: 'New status',
+    })
+    status: string
   ) {
-    return ReservationRequest.cancelById(id)
+    return ReservationRequest.updateStatus(id, status)
   }
 }

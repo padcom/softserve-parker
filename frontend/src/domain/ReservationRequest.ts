@@ -1,6 +1,13 @@
 import { query } from '@/graphql'
+import logger from '@/logger'
 
-export class ReservationRequest {
+export interface ReservationRequest {
+  id: number
+  date: Date
+  status: string
+}
+
+export class ReservationRequestAPI {
   static async fetchByUserId (
     userId: number,
     from: Date = new Date(),
@@ -19,14 +26,20 @@ export class ReservationRequest {
     return reservationRequests
   }
 
-  static async cancel (requestId: number): Promise<number | Error> {
+  static async setRequestStatus (id: number, status: string): Promise<number | Error> {
+    logger.debug('ReservationRequestAPI.setRequestStatus(', id, ',', status, ')')
+
     return query(
       `mutation
-      cancelReservationRequest($id: Int!) {
-        cancelReservationRequest(id: $id)
+      setReservationRequestStatus($id: Int!, $status: String!) {
+        setReservationRequestStatus(id: $id, status: $status)
       }`,
-      { id: requestId }
+      { id: Number(id), status }
     )
+  }
+
+  static async cancel (requestId: number): Promise<number | Error> {
+    return this.setRequestStatus(requestId, 'cancelled')
   }
 
   static async createRequest (

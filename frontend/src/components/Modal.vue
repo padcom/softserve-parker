@@ -1,5 +1,5 @@
 <template>
-  <div class="modal">
+  <div class="modal" v-if="visible">
     <div class="modal__wrapper">
       <p class="modal__text">
         <slot />
@@ -9,7 +9,7 @@
           v-for="(action, index) in actions"
           :key="index"
           v-bind="action"
-          @click="$emit(action.emitType)"
+          @click="close(action.result)"
         >{{ action.text }}</Btn>
       </div>
     </div>
@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { Prop, Component, Vue } from 'vue-property-decorator'
+import { Prop, Component, Vue, Watch } from 'vue-property-decorator'
 import Btn from './Btn'
 
 @Component({
@@ -27,6 +27,23 @@ import Btn from './Btn'
 })
 export default class Modal extends Vue {
   @Prop({ type: Array, required: true }) actions
+
+  visible = false
+  resolve = null
+
+  close (result) {
+    this.visible = false
+    if (this.resolve) {
+      this.resolve(result)
+    }
+  }
+
+  async show () {
+    this.visible = true
+    return new Promise(resolve => {
+      this.resolve = resolve
+    })
+  }
 }
 </script>
 
