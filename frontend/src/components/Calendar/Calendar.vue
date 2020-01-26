@@ -11,8 +11,8 @@
     <WeekDays />
     <Month
       :date="date"
-      @change="daySelected"
-      :selected="selectedDay !== null ? selectedDay : undefined"
+      @change="selectDay"
+      :selected="selected"
       :disabledDates="disabledDates"
     />
     <Btn
@@ -21,7 +21,7 @@
       outlined
       fullWidth
       @click="saveDate"
-      :disabled="selectedDay === null"
+      :disabled="selected === null"
     >
       add this date
     </Btn>
@@ -49,23 +49,23 @@ window.moment = moment
   },
 })
 export default class Calendar extends Vue {
-  @Prop({ type: Object, required: false }) value // moment.range
+  @Prop({ type: [ Object, null ], required: true }) value // moment.range
   @Prop({ type: Boolean, required: false, default: false }) bottom
   @Prop({ type: Array, required: false, default: () => [] }) disabledDates
-  @Prop({ type: Boolean, required: false, default: false }) tomorrowWeekendOrAlreadyRequested
 
   date = moment().startOf('month')
-  selectedDay = this.value ? moment.range(this.value) : null
+  selected = null
   mode = 'start' // 'start' | 'end'
   htmlBody = document.querySelector('body')
 
   @Watch('value')
   onValueChanged (newValue) {
     logger.debug('Calendar.onValueChange(', newValue, ')')
-    this.selectedDay = newValue === null ? null : moment.range(newValue)
+    this.selected = this.value ? this.value.clone() : null
   }
 
   mounted () {
+    this.selected = this.value ? this.value.clone() : null
     const defocuser = new Defocuser()
     let iteration = 0
     defocuser.addElement(this.$el, 'bubbling', () => {
@@ -84,16 +84,16 @@ export default class Calendar extends Vue {
   }
 
   saveDate () {
-    this.$emit('input', moment.range(this.selectedDay.start, this.selectedDay.end))
+    this.$emit('input', moment.range(this.selected.start, this.selected.end))
     this.$emit('close')
   }
 
-  daySelected (day) {
-    if (this.mode === 'start' || day.isBefore(this.selectedDay.start)) {
-      this.selectedDay = moment.range(day, day)
+  selectDay (day) {
+    if (this.mode === 'start' || day.isBefore(this.selected.start)) {
+      this.selected = moment.range(day, day)
       this.mode = 'end'
     } else {
-      this.selectedDay = moment.range(this.selectedDay.start, day)
+      this.selected = moment.range(this.selected.start, day)
       this.mode = 'start'
     }
   }

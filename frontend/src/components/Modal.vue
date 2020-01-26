@@ -79,9 +79,11 @@ export default class Modal extends Vue {
 
   &__actions {
     display: flex;
+    justify-content: center;
 
     button {
       margin: 0 10px 0 0;
+      padding: 10px 30px;
 
       &:nth-last-of-type(1) {
         margin-right: 0;

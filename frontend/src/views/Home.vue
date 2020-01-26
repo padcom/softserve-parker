@@ -13,8 +13,8 @@
       <div class="container">
         <Calendar bottom
           v-if="showCalendar"
-          :disabledDates="disabledCalendarDates"
           v-model="selectedRequestDays"
+          :disabledDates="disabledCalendarDates"
           @input="requestReservationsForRange"
           @close="closeCalendar"
         />
@@ -220,7 +220,7 @@ export default class Home extends Vue {
     return Promise.all(
       dates
         .filter(date => !this.isAlreadyRequested(date))
-        .map(async (date) => this.pickDate(date))
+        .map(async (date) => this.createRequestForDate(date))
     )
   }
 

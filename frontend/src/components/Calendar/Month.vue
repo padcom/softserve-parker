@@ -16,14 +16,13 @@
             'month__day--highlighted':
               day.within(highlighted) && day.isSame(date, 'month'),
             'month__day--selected':
-              day.isSame(selected.start, 'day') ||
-              day.isSame(selected.end, 'day'),
+              selected && (day.isSame(selected.start, 'day') || day.isSame(selected.end, 'day')),
             'month__day--selected-start':
-              day.isSame(selected.start, 'day') && day.isSame(date, 'month'),
+              selected && day.isSame(selected.start, 'day') && day.isSame(date, 'month'),
             'month__day--selected-end':
-              day.isSame(selected.end, 'day') && day.isSame(date, 'month'),
+              selected && day.isSame(selected.end, 'day') && day.isSame(date, 'month'),
             'month__day--in-range':
-              day.within(selected)
+              (selected && day.within(selected)) && !isWeekend(day)
           }"
         >
           <span>{{ day.format('D') }}</span>
