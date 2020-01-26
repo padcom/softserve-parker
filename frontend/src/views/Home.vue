@@ -4,8 +4,6 @@
       {{ infoMessage }}
     </Modal>
 
-    {{ disabledCalendarDates }}
-
     <Title borderBottom>Parking dates</Title>
     <div class="home-page__content">
       <div class="home-page__content__dates" v-if="!loading">
