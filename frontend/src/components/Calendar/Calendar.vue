@@ -15,13 +15,13 @@
       :selected="selectedDay !== null ? selectedDay : undefined"
       :disabledDates="disabledDates"
     />
-
     <Btn
       class="calendar__button"
       icon="/img/plus.png"
       outlined
       fullWidth
       @click="saveDate"
+      :disabled="selectedDay === null"
     >
       add this date
     </Btn>

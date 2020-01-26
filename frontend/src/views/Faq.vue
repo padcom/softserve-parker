@@ -27,8 +27,14 @@
 <script>
 import { Vue, Component } from 'vue-property-decorator'
 
+import { query } from '../graphql'
+
 @Component()
-export default class Faq extends Vue {}
+export default class Faq extends Vue {
+  async mounted () {
+    await query('query { isLoggedIn }')
+  }
+}
 </script>
 
 <style lang="scss">

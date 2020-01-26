@@ -101,6 +101,13 @@ const actions: ActionTree<AuthState, RootState> = {
     bus.emit('user-logged-out', user)
   },
 
+  async clear ({ commit, state }): Promise<void> {
+    const user = state.user
+    commit('setUser', null)
+    commit('setToken', null)
+    bus.emit('user-logged-out', user)
+  },
+
   async confirmRegistration ({ commit }, userId: number): Promise<void> {
     await API.confirmRegistration(userId)
   },

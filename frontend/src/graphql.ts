@@ -1,10 +1,12 @@
 import axios from 'axios'
+import bus from './bus'
 
 export async function query (query: string, variables: object = {}) {
   const router = require('@/router').default
   const token = window.localStorage.getItem('parker:token')
 
   if (!token) {
+    bus.emit('clear-credentials')
     await router.push('/login')
     throw new Error('User unauthenticated')
   } else {

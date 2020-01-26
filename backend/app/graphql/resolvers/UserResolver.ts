@@ -3,6 +3,12 @@ import { User } from '../../domain/User'
 
 @Resolver(User)
 export class UserResolver {
+  @Query(() => Boolean!)
+  async isLoggedIn () {
+    // authentication will return an error if not logged in
+    return true
+  }
+
   @Query(() => [User], {
     description: 'Returns all users',
   })

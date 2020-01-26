@@ -6,12 +6,20 @@ import auth from './auth'
 import ui from './ui'
 import reservationRequests from './reservationRequests'
 
+import bus from '../bus'
+
 Vue.use(Vuex)
 
-export default new Vuex.Store<RootState>({
+const store = new Vuex.Store<RootState>({
   modules: {
     auth,
     ui,
     reservationRequests,
   },
+})
+
+export default store
+
+bus.on('clear-credentials', () => {
+  store.dispatch('auth/clear')
 })
