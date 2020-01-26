@@ -49,7 +49,7 @@ window.moment = moment
   },
 })
 export default class Calendar extends Vue {
-  @Prop({ type: [ Object, null ], required: true }) value // moment.range
+  @Prop({ type: Object, required: false }) value // moment.range
   @Prop({ type: Boolean, required: false, default: false }) bottom
   @Prop({ type: Array, required: false, default: () => [] }) disabledDates
 
