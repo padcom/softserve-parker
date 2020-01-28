@@ -10,9 +10,12 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* && \
     rm -rf /tmp/*
 
-RUN a2enmod proxy_http
+RUN a2enmod proxy_http ssl
 
 ADD 001-parker.conf /etc/apache2/sites-enabled/
+ADD chain.crt /etc/ssl/certs/
+ADD parker.aplaline.com.crt /etc/ssl/certs/
+ADD parker.aplaline.com.key /etc/ssl/private/
 
 ADD start.sh /
 
