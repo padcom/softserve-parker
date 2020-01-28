@@ -1,7 +1,7 @@
 import nodemailer from 'nodemailer'
 import env from './config'
 
-const { SMTP_PORT, SMTP_HOST, SMTP_USER, SMTP_PASSWORD } = env
+const { SMTP_PORT, SMTP_HOST, SMTP_USER, SMTP_PASSWORD, SMTP_SECURE } = env
 
 //
 // To start an SMTP server locally use the following command:
@@ -16,12 +16,12 @@ const { SMTP_PORT, SMTP_HOST, SMTP_USER, SMTP_PASSWORD } = env
 export function mailer () {
   const settings = {
     host: SMTP_HOST,
-    port: SMTP_PORT,
+    port: Number(SMTP_PORT),
+    secure: Boolean(SMTP_SECURE),
     auth: undefined,
   }
   if (SMTP_HOST !== 'localhost' && SMTP_USER && SMTP_PASSWORD) {
     settings.auth = {
-      secure: true,
       user: SMTP_USER,
       pass: SMTP_PASSWORD,
     }
