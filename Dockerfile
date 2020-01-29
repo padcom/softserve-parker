@@ -7,6 +7,7 @@ ARG port=3000
 
 ENV CONFIRM_URL_BASE=http://$domain
 
+COPY common /common/
 COPY backend/dist /app/
 COPY backend/node_modules /app/node_modules
 COPY backend/private.key /app/

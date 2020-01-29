@@ -98,7 +98,6 @@ export async function logout (req: Request, res: Response) {
     res.status(200).end('User logged out successfuly')
   } catch (e) {
     logger.error(e)
-    console.log('Here..', e)
     const status = getErrorStatus(e)
     res.status(status).end(e.message)
   }

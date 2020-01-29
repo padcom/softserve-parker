@@ -6,7 +6,7 @@ export async function query<T> (query: string, variables: object = {}) {
   const router = require('@/router').default
   const token = window.localStorage.getItem('parker:token')
 
-  if (!token) {
+  if (!token && query !== 'query { today, deadline }') {
     bus.emit('clear-credentials')
     await router.push('/login')
     throw new Error('User unauthenticated')

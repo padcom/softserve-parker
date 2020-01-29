@@ -38,10 +38,13 @@ export const graphql = schema
       },
 
       async context ({ req }) {
-        const [ , token ] = req.headers.authorization.split(' ')
-        const data = jwt.decode(token) as TokenData
-
-        return { user: data.email } as GraphQLContext
+        if (req.body.query === 'query { today, deadline }') {
+          return {}
+        } else {
+          const [ , token ] = req.headers.authorization.split(' ')
+          const data = jwt.decode(token) as TokenData
+          return { user: data.email } as GraphQLContext
+        }
       },
     })
 

@@ -1,6 +1,6 @@
 const MILISECONDS_IN_A_DAY = 86400000
 
-export default function addDays (date: string, numberOfDaysToAdd: number) {
+module.exports = function addDays (date, numberOfDaysToAdd) {
   try {
     const newDate = new Date(new Date(date).getTime() + numberOfDaysToAdd * MILISECONDS_IN_A_DAY)
     return newDate.toISOString().split('T')[0]

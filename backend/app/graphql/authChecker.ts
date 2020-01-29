@@ -3,6 +3,7 @@ import { User } from '../domain/User'
 import { GraphQLContext } from './context';
 
 export const authChecker: AuthChecker<GraphQLContext> = async ({ context }, roles) => {
+
   if (roles.length === 0) {
     return context.user !== undefined;
   }

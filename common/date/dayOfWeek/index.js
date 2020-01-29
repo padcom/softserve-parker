@@ -1,4 +1,4 @@
-export default function dayOfWeek (date: string) {
+module.exports = function dayOfWeek (date) {
   try {
     return new Date(date).getDay()
   } catch (e) {

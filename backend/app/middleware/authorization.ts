@@ -23,6 +23,11 @@ export async function isAuthorized (req: Request, res: Response, next: NextFunct
     return next()
   }
 
+  if (req.method === 'POST' && req.body.query === 'query { today, deadline }') {
+    // allowing for date query to not be authorized
+    return next()
+  }
+
   try {
     const userToken: string = getTokenFromRequest(req)
     const token: string = await Session.fetchToken(userToken)
