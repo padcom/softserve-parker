@@ -17,7 +17,7 @@ export const graphql = schema
   .then((resolvedSchema): ApolloServer => {
     const server = new ApolloServer({
       schema: resolvedSchema,
-      introspection: [ 'development', 'qa' ].includes(NODE_ENV),
+      introspection: [ 'development' ].includes(NODE_ENV),
 
       formatResponse: (resp): unknown => {
         // Introspection queries are gigantic (+200 lines)

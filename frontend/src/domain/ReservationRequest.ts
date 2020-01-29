@@ -3,21 +3,21 @@ import logger from '@/logger'
 
 export interface ReservationRequest {
   id: number
-  date: Date
+  date: string
   status: string
 }
 
 export class ReservationRequestAPI {
   static async fetchByUserId (
     userId: number,
-    from: Date = new Date(),
+    from: string,
     fields: string[] = [ 'id', 'date', 'status' ]
   ) {
     const { reservationRequests } = await query(
       `query
-      ReservationRequests($from: DateTime!, $userId: Int!) {
+      ReservationRequests($from: String!, $userId: Int!) {
         reservationRequests(from: $from, userId: $userId) {
-          ${fields.join('\n')}
+          ${fields.join(',')}
         }
       }`,
       { from, userId }
@@ -44,14 +44,14 @@ export class ReservationRequestAPI {
 
   static async createRequest (
     userId: number,
-    dates: Date[],
+    dates: string[],
     fields: string[] = [ 'id', 'date', 'status' ]
   ) {
     const { reservationRequests } = await query(
       `mutation
-      CreateReservationRequest($dates: [DateTime!]!, $userId: Int!) {
+      CreateReservationRequest($dates: [String!]!, $userId: Int!) {
         createReservationRequest(dates: $dates, userId: $userId) {
-          ${fields.join('\n')}
+          ${fields.join(',')}
         }
       }`,
       { dates, userId }

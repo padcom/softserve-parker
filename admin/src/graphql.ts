@@ -1,4 +1,5 @@
 import axios from 'axios'
+import logger from './logger'
 
 export async function query<T> (query: string, variables: object = {}) {
   const store = require('@/store').default
@@ -6,7 +7,7 @@ export async function query<T> (query: string, variables: object = {}) {
     'Authorization': `Bearer ${store.state.auth.token} `,
   }
 
-  return axios
+  const result = await axios
     .post('/graphql', { query, variables }, { headers })
     .then(response => {
       if (!response.data) {
@@ -18,4 +19,10 @@ export async function query<T> (query: string, variables: object = {}) {
         return response.data.data as T
       }
     })
+
+  logger.debug('GraphQL:', query)
+  logger.debug('GraphQL variables:', variables)
+  logger.debug('GraphQL result:', result)
+
+  return result
 }

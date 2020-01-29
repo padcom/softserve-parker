@@ -22,7 +22,7 @@
         hide-default-footer
       >
         <template v-slot:item.date="{ item }">
-          {{ item.date | date }}
+          {{ item.date }}
         </template>
       </v-data-table>
     </v-card>
@@ -31,11 +31,7 @@
 </template>
 
 <script lang="ts">
-import subMonths from 'date-fns/subMonths'
-import endOfDay from 'date-fns/endOfDay'
-import addDays from 'date-fns/addDays'
-import format from 'date-fns/format'
-import parse from 'date-fns/parse'
+import addDays from 'common/date/addDays'
 import { Component, Vue } from 'vue-property-decorator'
 import Information from '@/components/Information.vue'
 import DateSelector from '@/components/DateSelector.vue'
@@ -47,9 +43,6 @@ import { RequestAPI, Request } from '../domain/Requests'
     Information,
   },
   filters: {
-    date (value: Date) {
-      return format(new Date(value), 'yyyy-MM-dd')
-    },
     json (value: any) {
       return JSON.stringify(value, null, 2)
     },
@@ -65,7 +58,7 @@ export default class UpcomingReservations extends Vue {
   ]
 
   reservations = [] as Request[]
-  startDate = addDays(new Date(), 1)
+  startDate = this.$store.state.time.tomorrow
   openCalendar = false
   loading = false
   search = ''
@@ -77,7 +70,7 @@ export default class UpcomingReservations extends Vue {
   async load () {
     this.loading = true
     const from = this.startDate
-    const to = addDays(this.startDate, 100)
+    const to = addDays(this.startDate, 1000)
     this.reservations = []
     try {
       this.reservations = await RequestAPI.upcoming()

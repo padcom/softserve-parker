@@ -7,10 +7,10 @@ export class StatisticsResolver {
     description: 'Returns parking usage history',
   })
   async statistics (
-    @Arg('from', () => Date!)
-    from: Date,
-    @Arg('to', () => Date!)
-    to: Date,
+    @Arg('from', () => String!)
+    from: string,
+    @Arg('to', () => String!)
+    to: string,
   ) {
     return Statistics.between(from, to)
   }

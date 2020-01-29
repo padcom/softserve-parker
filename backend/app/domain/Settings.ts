@@ -2,6 +2,12 @@ import { Field, ObjectType } from 'type-graphql'
 import { RowDataPacket, OkPacket } from 'mysql'
 import { db } from '../db'
 
+import parse from 'date-fns/parse'
+import isAfter from 'date-fns/isAfter'
+import startOfDay from 'date-fns/startOfDay'
+import addDays from 'date-fns/addDays'
+import format from 'date-fns/format'
+
 @ObjectType({
   description: 'Object representing system settings.',
 })
@@ -36,5 +42,24 @@ export class Settings {
     }
 
     return value
+  }
+
+  static async deadline () {
+    const [ results ] = await db.execute('SELECT value FROM settings WHERE name=?', [ 'deadlineHour' ]) as RowDataPacket[][]
+
+    if (results.length !== 1) {
+      throw new Error('Invalid settings')
+    }
+
+    return results[0].value
+  }
+
+  static async today () {
+    const deadline = parse(await this.deadline(), 'HH:mm', new Date())
+    const today = startOfDay(new Date())
+    const tomorrow = startOfDay(addDays(new Date(), 1))
+    const date = isAfter(new Date(), deadline) ? tomorrow : today;
+
+    return format(date, 'yyyy-MM-dd')
   }
 }

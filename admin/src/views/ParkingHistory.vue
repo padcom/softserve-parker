@@ -12,7 +12,7 @@
           hide-details />
       </v-card-title>
       <v-card-title>
-        <DateSelector label="Select date" v-model="inputDate" @input="load" />
+        <DateSelector label="Select date" v-model="date" @input="load" />
       </v-card-title>
       <v-data-table class="elevation-1"
         :headers="headers"
@@ -22,7 +22,7 @@
         disable-pagination
         hide-default-footer>
         <template v-slot:item.date="{ item }">
-          {{ item.date | date }}
+          {{ item.date }}
         </template>
       </v-data-table>
     </v-card>
@@ -39,6 +39,7 @@ import { Component } from 'vue-property-decorator'
 import Information from '@/components/Information.vue'
 import DateSelector from '@/components/DateSelector.vue'
 import { History, HistoryAPI } from '@/domain/History'
+import { TimeState } from '../store/time'
 
 // @ts-ignore
 window.formatDate = format
@@ -48,26 +49,21 @@ window.formatDate = format
     DateSelector,
     Information,
   },
-  filters: {
-    date (value: Date) {
-      return format(new Date(value), 'yyyy-MM-dd')
-    },
-  },
 })
 export default class ParkingStatus extends Vue {
   headers = [
+    { text: 'Date', align: 'left', sortable: true, value: 'date' },
     { text: 'First name', align: 'left', sortable: true, value: 'user.firstName' },
     { text: 'Last name', align: 'left', sortable: true, value: 'user.lastName' },
     { text: 'Email', align: 'left', sortable: true, value: 'user.email' },
     { text: 'Phone', align: 'left', sortable: true, value: 'user.phone' },
     { text: 'Plate', align: 'left', sortable: true, value: 'plate' },
-    { text: 'Date', align: 'left', sortable: true, value: 'date' },
     { text: 'Status', align: 'left', sortable: true, value: 'state' },
   ]
 
   history = [] as History[]
   search = ''
-  inputDate = new Date()
+  date = this.$store.state.time.today
   loading = false
 
   mounted () {
@@ -76,11 +72,9 @@ export default class ParkingStatus extends Vue {
 
   async load () {
     this.loading = true
-    const from = startOfDay(this.inputDate)
-    const to = endOfDay(this.inputDate)
     this.history = []
     try {
-      this.history = await HistoryAPI.between(from, to)
+      this.history = await HistoryAPI.between(this.date, this.date)
     } catch (e) {
       // @ts-ignore
       this.$refs.info.showError(e.message as string)

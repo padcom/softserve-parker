@@ -7,14 +7,14 @@ export class ReservationRequestResolver {
     description: 'Returns all reservation requests in someday',
   })
   async reservationRequestsInDay (
-    @Arg('from', () => Date!, {
+    @Arg('from', () => String!, {
       description: 'This argument defines date from which reservation requests will be fetch',
     })
-    from: Date,
-    @Arg('to', () => Date!, {
+    from: string,
+    @Arg('to', () => String!, {
       description: 'This argument defines date to which reservation requests will be fetch',
     })
-    to: Date,
+    to: string,
   ) {
     return ReservationRequest.between(from, to)
   }
@@ -27,10 +27,10 @@ export class ReservationRequestResolver {
       description: 'This argument defines for which user fetch reservation requests.',
     })
     userId: number,
-    @Arg('from', () => Date!, {
+    @Arg('from', () => String!, {
       description: 'This argument defines date from which reservation requests will be fetch',
     })
-    from: Date,
+    from: string,
   ) {
     return ReservationRequest.byUserId(userId, from)
   }
@@ -51,10 +51,10 @@ export class ReservationRequestResolver {
       description: 'User for which will be created requests.',
     })
     userId: number,
-    @Arg('dates', () => [Date!]!, {
+    @Arg('dates', () => [String!]!, {
       description: 'Dates for which will be created requests.',
     })
-    dates: Date[]
+    dates: string[]
   ) {
     return ReservationRequest.create(userId, dates)
   }

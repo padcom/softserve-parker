@@ -20,35 +20,31 @@
         :dark="true"
         :allowed-dates="getAllowedDates"
         first-day-of-week="1"
-        @input="$emit('input', selectedValueAsDate)"
+        @input="$emit('input', date)"
       />
     </v-menu>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Watch, Vue } from 'vue-property-decorator'
-import format from 'date-fns/format'
-import parse from 'date-fns/parse'
+
+import isWeekendDay from 'common/date/isWeekendDay'
 
 @Component({})
 export default class DateRangeSelector extends Vue {
-  @Prop({ type: Date, required: true }) value?: Date
+  @Prop({ type: String, required: true }) value?: string
   @Prop({ type: String, required: false, default: 'Label' }) label?: string
 
   calendar = false
-  date = format(this.value || new Date(), 'yyyy-MM-dd')
+  date = this.value
 
   @Watch('value')
-  onValueChanged (newValue: Date) {
-    this.date = format(newValue, 'yyyy-MM-dd')
+  onValueChanged (newValue: string) {
+    this.date = newValue
   }
 
-  getAllowedDates (val: string) {
-    return ![0, 7].includes(new Date(val).getDay())
-  }
-
-  get selectedValueAsDate () {
-    return parse(this.date, 'yyyy-MM-dd', new Date())
+  getAllowedDates (date: string) {
+    return !isWeekendDay(date)
   }
 }
 </script>

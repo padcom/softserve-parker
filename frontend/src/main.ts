@@ -18,9 +18,12 @@ moment.updateLocale('en', {
   },
 })
 
-// @ts-ignore
-window.app = new Vue({
-  router,
-  store,
-  render: (h: any) => h(App),
-}).$mount('#app')
+store.dispatch('time/update').then(() => {
+  setInterval(() => store.dispatch('time/update'), 10000)
+  // @ts-ignore
+  window.app = new Vue({
+    router,
+    store,
+    render: (h: any) => h(App),
+  }).$mount('#app')
+})

@@ -52,8 +52,9 @@ import Calendar from '../components/Calendar/Calendar'
 import Modal from '../components/Modal'
 
 import { ReservationRequestAPI } from '../domain/ReservationRequest'
+import { TimeState } from '../store/time'
 
-const TODAY_UPDATE_RATE = 60000 // ms
+import dayOfWeek from 'common/date/dayOfWeek'
 
 @Component({
   components: {
@@ -113,9 +114,8 @@ export default class Home extends Vue {
   async createRequestForDate (date) {
     logger.debug('createRequestForDate(', date, ')')
 
-    const startOfDay = moment(date).startOf('day')
     try {
-      await ReservationRequestAPI.createRequest(this.user.id, startOfDay)
+      await ReservationRequestAPI.createRequest(this.user.id, date)
       await this.loadRequests()
     } catch (e) {
       this.error(e.message)
@@ -139,33 +139,16 @@ export default class Home extends Vue {
   // handle Today's date changes
   // --------------------------------------------------------------------------
 
-  today = new Date()
-  todayUpdateTimer = null
-
-  initTodayUpdateTimer () {
-    this.todayUpdateTimer = setInterval(() => {
-      this.today = moment().startOf('day').toDate()
-    }, TODAY_UPDATE_RATE)
-  }
-
-  destroyTodayUpdateTimer () {
-    if (this.todayUpdateTimer) {
-      clearInterval(this.todayUpdateTimer)
-      this.todayUpdateTimer = null
-    }
-  }
+  @TimeState today
+  @TimeState tomorrow
 
   @Watch('today')
   async onTodayChanged (newValue) {
     this.loadRequests()
   }
 
-  get tomorrow () {
-    return moment(this.today).add(1, 'day').toDate()
-  }
-
   get isTomorrowWeekend () {
-    return [ 0, 6 ].includes(this.tomorrow.getDay())
+    return [ 0, 6 ].includes(dayOfWeek(this.tomorrow))
   }
 
   // --------------------------------------------------------------------------
@@ -229,6 +212,7 @@ export default class Home extends Vue {
     const dates = Array
       .from(range.by('day'))
       .filter(date => !this.isWeekend(date))
+      .map(date => date.format('YYYY-MM-DD'))
 
     await this.createReservationRequests(dates)
     await this.updateReservationRequests(dates, '')
@@ -256,12 +240,7 @@ export default class Home extends Vue {
   // --------------------------------------------------------------------------
 
   mounted () {
-    this.initTodayUpdateTimer()
     this.loadRequests()
-  }
-
-  beforeDestroy () {
-    this.destroyTodayUpdateTimer()
   }
 }
 </script>

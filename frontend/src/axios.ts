@@ -2,9 +2,15 @@ import axios from 'axios'
 import bus from './bus'
 import logger from './logger'
 
+function isTimeRefreshQuery (query?: string): boolean {
+  return query !== undefined && query.includes('{ today, deadline }')
+}
+
 axios.interceptors.request.use(
   config => {
-    bus.emit('request-begin', { config })
+    if (!isTimeRefreshQuery(config.data.query)) {
+      bus.emit('request-begin', { config })
+    }
     return config
   },
   error => {

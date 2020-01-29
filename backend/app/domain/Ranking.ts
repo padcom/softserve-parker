@@ -2,7 +2,7 @@ import { Field, ObjectType } from 'type-graphql'
 import { User } from './User'
 import { calculateCurrentRanking, RankingUser } from '../engine'
 
-function convertRankingUserToRanking(user: RankingUser): Ranking {
+function convertRankingUserToRanking (user: RankingUser): Ranking {
   // eslint-disable-next-line @typescript-eslint/no-use-before-define
   const entry = new Ranking()
   entry.id = user.id
@@ -34,7 +34,7 @@ export class Ranking {
     return User.byId(this.id)
   }
 
-  static async current(): Promise<Ranking[]> {
+  static async current (): Promise<Ranking[]> {
     const ranking = await calculateCurrentRanking()
     return ranking.users.map(convertRankingUserToRanking)
   }

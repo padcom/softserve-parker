@@ -2,7 +2,7 @@ import { query } from '@/graphql'
 
 export interface History {
   id: number
-  date: Date
+  date: String
   state: string
   plate: string
   rank: number
@@ -19,9 +19,9 @@ export interface History {
 }
 
 export class HistoryAPI {
-  static async between (from: Date, to: Date) {
+  static async between (from: string, to: string) {
     const { history } = await query<{ history: History[] }>(`query
-      history($from: DateTime!, $to: DateTime!) {
+      history($from: String!, $to: String!) {
         history(from: $from, to: $to) {
           id
           date

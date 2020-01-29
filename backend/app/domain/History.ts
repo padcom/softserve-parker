@@ -3,6 +3,8 @@ import { OkPacket, FieldPacket, RowDataPacket } from 'mysql'
 import { db } from '../db'
 import { User } from './User'
 
+import format from 'common/date/format'
+
 @ObjectType({
   description: 'Object representing history entry.',
 })
@@ -10,8 +12,8 @@ export class History {
   @Field(() => ID)
   id: number
 
-  @Field(() => Date)
-  date: Date
+  @Field(() => String)
+  date: string
 
   @Field(() => Number, { nullable: true })
   capacity?: number
@@ -36,7 +38,11 @@ export class History {
     return User.byId(this.userId)
   }
 
-  static async create (date: Date, numberOfParkingSpots: number, numberOfRequests: number, userId: number, plate: string, rank: number, state = 'used'): Promise<number> {
+  private static mapRowsToHistory (rows): History[] {
+    return rows.map(row => ({ ...row, date: format(row.date) }))
+  }
+
+  static async create (date: string, numberOfParkingSpots: number, numberOfRequests: number, userId: number, plate: string, rank: number, state = 'used'): Promise<number> {
     const [ result ] = await db.execute(
       'INSERT INTO history (date, capacity, requests, userId, plate, `rank`, state) VALUES (?,?,?,?,?,?,?)',
       [ date, numberOfParkingSpots, numberOfRequests, userId, plate, rank, state ]
@@ -49,21 +55,21 @@ export class History {
     return result.insertId
   }
 
-  static async since (date: Date): Promise<History[]> {
+  static async since (date: string): Promise<History[]> {
     const [ rows ]: [ RowDataPacket[], FieldPacket[] ] = await db.execute(
-      'SELECT * FROM history WHERE date > ?',
+      'SELECT * FROM history WHERE date >= ?',
       [ date ]
     )
 
-    return rows as History[]
+    return this.mapRowsToHistory(rows)
   }
 
-  static async between (from: Date, to: Date): Promise<History[]> {
+  static async between (from: string, to: string): Promise<History[]> {
     const [ rows ]: [ RowDataPacket[], FieldPacket[] ] = await db.execute(
       'SELECT * FROM history WHERE date BETWEEN ? AND ?',
       [ from, to ]
     )
 
-    return rows as History[]
+    return this.mapRowsToHistory(rows)
   }
 }

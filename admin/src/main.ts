@@ -7,9 +7,13 @@ import './axios'
 
 Vue.config.productionTip = false
 
-new Vue({
-  router,
-  store,
-  vuetify,
-  render: (h: any) => h(App),
-}).$mount('#app')
+store.dispatch('time/update').then(() => {
+  setInterval(() => store.dispatch('time/update'), 10000)
+
+  new Vue({
+    router,
+    store,
+    vuetify,
+    render: (h: any) => h(App),
+  }).$mount('#app')
+})

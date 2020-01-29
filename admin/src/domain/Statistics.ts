@@ -2,16 +2,16 @@ import { query } from '@/graphql'
 
 export interface Statistics {
   id: number
-  date: Date
+  date: string
   capacity: number
   requests: number
   utilization: number
 }
 
 export class StatisticsAPI {
-  static async between (from: Date, to: Date) {
+  static async between (from: string, to: string) {
     const { statistics } = await query<{ statistics: Statistics[] }>(`query
-    statistics($from: DateTime!, $to: DateTime!) {
+    statistics($from: String!, $to: String!) {
       statistics(from: $from, to: $to) {
           date
           capacity

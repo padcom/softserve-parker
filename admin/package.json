@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@mdi/font": "4.7.95",
+    "common": "file:../common",
     "core-js": "3.6.2",
     "date-fns": "^2.9.0",
     "dygraphs": "^2.1.0",

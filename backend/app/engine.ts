@@ -2,7 +2,7 @@ import { User } from './domain/User'
 import { History } from './domain/History'
 import { ReservationRequest } from './domain/ReservationRequest'
 import { Settings } from './domain/Settings'
-import { format, addMinutes, addDays } from 'date-fns'
+import { format, parse, addMinutes, addDays } from 'date-fns'
 
 // Example apache benchmark enchantation to test the performance of the engine through ranking
 //
@@ -27,7 +27,7 @@ export interface RankingUser {
 }
 
 export interface Ranking {
-  timestamp: Date
+  timestamp: string
   users: RankingUser[]
   history: History[]
   requests: ReservationRequest[]
@@ -128,7 +128,7 @@ function dumpRequests (requests: ReservationRequest[]) {
   })
 }
 
-async function calculateRankingForDates (timestamp: Date, timeOfRankingStart: Date, timeOfFirstRequest: Date): Promise<Ranking> {
+async function calculateRankingForDates (timestamp: string, timeOfRankingStart: string, timeOfFirstRequest: string): Promise<Ranking> {
   console.log('Calculating ranking from history starting at', timeOfRankingStart)
   console.log('Requests from', timeOfFirstRequest, 'to', timestamp)
 
@@ -150,9 +150,9 @@ async function calculateRankingForDates (timestamp: Date, timeOfRankingStart: Da
 }
 
 export async function calculateCurrentRanking (numberOfDays = 8): Promise<Ranking> {
-  const timestamp = new Date()
-  const timeOfRankingStart = addDays(timestamp, -numberOfDays)
-  const timeOfFirstRequest = addDays(timestamp, -1)
+  const timestamp = await Settings.today()
+  const timeOfRankingStart = format(addDays(parse(timestamp, 'yyyy-MM-dd', new Date()), -numberOfDays), 'yyyy-MM-dd')
+  const timeOfFirstRequest = format(addDays(parse(timestamp, 'yyyy-MM-dd', new Date()), -1), 'yyyy-MM-dd')
 
   return {
     timestamp,
@@ -200,7 +200,7 @@ export function calculateLoosers (users: RankingUser[], numberOfParkingSpots: nu
     .skip(numberOfParkingSpots)
 }
 
-async function createHistoryEntriesForWinners (timestamp: Date, numberOfParkingSpots: number, numberOfRequests: number, winners: RankingUser[]): Promise<number[]> {
+async function createHistoryEntriesForWinners (timestamp: string, numberOfParkingSpots: number, numberOfRequests: number, winners: RankingUser[]): Promise<number[]> {
   console.log('--- creating history entries for winners')
   return Promise.all(winners.map(async (user) => {
     return await History.create(timestamp, numberOfParkingSpots, numberOfRequests, user.id, user.plate, user.rank)
@@ -260,6 +260,6 @@ export async function createRandomReservationRequests (timestamp: Date) {
   // create reservation requests 
   await Promise.all(users.clone().randomize().take(numberOfRequests).map(async (user, index) => {
     const date = addMinutes(timestamp, -index - 1)
-    return await ReservationRequest.create(user.id, [ date ], false)
+    return await ReservationRequest.create(user.id, [ format(date, 'yyyy-MM-dd') ], false)
   }))
 }

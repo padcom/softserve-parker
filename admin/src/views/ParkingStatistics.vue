@@ -24,7 +24,7 @@
         hide-default-footer
       >
         <template v-slot:item.date="{ item }">
-          {{ item.date | date }}
+          {{ item.date }}
         </template>
         <template v-slot:item.percentage="{ item }">
           {{ item | percentage }}
@@ -36,15 +36,14 @@
 </template>
 
 <script lang="ts">
-import subMonths from 'date-fns/subMonths'
-import endOfDay from 'date-fns/endOfDay'
-import format from 'date-fns/format'
-import parse from 'date-fns/parse'
+import addDays from 'common/date/addDays'
+import format from 'common/date/format'
 import { Component, Vue } from 'vue-property-decorator'
 import Information from '@/components/Information.vue'
 import DateSelector from '@/components/DateSelector.vue'
 import { Statistics, StatisticsAPI } from '@/domain/Statistics'
 import DygraphChart from '@/components/DygraphChart.vue'
+import { TimeState } from '@/store/time'
 
 function getUtilizationPercentage (entry: Statistics): number {
   if (entry.capacity && entry.utilization) {
@@ -61,9 +60,6 @@ function getUtilizationPercentage (entry: Statistics): number {
     Information,
   },
   filters: {
-    date (value: Date) {
-      return format(new Date(value), 'yyyy-MM-dd HH:mm:ss')
-    },
     percentage (entry: Statistics) {
       const percentage = getUtilizationPercentage(entry)
       return percentage ? `${percentage}%` : ''
@@ -83,8 +79,8 @@ export default class ParkingStatistics extends Vue {
   ]
 
   statistics = [] as Statistics[]
-  startDate = subMonths(new Date(), 3)
-  endDate = new Date()
+  endDate = this.$store.state.time.today
+  startDate = addDays(this.endDate, -90)
   openCalendar = false
   loading = false
 
@@ -94,11 +90,9 @@ export default class ParkingStatistics extends Vue {
 
   async load () {
     this.loading = true
-    const from = this.startDate
-    const to = endOfDay(this.endDate)
     this.statistics = []
     try {
-      this.statistics = await StatisticsAPI.between(from, to)
+      this.statistics = await StatisticsAPI.between(this.startDate, this.endDate)
     } catch (e) {
       // @ts-ignore
       this.$refs.info.showError(e.message as string)

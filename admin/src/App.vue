@@ -45,6 +45,7 @@ import { Component } from 'vue-property-decorator'
 
 import { AuthGetter } from '@/store/auth'
 import { UIState, UIAction } from './store/ui'
+import { TimeAction } from './store/time'
 
 @Component({
 })
@@ -71,6 +72,8 @@ export default class App extends Vue {
   @UIAction beginRequest
   // @ts-ignore
   @UIAction endRequest
+
+  timeUpdateIntervalId: number | null = null
 
   get loadingIndicatorStyles () {
     const width = this.pendingCalls > 0 ? 100 / (this.total / this.pendingCalls) + 'vw' : '0vw'

@@ -1,9 +1,10 @@
 import { Field, ID, ObjectType } from 'type-graphql'
 import { FieldPacket, RowDataPacket, OkPacket } from 'mysql'
-import { isPast } from 'date-fns'
+import { isBefore, format } from 'date-fns'
 import { db } from '../db'
 
 import { User } from './User'
+import { Settings } from './Settings'
 
 @ObjectType({
   description: 'Object representing reservation request.',
@@ -15,8 +16,8 @@ export class ReservationRequest {
   @Field(() => Number)
   userId: number
 
-  @Field(() => Date)
-  date: Date
+  @Field(() => String)
+  date: string
 
   @Field(() => Number, { nullable: true })
   parkingSpotId: number
@@ -32,17 +33,21 @@ export class ReservationRequest {
     return User.byId(this.userId)
   }
 
-  static async byUserId (userId: number, from: Date): Promise<ReservationRequest[]> {
+  private static mapRowsToReservationRequest (rows) {
+    return rows.map(row => ({ ...row, date: format(row.date, 'yyyy-MM-dd') })) as ReservationRequest[]
+  }
+
+  static async byUserId (userId: number, from: string): Promise<ReservationRequest[]> {
     const [rows]: [RowDataPacket[], FieldPacket[]] = await db.execute(
       `SELECT * FROM reservationRequest
        WHERE userId = ? AND date >= ?
        ORDER BY date ASC`,
       [userId, from]
     )
-    return rows as ReservationRequest[]
+    return this.mapRowsToReservationRequest(rows)
   }
 
-  static async create (userId: number, dates: Date[], validate = true): Promise<ReservationRequest[]> {
+  static async create (userId: number, dates: string[], validate = true): Promise<ReservationRequest[]> {
     if (validate) this.validateDates(dates)
     await this.assertRequestsDoesntExist(userId, dates)
 
@@ -54,31 +59,35 @@ export class ReservationRequest {
     return this.byUserIdAndDates(userId, dates)
   }
 
-  private static validateDates (dates: Date[]): void | Error {
-    if (dates.some((date: Date) => isPast(date))) throw new Error(`Provided date is in the past.`)
-    const containsDuplicates = dates
-      .map((date: Date) => date.getTime())
-      .some((value: number, i: number, self: number[]) => self.indexOf(value) !== i)
+  private static async validateDates (dates: string[]): Promise<void | Error> {
+    const today = new Date(await Settings.today())
+    const timestamps = dates.map(date => new Date(date))
+    if (timestamps.some(date => isBefore(date, today))) {
+      throw new Error(`Provided date is in the past.`)
+    }
+    const containsDuplicates = timestamps
+      .map(date => date.getTime())
+      .some((value, i, self) => self.indexOf(value) !== i)
     if (containsDuplicates) throw new Error('Provided date range contains duplicates.')
   }
 
-  static async assertRequestsDoesntExist (userId: number, dates: Date[]): Promise<void | Error> {
+  static async assertRequestsDoesntExist (userId: number, dates: string[]): Promise<void | Error> {
     const records = await this.byUserIdAndDates(userId, dates)
     if (records && records.length) throw new Error('Request already exist')
   }
 
-  static async byUserIdAndDates (userId: number, dates: Date[]): Promise<ReservationRequest[]> {
-    const [rows]: [RowDataPacket[], FieldPacket[]] = await db.query(
+  static async byUserIdAndDates (userId: number, dates: string[]): Promise<ReservationRequest[]> {
+    const [ rows ]: [ RowDataPacket[], FieldPacket[] ] = await db.query(
       `SELECT * FROM reservationRequest
         WHERE userId = ? AND date IN(?)
         ORDER BY date ASC`,
-      [userId, ...dates]
+      [ userId, ...dates ]
     )
 
-    return rows as ReservationRequest[]
+    return this.mapRowsToReservationRequest(rows)
   }
 
-  static async delete (userId: number, date: Date) {
+  static async delete (userId: number, date: string) {
     const [ result ] = await db.execute(`DELETE from reservationRequest WHERE userId = ? AND date = ?`,
       [userId, date]) as OkPacket[]
 
@@ -127,21 +136,22 @@ export class ReservationRequest {
     return ReservationRequest.updateStatus(id, 'cancelled')
   }
 
-  static async between (from: Date, to: Date): Promise<ReservationRequest[]> {
-    const [ result ] = await db.execute(`
+  static async between (from: string, to: string): Promise<ReservationRequest[]> {
+    const [ rows ] = await db.execute(`
       SELECT * FROM parker.reservationRequest
       WHERE date BETWEEN ? AND ?
-    `, [from, to])
+    `, [ from, to ])
 
-    return result as ReservationRequest[]
+    return this.mapRowsToReservationRequest(rows)
   }
 
   static async upcoming (): Promise<ReservationRequest[]> {
-    const [ result ] = await db.execute(`
+    const today = await Settings.today()
+    const [ rows ] = await db.execute(`
       SELECT * from reservationRequest
       WHERE status = '' AND date > ?
-    `, [ new Date() ])
+    `, [ today ])
 
-    return result as ReservationRequest[]
+    return this.mapRowsToReservationRequest(rows)
   }
 }

@@ -2,7 +2,7 @@
   <v-container fluid>
     <v-card>
       <v-card-title>
-        Parking status for {{ date }}; {{ usage }}
+        Parking status for {{ today }}; {{ usage }}
         <v-spacer />
         <v-text-field
           v-model="search"
@@ -20,16 +20,16 @@
         hide-default-footer
       >
         <template v-slot:item.phone="{ item }">
-          {{ getValue(item.phone) }}
+          {{ item.phone | value }}
         </template>
         <template v-slot:item.rank="{ item }">
           {{ item.rank | rank }}
         </template>
         <template v-slot:item.role="{ item }">
-          {{ getValue(item.roles) }}
+          {{ item.roles | value }}
         </template>
         <template v-slot:item.state="{ item }">
-          {{ getValue(item.state) }}
+          {{ item.state | value }}
         </template>
       </v-data-table>
     </v-card>
@@ -47,6 +47,7 @@ import { User } from '@/domain/User'
 import { History, HistoryAPI } from '@/domain/History'
 import Information from '@/components/Information.vue'
 import { UserInterface, formatRank } from '../domain/User'
+import { TimeState } from '../store/time'
 
 @Component({
   components: {
@@ -54,6 +55,9 @@ import { UserInterface, formatRank } from '../domain/User'
   },
   filters: {
     rank: formatRank,
+    value (val: any) {
+      return val !== undefined && val !== null ? val : ''
+    },
   },
 })
 export default class ParkingStatus extends Vue {
@@ -72,13 +76,15 @@ export default class ParkingStatus extends Vue {
   search = ''
   loading = false
 
+  // @ts-ignore
+  // @TimeState today: string
+  today = '2020-01-24'
+
   async mounted () {
     this.loading = true
     this.history = []
     try {
-      const from = startOfDay(new Date())
-      const to = endOfDay(new Date())
-      this.history = await HistoryAPI.between(from, to)
+      this.history = await HistoryAPI.between(this.today, this.today)
     } catch (e) {
       // @ts-ignore
       this.$refs.info.showError(e.message as string)
@@ -87,16 +93,8 @@ export default class ParkingStatus extends Vue {
     }
   }
 
-  get date () {
-    return format(new Date(), 'yyyy-MM-dd')
-  }
-
   get usage () {
     return this.history.length > 0 ? `${this.history.length}/${this.history[0].capacity}` : ''
-  }
-
-  getValue (data: string): string {
-    return !data ? '-' : data
   }
 }
 </script>

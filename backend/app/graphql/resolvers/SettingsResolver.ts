@@ -3,6 +3,16 @@ import { Settings } from '../../domain/Settings'
 
 @Resolver(Settings)
 export class SettingsResolver {
+  @Query(() => String)
+  async today () {
+    return Settings.today()
+  }
+
+  @Query(() => String)
+  async deadline () {
+    return Settings.deadline()
+  }
+
   @Authorized('admin')
   @Query(() => Settings!)
   async settings () {

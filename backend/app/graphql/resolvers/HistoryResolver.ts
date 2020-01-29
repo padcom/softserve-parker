@@ -7,10 +7,10 @@ export class HistoryResolver {
     description: 'Returns parking usage history',
   })
   async history (
-    @Arg('from', () => Date!)
-    from: Date,
-    @Arg('to', () => Date!)
-    to: Date,
+    @Arg('from', () => String!)
+    from: string,
+    @Arg('to', () => String!)
+    to: string,
   ) {
     return History.between(from, to)
   }

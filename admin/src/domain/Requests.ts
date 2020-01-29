@@ -2,7 +2,7 @@ import { query } from '@/graphql'
 
 export interface Request {
   id: number
-  date: Date
+  date: string
   email: string
   status: string
   user: {
@@ -16,9 +16,9 @@ export interface Request {
 }
 
 export class RequestAPI {
-  static async getAllInDay (from: Date, to: Date) {
+  static async getAllInDay (from: string, to: string) {
     const { reservationRequestsInDay } = await query(`query
-      reservationRequestsInDay($from: DateTime!, $to: DateTime!) {
+      reservationRequestsInDay($from: String!, $to: String!) {
         reservationRequestsInDay(from: $from, to: $to) {
           id
           date
