@@ -39,7 +39,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { Component } from 'vue-property-decorator'
+import { Component, Watch } from 'vue-property-decorator'
 import { User } from '@/domain/User'
 import { History, HistoryAPI } from '@/domain/History'
 import Information from '@/components/Information.vue'
@@ -77,7 +77,12 @@ export default class ParkingStatus extends Vue {
   @TimeState today: string
   // today = '2020-01-24'
 
-  async mounted () {
+  @Watch('today')
+  onTodayChanged () {
+    this.load()
+  }
+
+  async load () {
     this.loading = true
     this.history = []
     try {
@@ -88,6 +93,10 @@ export default class ParkingStatus extends Vue {
     } finally {
       this.loading = false
     }
+  }
+
+  async mounted () {
+    await this.load()
   }
 
   get usage () {

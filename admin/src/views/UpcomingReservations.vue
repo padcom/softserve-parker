@@ -31,11 +31,11 @@
 </template>
 
 <script lang="ts">
-import addDays from 'common/date/addDays'
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue, Watch } from 'vue-property-decorator'
 import Information from '@/components/Information.vue'
 import DateSelector from '@/components/DateSelector.vue'
 import { RequestAPI, Request } from '../domain/Requests'
+import { TimeState } from '../store/time'
 
 @Component({
   components: {
@@ -58,10 +58,15 @@ export default class UpcomingReservations extends Vue {
   ]
 
   reservations = [] as Request[]
-  startDate = this.$store.state.time.tomorrow
+  @TimeState tomorrow?: string
   openCalendar = false
   loading = false
   search = ''
+
+  @Watch('tomorrow')
+  onTomorrowChanged () {
+    this.load()
+  }
 
   mounted () {
     this.load()
@@ -69,8 +74,6 @@ export default class UpcomingReservations extends Vue {
 
   async load () {
     this.loading = true
-    const from = this.startDate
-    const to = addDays(this.startDate, 1000)
     this.reservations = []
     try {
       this.reservations = await RequestAPI.upcoming()
