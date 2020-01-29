@@ -55,6 +55,7 @@ import { ReservationRequestAPI } from '../domain/ReservationRequest'
 import { TimeState } from '../store/time'
 
 import dayOfWeek from 'common/date/dayOfWeek'
+import isWeekendDay from 'common/date/isWeekendDay'
 
 @Component({
   components: {
@@ -148,7 +149,7 @@ export default class Home extends Vue {
   }
 
   get isTomorrowWeekend () {
-    return [ 0, 6 ].includes(dayOfWeek(this.tomorrow))
+    return isWeekendDay(this.tomorrow)
   }
 
   // --------------------------------------------------------------------------
@@ -173,10 +174,6 @@ export default class Home extends Vue {
 
   closeCalendar () {
     this.showCalendar = false
-  }
-
-  isWeekend (date) {
-    return [ 0, 6 ].includes(date.day())
   }
 
   isAlreadyRequested (date) {
@@ -211,8 +208,8 @@ export default class Home extends Vue {
   async requestReservationsForRange (range) {
     const dates = Array
       .from(range.by('day'))
-      .filter(date => !this.isWeekend(date))
       .map(date => date.format('YYYY-MM-DD'))
+      .filter(date => !isWeekendDay(date))
 
     await this.createReservationRequests(dates)
     await this.updateReservationRequests(dates, '')

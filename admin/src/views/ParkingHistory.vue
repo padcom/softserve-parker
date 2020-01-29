@@ -38,9 +38,6 @@ import DateSelector from '@/components/DateSelector.vue'
 import { History, HistoryAPI } from '@/domain/History'
 import { TimeState } from '../store/time'
 
-// @ts-ignore
-window.formatDate = format
-
 @Component({
   components: {
     DateSelector,
