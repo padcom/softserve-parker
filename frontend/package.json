@@ -11,7 +11,6 @@
     "axios": "0.19.0",
     "common": "file:../common",
     "core-js": "3.6.2",
-    "date-fns": "^2.9.0",
     "md5": "2.2.1",
     "moment": "2.24.0",
     "moment-range": "4.0.2",

@@ -38,9 +38,6 @@
 </template>
 
 <script lang="ts">
-import format from 'date-fns/format'
-import startOfDay from 'date-fns/startOfDay'
-import endOfDay from 'date-fns/endOfDay'
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 import { User } from '@/domain/User'
@@ -77,8 +74,8 @@ export default class ParkingStatus extends Vue {
   loading = false
 
   // @ts-ignore
-  // @TimeState today: string
-  today = '2020-01-24'
+  @TimeState today: string
+  // today = '2020-01-24'
 
   async mounted () {
     this.loading = true

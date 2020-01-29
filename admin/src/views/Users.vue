@@ -80,7 +80,6 @@
 </template>
 
 <script lang="ts">
-import format from 'date-fns/format'
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 import { User, UserInterface, formatRank } from '@/domain/User'

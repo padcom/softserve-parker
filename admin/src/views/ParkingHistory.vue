@@ -31,9 +31,6 @@
 </template>
 
 <script lang="ts">
-import startOfDay from 'date-fns/startOfDay'
-import endOfDay from 'date-fns/endOfDay'
-import format from 'date-fns/format'
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 import Information from '@/components/Information.vue'
