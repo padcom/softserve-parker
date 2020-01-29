@@ -41,7 +41,7 @@ export class ReservationRequest {
     const [rows]: [RowDataPacket[], FieldPacket[]] = await db.execute(
       `SELECT * FROM reservationRequest
        WHERE userId = ? AND date >= ?
-       ORDER BY date ASC`,
+       ORDER BY date`,
       [userId, from]
     )
     return this.mapRowsToReservationRequest(rows)

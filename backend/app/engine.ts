@@ -223,10 +223,6 @@ async function updateLoosersRequests (winners: RankingUser[]) {
   }))
 }
 
-// TODO implement sending confirmation emails
-// async function sendConfirmationEmails (winners: RankingUser[]) {
-// }
-
 export async function engine (): Promise<void> {
   console.log('Engine running at', new Date())
 
@@ -241,7 +237,6 @@ export async function engine (): Promise<void> {
   await updateWinnerRequests(winners)
   const loosers = calculateLoosers(users, settings.numberOfParkingSpots)
   await updateLoosersRequests(loosers)
-  // await sendConfirmationEmails(winners)
 }
 
 function isTimeToRunTheEngine (deadlineHour: string): boolean {
