@@ -164,7 +164,8 @@ export default class Home extends Vue {
   }
 
   get isTomorrowAlreadyRequested () {
-    return this.pendingRequests.some(request => moment(request.date).isSame(moment(this.tomorrow), 'day'))
+    const request = this.getRequestByDate(this.tomorrow)
+    return request && request.status === ''
   }
 
   openCalendar () {
@@ -177,15 +178,16 @@ export default class Home extends Vue {
   }
 
   isAlreadyRequested (date) {
-    return this.requests.some(request => moment(request.date).isSame(date, 'day'))
+    return Boolean(this.getRequestByDate(date))
   }
 
   isCancelledRequest (date) {
-    return this.requests.some(request => moment(request.date).isSame(date, 'day') && request.status === 'cancelled')
+    const request = this.getRequestByDate(date)
+    return request && request.status === 'cancelled'
   }
 
   getRequestByDate (date) {
-    return this.requests.find(request => moment(request.date).isSame(date, 'day'))
+    return this.requests.find(request => request.date === date)
   }
 
   async createReservationRequests (dates) {
