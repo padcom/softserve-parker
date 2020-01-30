@@ -16,7 +16,7 @@ export interface Request {
 }
 
 export class RequestAPI {
-  static async getAllInDay (from: string, to: string) {
+  static async getAllInDay (from: string, to: string): Promise<Request[]> {
     const { reservationRequestsInDay } = await query(`query
       reservationRequestsInDay($from: String!, $to: String!) {
         reservationRequestsInDay(from: $from, to: $to) {

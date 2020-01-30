@@ -26,9 +26,6 @@
         :loading="loading"
         disable-pagination
         hide-default-footer>
-        <template v-slot:item.date="{ item }">
-          {{ item.date }}
-        </template>
       </v-data-table>
     </v-card>
     <Information ref="info" />
@@ -75,10 +72,20 @@ export default class ParkingStatus extends Vue {
   }
 
   async load () {
+    const STATUS_TO_STRING: { [status: string]: string } = {
+      'lost': 'Rejected',
+      'won': 'Successful',
+      'cancelled': 'Cancelled',
+    }
+
     this.loading = true
     this.requests = []
     try {
-      this.requests = await RequestAPI.getAllInDay(this.startDate, this.endDate)
+      const requests = await RequestAPI.getAllInDay(this.startDate, this.endDate)
+      this.requests = requests.map(request => ({
+        ...request,
+        status: STATUS_TO_STRING[request.status] || 'Pending',
+      }))
     } catch (e) {
       // @ts-ignore
       this.$refs.info.showError(e.message as string)
