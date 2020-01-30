@@ -37,7 +37,7 @@ const router = new Router({
     {
       path: '/users-history',
       name: 'users-history',
-      component: () => import(/* webpackChunkName: "empty" */ './views/Empty.vue'),
+      component: () => import(/* webpackChunkName: "user-history" */ './views/UserHistory.vue'),
     },
     {
       path: '/settings',
