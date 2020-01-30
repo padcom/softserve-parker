@@ -4,7 +4,7 @@
     <div class="popup-rank__score-box">
       {{ userRank }}
       <p class="popup-rank__total">
-        /{{ totalRank }}
+        /{{ totalRank === -1 ? '?' : totalRank }}
       </p>
     </div>
   </div>

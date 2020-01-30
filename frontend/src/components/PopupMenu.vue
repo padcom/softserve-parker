@@ -1,6 +1,6 @@
 <template>
   <div class="popup-menu">
-    <Ranking :userRank="user.rank" :totalRank="5381" />
+    <Ranking :userRank="rank" :totalRank="total" />
     <router-link v-for="link in links" :key="link.url" :to="link.url" @click.native.stop="closePopup">
       {{ link.title }}
     </router-link>
@@ -12,6 +12,8 @@ import { Component, Vue, Prop } from 'vue-property-decorator'
 import { AuthState } from '@/store/auth'
 import Defocuser from 'defocuser'
 
+import { User } from '@/domain/User'
+import { RankingAPI } from '@/domain/RankingAPI'
 import Ranking from '@/components/Ranking.vue'
 
 @Component({
@@ -20,11 +22,24 @@ import Ranking from '@/components/Ranking.vue'
   },
 })
 export default class PopupMenu extends Vue {
-  @AuthState user
-
   @Prop({ type: Array, required: true }) links
 
+  @AuthState user
+
+  rank = this.$store.state.auth.user.rank + 1
+  total = -1
+
+  async loadUserRating () {
+    const [ user, ranking ] = await Promise.all([
+      User.getByEmail(this.user.email, [ 'rank' ]),
+      RankingAPI.getRanking(),
+    ])
+    this.rank = user.rank + 1
+    this.total = ranking.reduce((acc, item) => item.rank > acc ? item.rank : acc, 0) + 1
+  }
+
   mounted () {
+    this.loadUserRating()
     const defocuser = new Defocuser()
     let iteration = 0
     defocuser.addElement(this.$el, 'bubbling', () => {
