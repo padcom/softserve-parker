@@ -12,7 +12,7 @@
           :class="{
             month__day: true,
             'month__day--disabled':
-              day.isBefore(today) || isWeekend(day) || isInDisabledDates(day) || !day.isSame(date, 'month'),
+              day.isBefore(tomorrow) || isWeekend(day) || isInDisabledDates(day) || !day.isSame(date, 'month'),
             'month__day--highlighted':
               day.within(highlighted) && day.isSame(date, 'month'),
             'month__day--selected':
@@ -38,6 +38,7 @@ import moment from 'moment'
 
 import WeekDays from './WeekDays.vue'
 import logger from '@/logger'
+import { TimeState } from '../../store/time'
 
 @Component({
   components: {
@@ -76,9 +77,8 @@ export default class Month extends Vue {
   })
   disabledDates
 
-  get today () {
-    return moment()
-  }
+  @TimeState today
+  @TimeState tomorrow
 
   get weeks () {
     const result = []
