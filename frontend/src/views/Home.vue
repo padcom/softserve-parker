@@ -94,7 +94,7 @@ export default class Home extends Vue {
   requests = []
 
   get pendingRequests () {
-    return this.requests.filter(request => request.status === '')
+    return this.requests.filter(request => request.status !== 'cancelled')
   }
 
   async loadRequests () {

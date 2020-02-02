@@ -13,13 +13,16 @@
       @touchend="handleTouchEnd"
       :style="{ left: leftPosition + positionUnit }"
       class="reservation__date"
-      :class="{ 'reservation__date--animeted-movement': animetedMovementActive }"
+      :class="{
+        'reservation__date--won': request.status === 'won',
+        'reservation__date--lost': request.status === 'lost',
+        'reservation__date--animeted-movement': animetedMovementActive,
+      }"
     >
       {{ this.request.date | date }} - {{ this.request.status }}
     </p>
-    <button
+    <button v-if="!touchedDevice && request.status === ''"
       class="reservation__cancel-desktop-btn"
-      v-if="!touchedDevice"
       @click="removeItemByClick">
       <img src="/img/close-black.png" alt="">
     </button>
@@ -161,6 +164,14 @@ export default class ParkingDatesListItem extends Vue {
 
     &--animeted-movement {
       transition: left 400ms ease;
+    }
+
+    &--won {
+      color: green;
+    }
+
+    &--lost {
+      color: red;
     }
   }
 }
