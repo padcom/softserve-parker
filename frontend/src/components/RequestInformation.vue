@@ -1,5 +1,5 @@
 <template>
-  <div v-if="request !== null" class="request-information"
+  <div v-if="request !== null && isBeforeCancelHour" class="request-information"
     :class="{
       'request-information--won': request.status === 'won',
       'request-information--lost': request.status === 'lost',
@@ -11,7 +11,7 @@
       has been {{ status }}.
     </p>
 
-    <Btn v-if="request.status === 'won' && isBeforeCancelHour" outlined fullWidth color="white"
+    <Btn v-if="request.status === 'won'" outlined fullWidth color="white"
       class="request-information__cancel"
       @click="cancel"
     >
