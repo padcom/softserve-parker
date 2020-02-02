@@ -1,12 +1,13 @@
 import moment from 'moment'
 import { namespace } from 'vuex-class'
-import { MutationTree, ActionTree } from 'vuex'
+import { MutationTree, ActionTree, GetterTree } from 'vuex'
 import { RootState } from './root-state'
 import bus from '@/bus'
 import logger from '@/logger'
 import { query } from '@/graphql'
 
 import addDays from 'common/date/addDays'
+import isWeekendDay from 'common/date/isWeekendDay'
 
 interface TimeResponse {
   today: string
@@ -37,6 +38,15 @@ const state: TimeState = {
   yesterday: '',
   deadline: '',
   cancelHour: '07:00',
+}
+
+const getters: GetterTree<TimeState, RootState> = {
+  isBeforeCancelHour (state) {
+    return moment(state.now).isBefore(moment(state.today + ' ' + state.cancelHour))
+  },
+  isTomorrowWeekend (state) {
+    return isWeekendDay(state.tomorrow)
+  },
 }
 
 const mutations: MutationTree<TimeState> = {
@@ -74,11 +84,13 @@ const actions: ActionTree<TimeState, RootState> = {
 export default {
   namespaced: true,
   state,
+  getters,
   mutations,
   actions,
 }
 
 export const TimeState = namespace('time').State
+export const TimeGetter = namespace('time').Getter
 export const TimeAction = namespace('time').Action
 
 bus.on('time-updated', (date: string) => {

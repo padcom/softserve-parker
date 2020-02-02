@@ -66,9 +66,10 @@ import Modal from '@/components/Modal.vue'
 import RequestInformation from '@/components/RequestInformation.vue'
 import LastMinuteNotice from '@/components/LastMinuteNotice.vue'
 
-import { ReservationRequestAPI } from '@/domain/ReservationRequest'
-import { TimeState } from '@/store/time'
+import { ReservationRequest, ReservationRequestAPI } from '@/domain/ReservationRequest'
+import { TimeState, TimeGetter } from '@/store/time'
 import { SettingsAPI } from '@/domain/Settings'
+import { RequestState, RequestGetter, RequestAction } from '@/store/requests'
 
 import dayOfWeek from 'common/date/dayOfWeek'
 import isWeekendDay from 'common/date/isWeekendDay'
@@ -110,52 +111,19 @@ export default class Home extends Vue {
   // --------------------------------------------------------------------------
 
   loading = false
-  requests = []
+  @RequestState requests
+  @RequestGetter pendingRequests
+  @RequestGetter todayRequest
+  @RequestAction loadRequests
 
-  get pendingRequests () {
-    return this.requests.filter(request => request.status !== 'cancelled')
-  }
-
-  get todayRequest () {
-    return this.requests.find(request => request.date === this.today && [ 'won', 'lost' ].includes(request.status))
-  }
-
-  async loadRequests () {
-    logger.debug('loadRequests()')
-    this.requests = []
-    if (this.isLoggedIn) {
-      this.loading = true
-      try {
-        this.requests = await ReservationRequestAPI.fetchByUserId(this.user.id, this.today)
-      } catch (e) {
-        this.error(e.message)
-      } finally {
-        this.loading = false
-      }
-    }
-  }
-
-  async createRequestForDate (date) {
-    logger.debug('createRequestForDate(', date, ')')
-
+  async loadReservationRequests () {
+    this.loading = true
     try {
-      await ReservationRequestAPI.createRequest(this.user.id, date)
       await this.loadRequests()
     } catch (e) {
       this.error(e.message)
-      throw e
-    }
-  }
-
-  async updateRequestStatus (request, status) {
-    logger.debug('updateRequestStatus(', request, ',', status, ')')
-
-    try {
-      await ReservationRequestAPI.setRequestStatus(request.id, status)
-      request.status = status
-    } catch (e) {
-      this.error(e.message)
-      throw e
+    } finally {
+      this.loading = false
     }
   }
 
@@ -165,68 +133,28 @@ export default class Home extends Vue {
 
   @TimeState today
   @TimeState tomorrow
+  @TimeGetter isTomorrowWeekend
 
   @Watch('today')
   async onTodayChanged (newValue) {
-    this.loadRequests()
-  }
-
-  get isTomorrowWeekend () {
-    return isWeekendDay(this.tomorrow)
+    this.loadReservationRequests()
   }
 
   // --------------------------------------------------------------------------
   // handle asking for request that someone else abandoned
   // --------------------------------------------------------------------------
 
-  abandonedRequests = []
-
-  get firstAbandonedRequest () {
-    return this.abandonedRequests[0] || null
-  }
-
-  get hasLostRequest () {
-    const request = this.getRequestByDate(this.today)
-    return request && [ 'won', 'lost' ].includes(request.status)
-  }
+  @RequestState abandonedRequests
+  @RequestGetter firstAbandonedRequest
+  @RequestGetter hasLostRequest
+  @RequestAction takeLastMinuteRequest
 
   async takeLastMinuteSpot (request) {
     logger.debug('takeLastMinuteSpot(', request, ')')
-    if (this.todayRequest && this.todayRequest.status === 'lost') {
-      const success = await ReservationRequestAPI.takeLastMinuteSpot(request, this.todayRequest)
-      if (!success) {
-        this.infoMessage = 'Too late... Someone has beaten you to it! Sorry!'
-        this.$refs.info.show()
-      }
-      await this.loadRequests()
-      await this.loadAbandonedRequests()
-    }
-  }
-
-  abandonedRequestsRefresherTimer = null
-
-  startRefresherAbandonedRequests () {
-    logger.debug('startRefresherAbandonedRequests()')
-    this.loadAbandonedRequests()
-    if (!this.abandonedRequestsRefresherTimer) {
-      this.abandonedRequestsRefresherTimer = setInterval(this.loadAbandonedRequests, 30000)
-    }
-  }
-
-  stopRefreshingAbandonedRequests () {
-    logger.debug('stopRefreshingAbandonedRequests()')
-    if (this.abandonedRequestsRefresherTimer !== null) {
-      clearInterval(this.abandonedRequestsRefresherTimer)
-      this.abandonedRequestsRefresherTimer = null
-    }
-  }
-
-  async loadAbandonedRequests () {
-    logger.debug('loadAbandonedRequests()')
-    if (this.isBeforeCancelHour) {
-      this.abandonedRequests = await ReservationRequestAPI.abandonedRequests(this.today, this.user.id)
-    } else {
-      this.abandonedRequests = []
+    const success = await this.takeLastMinuteRequest(request)
+    if (!success) {
+      this.infoMessage = 'Too late... Someone has beaten you to it! Sorry!'
+      this.$refs.info.show()
     }
   }
 
@@ -236,15 +164,9 @@ export default class Home extends Vue {
 
   @TimeState now
   @TimeState cancelHour
-
-  get isBeforeCancelHour () {
-    return moment(this.now).isBefore(moment(this.today + ' ' + this.cancelHour))
-  }
-
-  async abandonRequest (request) {
-    logger.debug('abandonRequest(', request, ')')
-    this.updateRequestStatus(request, 'abandoned')
-  }
+  @TimeGetter isBeforeCancelHour
+  @RequestAction updateRequestStatus
+  @RequestAction abandonRequest
 
   // --------------------------------------------------------------------------
   // handle dates selector
@@ -342,15 +264,19 @@ export default class Home extends Vue {
   // handlers for list of requests
   // --------------------------------------------------------------------------
 
-  async cancelRequest (request) {
-    logger.debug('cancelRequest(', request, ')')
-    await this.updateRequestStatus(request, 'cancelled')
+  @RequestAction cancelRequest
+
+  async cancelReservationRequest (request) {
+    await this.cancelRequest(request)
     this.info('Your parking request have been revoked!')
   }
 
   // --------------------------------------------------------------------------
   // lifecycle methods
   // --------------------------------------------------------------------------
+
+  @RequestAction startRefresherAbandonedRequests
+  @RequestAction stopRefresherAbandonedRequests
 
   mounted () {
     this.loadRequests()
