@@ -5,7 +5,7 @@
     </p>
 
     <Btn outlined fullWidth color="white"
-      class="request-information__takeit"
+      class="last-minute-notice__takeit"
       @click="takeit"
     >
       I'm taking it!

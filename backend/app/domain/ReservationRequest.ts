@@ -172,9 +172,18 @@ export class ReservationRequest {
     const lost = await ReservationRequest.byIdAndStatus(lostId, 'lost')
     if (!lost) return false
 
-    this.updateStatus(abandonedId, 'cancelled')
-    this.updateStatus(lostId, 'won')
+    await this.updateStatus(abandonedId, 'cancelled')
+    await this.updateStatus(lostId, 'won')
 
     return true
+  }
+
+  static async abandonedRequests (date: string, userId: number) {
+    const [ rows ] = await db.execute(`
+      SELECT * from reservationRequest
+      WHERE status = 'abandoned' AND date = ? AND userId <> ?
+    `, [ date, userId ])
+
+    return this.mapRowsToReservationRequest(rows)
   }
 }

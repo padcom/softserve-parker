@@ -59,4 +59,29 @@ export class ReservationRequestAPI {
 
     return reservationRequests
   }
+
+  static async abandonedRequests (date: string, userId: number) {
+    const { abandonedRequests } = await query(`query
+      AbandonedRequests($date: String!, $userId: Int!) {
+        abandonedRequests (date: $date, userId: $userId) {
+          id, date, status, userId
+        }
+      }`, { date, userId })
+
+    return abandonedRequests
+  }
+
+  static async takeLastMinuteSpot (abandoned: any, lost: any): Promise<number | Error> {
+    logger.debug('ReservationRequestAPI.takeLastMinuteSpot(', abandoned, ',', lost, ')')
+
+    const { takeLastMinuteSpot } = await query(
+      `mutation
+        takeLastMinuteSpot($abandoned: ID!, $lost: ID!) {
+          takeLastMinuteSpot(abandoned: $abandoned, lost: $lost)
+        }`,
+      { abandoned: abandoned.id, lost: lost.id }
+    )
+
+    return takeLastMinuteSpot
+  }
 }

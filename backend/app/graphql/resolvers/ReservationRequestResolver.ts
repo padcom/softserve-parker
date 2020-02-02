@@ -1,4 +1,4 @@
-import { Arg, Int, Query, Resolver, Mutation } from 'type-graphql'
+import { Arg, Int, ID, Query, Resolver, Mutation } from 'type-graphql'
 import { ReservationRequest } from '../../domain/ReservationRequest'
 
 @Resolver(ReservationRequest)
@@ -75,15 +75,25 @@ export class ReservationRequestResolver {
 
   @Mutation(() => Boolean!)
   async takeLastMinuteSpot (
-    @Arg('abandoned', () => Int!, {
+    @Arg('abandoned', () => ID!, {
       description: 'Id of abandoned request',
     })
     abandoned: number,
-    @Arg('lost', () => Int!, {
+    @Arg('lost', () => ID!, {
       description: 'Id of lost request',
     })
     lost: number,
   ) {
     return ReservationRequest.takeLastMinuteSpot(abandoned, lost)
+  }
+
+  @Query(() => [ ReservationRequest! ])
+  async abandonedRequests (
+    @Arg('date', () => String!)
+    date: string,
+    @Arg('userId', () => Int!)
+    userId: number,
+  ) {
+    return ReservationRequest.abandonedRequests(date, userId)
   }
 }

@@ -4,13 +4,13 @@
       {{ infoMessage }}
     </Modal>
 
-    <LastMinuteNotice v-if="isBeforeCancelHour"
-      :request="firstAbandonedRequest"
-      @takeit="takeLastMinuteSpot"
-    />
     <RequestInformation v-if="isBeforeCancelHour"
       :request="todayRequest"
       @cancel="abandonRequest"
+    />
+    <LastMinuteNotice v-if="isBeforeCancelHour"
+      :request="firstAbandonedRequest"
+      @takeit="takeLastMinuteSpot"
     />
 
     <Title borderBottom>Parking dates</Title>
@@ -184,13 +184,42 @@ export default class Home extends Vue {
   }
 
   async takeLastMinuteSpot (request) {
+    logger.debug('takeLastMinuteSpot(', request, ')')
     if (this.todayRequest && this.todayRequest.status === 'lost') {
-      if (!ReservationRequestAPI.takeLastMinuteSpot(request, this.todayRequest)) {
+      const success = await ReservationRequestAPI.takeLastMinuteSpot(request, this.todayRequest)
+      if (!success) {
         this.infoMessage = 'Too late... Someone has beaten you to it! Sorry!'
-      } else {
-        this.loadRequests()
-        this.loadAbandonedRequests()
+        this.$refs.info.show()
       }
+      await this.loadRequests()
+      await this.loadAbandonedRequests()
+    }
+  }
+
+  abandonedRequestsRefresherTimer = null
+
+  startRefresherAbandonedRequests () {
+    logger.debug('startRefresherAbandonedRequests()')
+    this.loadAbandonedRequests()
+    if (!this.abandonedRequestsRefresherTimer) {
+      this.abandonedRequestsRefresherTimer = setInterval(this.loadAbandonedRequests, 30000)
+    }
+  }
+
+  stopRefreshingAbandonedRequests () {
+    logger.debug('stopRefreshingAbandonedRequests()')
+    if (this.abandonedRequestsRefresherTimer !== null) {
+      clearInterval(this.abandonedRequestsRefresherTimer)
+      this.abandonedRequestsRefresherTimer = null
+    }
+  }
+
+  async loadAbandonedRequests () {
+    logger.debug('loadAbandonedRequests()')
+    if (this.isBeforeCancelHour) {
+      this.abandonedRequests = await ReservationRequestAPI.abandonedRequests(this.today, this.user.id)
+    } else {
+      this.abandonedRequests = []
     }
   }
 
@@ -206,6 +235,7 @@ export default class Home extends Vue {
   }
 
   async abandonRequest (request) {
+    logger.debug('abandonRequest(', request, ')')
     this.updateRequestStatus(request, 'abandoned')
   }
 
@@ -223,7 +253,7 @@ export default class Home extends Vue {
 
   get isTomorrowAlreadyRequested () {
     const request = this.getRequestByDate(this.tomorrow)
-    return request && request.status === ''
+    return request && [ '', 'won', 'lost' ].includes(request.status)
   }
 
   get maxDate () {
@@ -231,32 +261,39 @@ export default class Home extends Vue {
   }
 
   async loadNumberOfDaysAhead () {
+    logger.debug('loadNumberOfDaysAhead()')
     this.numberOfDaysAhead = await SettingsAPI.getDaysForRequests()
   }
 
   openCalendar () {
+    logger.debug('openCalendar()')
     this.selectedRequestDays = this.isTomorrowAlreadyRequested || this.isTomorrowWeekend ? null : moment.range(this.tomorrow, this.tomorrow)
     this.showCalendar = true
   }
 
   closeCalendar () {
+    logger.debug('closeCalendar()')
     this.showCalendar = false
   }
 
   isAlreadyRequested (date) {
+    logger.debug('isAlreadyRequested(', date, ')')
     return Boolean(this.getRequestByDate(date))
   }
 
   isCancelledRequest (date) {
+    logger.debug('isCancelledRequest(', date, ')')
     const request = this.getRequestByDate(date)
     return request && request.status === 'cancelled'
   }
 
   getRequestByDate (date) {
+    logger.debug('getRequestByDate(', date, ')')
     return this.requests.find(request => request.date === date)
   }
 
   async createReservationRequests (dates) {
+    logger.debug('createReservationRequests(', dates, ')')
     return Promise.all(
       dates
         .filter(date => !this.isAlreadyRequested(date))
@@ -265,6 +302,7 @@ export default class Home extends Vue {
   }
 
   async updateReservationRequests (dates, status) {
+    logger.debug('updateReservationRequests(', dates, ', ', status, ')')
     return Promise.all(
       dates
         .filter(date => this.isCancelledRequest(date))
@@ -274,6 +312,7 @@ export default class Home extends Vue {
   }
 
   async requestReservationsForRange (range) {
+    logger.debug('requestReservationsForRange(', range, ')')
     const dates = Array
       .from(range.by('day'))
       .map(date => date.format('YYYY-MM-DD'))
@@ -287,6 +326,7 @@ export default class Home extends Vue {
   }
 
   async requestReservationsForTomorrow () {
+    logger.debug('requestReservationsForTomorrow()')
     await this.requestReservationsForRange(moment.range(this.tomorrow, this.tomorrow))
     this.info('Parking for Tomorrow requested!')
   }
@@ -296,6 +336,7 @@ export default class Home extends Vue {
   // --------------------------------------------------------------------------
 
   async cancelRequest (request) {
+    logger.debug('cancelRequest(', request, ')')
     await this.updateRequestStatus(request, 'cancelled')
     this.info('Your parking request have been revoked!')
   }
@@ -307,6 +348,11 @@ export default class Home extends Vue {
   mounted () {
     this.loadRequests()
     this.loadNumberOfDaysAhead()
+    this.startRefresherAbandonedRequests()
+  }
+
+  beforeDestroy () {
+    this.stopRefreshingAbandonedRequests()
   }
 }
 </script>

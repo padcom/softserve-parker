@@ -117,7 +117,6 @@ export default class Month extends Vue {
   }
 
   isInDisabledDates (day) {
-    console.log(this.maxDate)
     return this.disabledDates.some(disabledDate => {
       return day.isSame(disabledDate, 'day')
     }) || moment(day).isAfter(this.maxDate)
