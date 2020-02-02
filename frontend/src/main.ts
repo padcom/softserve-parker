@@ -6,6 +6,7 @@ import router from './router'
 import store from './store'
 import './registerServiceWorker'
 import './axios'
+import './filters'
 
 Vue.config.productionTip = false
 

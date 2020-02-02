@@ -167,11 +167,11 @@ export default class ParkingDatesListItem extends Vue {
     }
 
     &--won {
-      color: green;
+      color: $color-won-text;
     }
 
     &--lost {
-      color: red;
+      color: $color-lost-text;
     }
   }
 }

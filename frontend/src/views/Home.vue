@@ -4,6 +4,8 @@
       {{ infoMessage }}
     </Modal>
 
+    <RequestInformation v-if="todayRequest" :request="todayRequest" />
+
     <Title borderBottom>Parking dates</Title>
     <div class="home-page__content">
       <div class="home-page__content__dates" v-if="!loading">
@@ -43,16 +45,17 @@ import moment from 'moment'
 import { AuthState, AuthGetter } from '@/store/auth'
 import { UIGetter } from '@/store/ui'
 
-import logger from '../logger'
+import logger from '@/logger'
 
-import Title from '../components/Title'
-import Btn from '../components/Btn'
-import ParkingDates from '../components/ParkingDates/ParkingDates'
-import Calendar from '../components/Calendar/Calendar'
-import Modal from '../components/Modal'
+import Title from '@/components/Title'
+import Btn from '@/components/Btn'
+import ParkingDates from '@/components/ParkingDates/ParkingDates'
+import Calendar from '@/components/Calendar/Calendar'
+import Modal from '@/components/Modal'
+import RequestInformation from '@/components/RequestInformation'
 
-import { ReservationRequestAPI } from '../domain/ReservationRequest'
-import { TimeState } from '../store/time'
+import { ReservationRequestAPI } from '@/domain/ReservationRequest'
+import { TimeState } from '@/store/time'
 
 import dayOfWeek from 'common/date/dayOfWeek'
 import isWeekendDay from 'common/date/isWeekendDay'
@@ -64,6 +67,7 @@ import isWeekendDay from 'common/date/isWeekendDay'
     ParkingDates,
     Calendar,
     Modal,
+    RequestInformation,
   },
 })
 export default class Home extends Vue {
@@ -95,6 +99,10 @@ export default class Home extends Vue {
 
   get pendingRequests () {
     return this.requests.filter(request => request.status !== 'cancelled')
+  }
+
+  get todayRequest () {
+    return this.requests.find(request => request.date === this.today && request.status !== 'cancelled')
   }
 
   async loadRequests () {
