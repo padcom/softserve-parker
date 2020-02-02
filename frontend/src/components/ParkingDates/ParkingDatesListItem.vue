@@ -3,7 +3,7 @@
     <span class="reservation__background">
       <img
         class="reservation__cancel-icon"
-        v-bind:class="{'reservation__cancel-icon--active': cancelIconActive}"
+        :class="{ 'reservation__cancel-icon--active': cancelIconActive }"
         src="/img/close.png"
       />
     </span>
@@ -11,9 +11,9 @@
       @touchstart="handleTouchStart"
       @touchmove="handleSwipe"
       @touchend="handleTouchEnd"
-      v-bind:style="{left: leftPosition + positionUnit}"
+      :style="{ left: leftPosition + positionUnit }"
       class="reservation__date"
-      v-bind:class="{'reservation__date--animeted-movement': animetedMovementActive}"
+      :class="{ 'reservation__date--animeted-movement': animetedMovementActive }"
     >
       {{ this.request.date | date }} - {{ this.request.status }}
     </p>
@@ -56,38 +56,49 @@ export default class ParkingDatesListItem extends Vue {
   }
 
   handleTouchStart (event: TouchEvent) {
-    const { clientX } = event.touches[0]
-    initialX = clientX
+    if (this.request && this.request.status === '') {
+      const { clientX } = event.touches[0]
+      initialX = clientX
+    }
   }
 
   handleSwipe (event: TouchEvent) {
-    const { clientX } = event.touches[0]
-    this.leftPosition = (initialX - clientX) * -1 > 0 ? 0 : (initialX - clientX) * -1
-    this.cancelIconActive = this.leftPosition < CANCELABLE_POSITION
+    if (this.request && this.request.status === '') {
+      const { clientX } = event.touches[0]
+      this.leftPosition = (initialX - clientX) * -1 > 0 ? 0 : (initialX - clientX) * -1
+      this.cancelIconActive = this.leftPosition < CANCELABLE_POSITION
+    }
   }
 
   handleTouchEnd (event: TouchEvent) {
-    this.animetedMovementActive = true
-    if (this.leftPosition > CANCELABLE_POSITION) {
-      this.leftPosition = 0
-      setTimeout(() => {
-        this.animetedMovementActive = false
-      }, 1000)
-    } else {
-      this.removeItem()
+    if (this.request && this.request.status === '') {
+      this.animetedMovementActive = true
+      if (this.leftPosition > CANCELABLE_POSITION) {
+        this.leftPosition = 0
+        setTimeout(() => {
+          this.animetedMovementActive = false
+        }, 1000)
+      } else {
+        this.removeItem()
+      }
     }
   }
 
   removeItem () {
     this.positionUnit = '%'
     this.leftPosition = -100
-    setTimeout(() => {
-      this.$emit('action', this)
-    }, 100)
+    setTimeout(() => { this.$emit('action', this) }, 100)
   }
 
   removeItemByClick () {
     this.$emit('action', this)
+  }
+
+  cancel () {
+    this.cancelIconActive = false
+    this.animetedMovementActive = false
+    this.leftPosition = 0
+    this.positionUnit = 'px'
   }
 }
 </script>

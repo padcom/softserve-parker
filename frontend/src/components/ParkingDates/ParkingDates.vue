@@ -13,14 +13,14 @@
       v-for="request in requests"
       :key="request.id"
       :request="request"
+      ref="requests"
       @action="remove(request)"
     />
 
-    <Modal ref="confirmation" :actions="[ { result: 'ok', text: 'Yes' }, { result: 'cancel', text: 'No' }]">
-      Do you want to revoke your parking request?
-    </Modal>
-
-    <Modal ref="information" :actions="[ { result: 'ok', text: 'OK' } ]">
+    <Modal ref="confirmation" :actions="[
+      { result: 'ok', text: 'Yes' },
+      { result: 'cancel', text: 'No' }
+    ]">
       Do you want to revoke your parking request?
     </Modal>
   </div>
@@ -45,6 +45,9 @@ export default class ParkingDates extends Vue {
     const action = await this.$refs.confirmation.show()
     if (action === 'ok') {
       this.$emit('revoke', request)
+    } else {
+      const listItem = this.$refs.requests.find(item => item.cancelIconActive)
+      listItem.cancel()
     }
   }
 }
