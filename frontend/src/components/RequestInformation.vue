@@ -10,7 +10,10 @@
       <strong>{{ day }} ({{ request.date }})</strong>
       has been {{ status }}.
     </p>
-    <Btn v-if="request.status === 'won'" outlined fullWidth color="white" class="request-information__cancel">
+    <Btn v-if="request.status === 'won'" outlined fullWidth color="white"
+      class="request-information__cancel"
+      @click="cancel"
+    >
       Cancel your parking
     </Btn>
 
@@ -48,6 +51,15 @@ export default class RequestInformation extends Vue {
 
   get status () {
     return this.request.status === 'won' ? 'confirmed' : 'rejected'
+  }
+
+  async cancel () {
+    // @ts-ignore
+    const result = await this.$refs.confirmation.show()
+
+    if (result === 'ok') {
+      this.$emit('cancel', this.request)
+    }
   }
 }
 </script>

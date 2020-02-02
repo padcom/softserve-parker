@@ -4,7 +4,7 @@
       {{ infoMessage }}
     </Modal>
 
-    <RequestInformation v-if="todayRequest" :request="todayRequest" />
+    <RequestInformation v-if="todayRequest" :request="todayRequest" @cancel="abandonRequest" />
 
     <Title borderBottom>Parking dates</Title>
     <div class="home-page__content">
@@ -103,7 +103,7 @@ export default class Home extends Vue {
   }
 
   get todayRequest () {
-    return this.requests.find(request => request.date === this.today && request.status !== 'cancelled')
+    return this.requests.find(request => request.date === this.today && [ 'won', 'lost' ].includes(request.status))
   }
 
   async loadRequests () {
@@ -159,6 +159,14 @@ export default class Home extends Vue {
 
   get isTomorrowWeekend () {
     return isWeekendDay(this.tomorrow)
+  }
+
+  // --------------------------------------------------------------------------
+  // handle request abandoning (request has been granted but cancels it)
+  // --------------------------------------------------------------------------
+
+  async abandonRequest (request) {
+    this.updateRequestStatus(request, 'abandoned')
   }
 
   // --------------------------------------------------------------------------
