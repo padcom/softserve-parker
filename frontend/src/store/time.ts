@@ -1,3 +1,4 @@
+import moment from 'moment'
 import { namespace } from 'vuex-class'
 import { MutationTree, ActionTree } from 'vuex'
 import { RootState } from './root-state'
@@ -21,6 +22,7 @@ class API {
 }
 
 export interface TimeState {
+  now: string
   today: string
   yesterday: string
   tomorrow: string
@@ -29,6 +31,7 @@ export interface TimeState {
 }
 
 const state: TimeState = {
+  now: '',
   today: '',
   tomorrow: '',
   yesterday: '',
@@ -38,6 +41,7 @@ const state: TimeState = {
 
 const mutations: MutationTree<TimeState> = {
   setDate (state, date: string) {
+    state.now = moment().format('YYYY-MM-DD HH:mm')
     if (state.today !== date) {
       state.today = date
       state.yesterday = addDays(state.today, -1)

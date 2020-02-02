@@ -3,7 +3,7 @@ import bus from './bus'
 import logger from './logger'
 
 function isTimeRefreshQuery (query?: string): boolean {
-  return query !== undefined && query.includes('{ today, deadline }')
+  return query !== undefined && query.includes('{ today, deadline, cancelHour }')
 }
 
 axios.interceptors.request.use(

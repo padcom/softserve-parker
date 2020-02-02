@@ -10,7 +10,8 @@
       <strong>{{ day }} ({{ request.date }})</strong>
       has been {{ status }}.
     </p>
-    <Btn v-if="request.status === 'won'" outlined fullWidth color="white"
+
+    <Btn v-if="request.status === 'won' && isBeforeCancelHour" outlined fullWidth color="white"
       class="request-information__cancel"
       @click="cancel"
     >
@@ -44,6 +45,8 @@ export default class RequestInformation extends Vue {
   @Prop({ type: Object, required: false, default: () => null }) request?: any
 
   @TimeState today?: string
+  @TimeState now?: string
+  @TimeState cancelHour?: string
 
   get day () {
     return this.request.date === this.today ? 'today' : 'tomorrow'
@@ -51,6 +54,10 @@ export default class RequestInformation extends Vue {
 
   get status () {
     return this.request.status === 'won' ? 'confirmed' : 'rejected'
+  }
+
+  get isBeforeCancelHour () {
+    return moment(this.now).isBefore(moment(this.today + ' ' + this.cancelHour))
   }
 
   async cancel () {
