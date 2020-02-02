@@ -77,6 +77,13 @@ export default class Month extends Vue {
   })
   disabledDates
 
+  @Prop({
+    type: String,
+    required: false,
+    default: '9999-12-31',
+  })
+  maxDate
+
   @TimeState today
   @TimeState tomorrow
 
@@ -110,9 +117,10 @@ export default class Month extends Vue {
   }
 
   isInDisabledDates (day) {
+    console.log(this.maxDate)
     return this.disabledDates.some(disabledDate => {
       return day.isSame(disabledDate, 'day')
-    })
+    }) || moment(day).isAfter(this.maxDate)
   }
 
   isSameMonth (day, date) {

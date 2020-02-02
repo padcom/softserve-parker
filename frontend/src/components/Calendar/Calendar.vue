@@ -14,6 +14,7 @@
       @change="selectDay"
       :selected="selected"
       :disabledDates="disabledDates"
+      :maxDate="maxDate"
     />
     <Btn
       class="calendar__button"
@@ -53,6 +54,7 @@ export default class Calendar extends Vue {
   @Prop({ type: Object, required: false }) value // moment.range
   @Prop({ type: Boolean, required: false, default: false }) bottom
   @Prop({ type: Array, required: false, default: () => [] }) disabledDates
+  @Prop({ type: String, required: false, default: '9999-12-31' }) maxDate
 
   date = moment().startOf('month')
   selected = null

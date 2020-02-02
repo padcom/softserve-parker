@@ -17,6 +17,7 @@
           v-if="showCalendar"
           v-model="selectedRequestDays"
           :disabledDates="disabledCalendarDates"
+          :maxDate="maxDate"
           @input="requestReservationsForRange"
           @close="closeCalendar"
         />
@@ -57,9 +58,11 @@ import RequestInformation from '@/components/RequestInformation'
 
 import { ReservationRequestAPI } from '@/domain/ReservationRequest'
 import { TimeState } from '@/store/time'
+import { SettingsAPI } from '@/domain/Settings'
 
 import dayOfWeek from 'common/date/dayOfWeek'
 import isWeekendDay from 'common/date/isWeekendDay'
+import addDays from 'common/date/addDays'
 
 @Component({
   components: {
@@ -175,6 +178,7 @@ export default class Home extends Vue {
 
   selectedRequestDays = null
   showCalendar = false
+  numberOfDaysAhead = 10
 
   get disabledCalendarDates () {
     return this.pendingRequests.map(request => moment(request.date))
@@ -183,6 +187,14 @@ export default class Home extends Vue {
   get isTomorrowAlreadyRequested () {
     const request = this.getRequestByDate(this.tomorrow)
     return request && request.status === ''
+  }
+
+  get maxDate () {
+    return addDays(this.today, this.numberOfDaysAhead)
+  }
+
+  async loadNumberOfDaysAhead () {
+    this.numberOfDaysAhead = await SettingsAPI.getDaysForRequests()
   }
 
   openCalendar () {
@@ -257,6 +269,7 @@ export default class Home extends Vue {
 
   mounted () {
     this.loadRequests()
+    this.loadNumberOfDaysAhead()
   }
 }
 </script>
