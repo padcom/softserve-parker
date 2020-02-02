@@ -13,6 +13,11 @@ export class SettingsResolver {
     return Settings.deadline()
   }
 
+  @Query(() => String)
+  async cancelHour () {
+    return Settings.cancelHour()
+  }
+
   @Authorized('admin')
   @Query(() => Settings!)
   async settings () {

@@ -8,14 +8,15 @@ import { query } from '@/graphql'
 import addDays from 'common/date/addDays'
 
 interface TimeResponse {
-  today: String
-  deadline: String
+  today: string
+  deadline: string
+  cancelHour: string
 }
 
 class API {
   static async time () {
-    const { today, deadline } = await query<TimeResponse>('query { today, deadline }')
-    return { today, deadline }
+    const { today, deadline, cancelHour } = await query<TimeResponse>('query { today, deadline, cancelHour }')
+    return { today, deadline, cancelHour }
   }
 }
 
@@ -24,6 +25,7 @@ export interface TimeState {
   yesterday: string
   tomorrow: string
   deadline: string // HH:mm
+  cancelHour: string
 }
 
 const state: TimeState = {
@@ -31,6 +33,7 @@ const state: TimeState = {
   tomorrow: '',
   yesterday: '',
   deadline: '',
+  cancelHour: '07:00',
 }
 
 const mutations: MutationTree<TimeState> = {
@@ -48,6 +51,11 @@ const mutations: MutationTree<TimeState> = {
       state.deadline = deadline
     }
   },
+  setCancelHour (state, hour: string) {
+    if (state.cancelHour !== hour) {
+      state.cancelHour = hour
+    }
+  },
 }
 
 const actions: ActionTree<TimeState, RootState> = {
@@ -55,6 +63,7 @@ const actions: ActionTree<TimeState, RootState> = {
     const time = await API.time()
     commit('setDate', time.today)
     commit('setDeadlineHour', time.deadline)
+    commit('setCancelHour', time.cancelHour)
   },
 }
 

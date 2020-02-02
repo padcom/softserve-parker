@@ -38,7 +38,7 @@ export const graphql = schema
       },
 
       async context ({ req }) {
-        if (req.body.query === 'query { today, deadline }') {
+        if (req.body.query === 'query { today, deadline, cancelHour }') {
           return {}
         } else {
           const [ , token ] = req.headers.authorization.split(' ')

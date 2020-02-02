@@ -54,6 +54,16 @@ export class Settings {
     return results[0].value
   }
 
+  static async cancelHour () {
+    const [ results ] = await db.execute('SELECT value FROM settings WHERE name=?', [ 'cancelHour' ]) as RowDataPacket[][]
+
+    if (results.length !== 1) {
+      throw new Error('Invalid settings')
+    }
+
+    return results[0].value
+  }
+
   static async today () {
     const deadline = parse(await this.deadline(), 'HH:mm', new Date())
     const today = startOfDay(new Date())

@@ -14,7 +14,9 @@ function getTokenFromRequest (req: Request): string {
 
 function assertUserIsAuthorized (userToken: string, sessionToken: string): void | Error {
   const cert: string = fs.readFileSync(path.resolve(__dirname, '../../public.key'), 'utf8')
-  if (!sessionToken || !jwt.verify(userToken, cert)) throw new UnauthenticatedError('Unauthorized')
+  if (!sessionToken || !jwt.verify(userToken, cert)) {
+    throw new UnauthenticatedError('Unauthorized')
+  }
 }
 
 export async function isAuthorized (req: Request, res: Response, next: NextFunction) {
@@ -23,7 +25,7 @@ export async function isAuthorized (req: Request, res: Response, next: NextFunct
     return next()
   }
 
-  if (req.method === 'POST' && req.body.query === 'query { today, deadline }') {
+  if (req.method === 'POST' && req.body.query === 'query { today, deadline, cancelHour }') {
     // allowing for date query to not be authorized
     return next()
   }

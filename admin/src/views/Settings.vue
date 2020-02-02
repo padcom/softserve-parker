@@ -14,6 +14,10 @@
             v-model="deadlineHour"
             label="Time when system will assign parking space to Drivers"
             @input="modified = true" />
+          <TimePicker
+            v-model="cancelHour"
+            label="Time when system closes the window of opportunity to cancel reservation and taking cancelled parking reservation"
+            @input="modified = true" />
           <v-text-field type="number"
             v-model.number="daysForCalculation"
             label="The period of time that is taken into account when calculating the ranking"
@@ -38,7 +42,7 @@ import TimePicker from '@/components/TimePicker.vue'
 import Information from '@/components/Information.vue'
 import { query } from '../graphql'
 
-import { Settings as SettingsInterface, SettingsAPI } from '@/domain/Settings'
+import { SettingsAPI } from '@/domain/Settings'
 
 @Component({
   components: {
