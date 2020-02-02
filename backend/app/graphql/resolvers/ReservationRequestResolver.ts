@@ -72,4 +72,18 @@ export class ReservationRequestResolver {
   ) {
     return ReservationRequest.updateStatus(id, status)
   }
+
+  @Mutation(() => Boolean!)
+  async takeLastMinuteSpot (
+    @Arg('abandoned', () => Int!, {
+      description: 'Id of abandoned request',
+    })
+    abandoned: number,
+    @Arg('lost', () => Int!, {
+      description: 'Id of lost request',
+    })
+    lost: number,
+  ) {
+    return ReservationRequest.takeLastMinuteSpot(abandoned, lost)
+  }
 }

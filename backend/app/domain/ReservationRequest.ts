@@ -154,4 +154,27 @@ export class ReservationRequest {
 
     return this.mapRowsToReservationRequest(rows)
   }
+
+  static async byIdAndStatus (id: number, status: string) {
+    const [ rows ]: [ RowDataPacket[], FieldPacket[] ] = await db.execute(
+      `SELECT * from reservationRequest WHERE id=? AND status=?
+    `, [ id, status ])
+    if (rows.length && rows.length === 0) {
+      throw new Error(`Request with id ${id} not found!`)
+    }
+    return this.mapRowsToReservationRequest(rows)[0]
+  }
+
+  static async takeLastMinuteSpot (abandonedId: number, lostId: number) {
+    const abandoned = await ReservationRequest.byIdAndStatus(abandonedId, 'abandoned')
+    if (!abandoned) return false
+
+    const lost = await ReservationRequest.byIdAndStatus(lostId, 'lost')
+    if (!lost) return false
+
+    this.updateStatus(abandonedId, 'cancelled')
+    this.updateStatus(lostId, 'won')
+
+    return true
+  }
 }

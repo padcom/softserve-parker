@@ -4,7 +4,8 @@
       {{ infoMessage }}
     </Modal>
 
-    <RequestInformation v-if="todayRequest" :request="todayRequest" @cancel="abandonRequest" />
+    <LastMinuteNotice :request="firstAbandonedRequest" @takeit="takeLastMinuteSpot" />
+    <RequestInformation :request="todayRequest" @cancel="abandonRequest" />
 
     <Title borderBottom>Parking dates</Title>
     <div class="home-page__content">
@@ -49,12 +50,13 @@ import { UIGetter } from '@/store/ui'
 
 import logger from '@/logger'
 
-import Title from '@/components/Title'
-import Btn from '@/components/Btn'
-import ParkingDates from '@/components/ParkingDates/ParkingDates'
-import Calendar from '@/components/Calendar/Calendar'
-import Modal from '@/components/Modal'
-import RequestInformation from '@/components/RequestInformation'
+import Title from '@/components/Title.vue'
+import Btn from '@/components/Btn.vue'
+import ParkingDates from '@/components/ParkingDates/ParkingDates.vue'
+import Calendar from '@/components/Calendar/Calendar.vue'
+import Modal from '@/components/Modal.vue'
+import RequestInformation from '@/components/RequestInformation.vue'
+import LastMinuteNotice from '@/components/LastMinuteNotice.vue'
 
 import { ReservationRequestAPI } from '@/domain/ReservationRequest'
 import { TimeState } from '@/store/time'
@@ -71,6 +73,7 @@ import addDays from 'common/date/addDays'
     ParkingDates,
     Calendar,
     Modal,
+    LastMinuteNotice,
     RequestInformation,
   },
 })
@@ -162,6 +165,27 @@ export default class Home extends Vue {
 
   get isTomorrowWeekend () {
     return isWeekendDay(this.tomorrow)
+  }
+
+  // --------------------------------------------------------------------------
+  // handle request abandoning (request has been granted but cancels it)
+  // --------------------------------------------------------------------------
+
+  abandonedRequests = []
+
+  get firstAbandonedRequest () {
+    return this.abandonedRequests[0] || null
+  }
+
+  async takeLastMinuteSpot (request) {
+    if (this.todayRequest && this.todayRequest.status === 'lost') {
+      if (!ReservationRequestAPI.takeLastMinuteSpot(request, this.todayRequest)) {
+        this.infoMessage = 'Too late... Someone has beaten you to it! Sorry!'
+      } else {
+        this.loadRequests()
+        this.loadAbandonedRequests()
+      }
+    }
   }
 
   // --------------------------------------------------------------------------
