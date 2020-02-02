@@ -4,8 +4,8 @@ module.exports = {
   pluginOptions: {
     'style-resources-loader': {
       preProcessor: 'scss',
-      patterns: [path.resolve(__dirname, 'src/styles/common/*.scss')]
-    }
+      patterns: [ path.resolve(__dirname, 'src/styles/common/*.scss') ],
+    },
   },
   devServer: {
     proxy: {
@@ -16,5 +16,12 @@ module.exports = {
       '/graphql': { target: 'http://localhost:3000/graphql' },
       '/': { target: 'http://localhost:3000/' },
     },
+  },
+  pwa: {
+    name: 'Parker',
+    themeColor: '#4DBA87',
+    msTileColor: '#000000',
+    appleMobileWebAppCapable: 'yes',
+    appleMobileWebAppStatusBarStyle: 'black',
   },
 }
