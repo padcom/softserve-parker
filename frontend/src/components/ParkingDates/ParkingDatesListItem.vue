@@ -16,10 +16,12 @@
       :class="{
         'reservation__date--won': request.status === 'won',
         'reservation__date--lost': request.status === 'lost',
+        'reservation__date--abandoned': request.status === 'abandoned',
         'reservation__date--animeted-movement': animetedMovementActive,
       }"
     >
-      {{ this.request.date | date }} - {{ this.request.status }}
+      {{ this.request.date | date }}
+      <span v-if="request.status">- {{ this.request.status }}</span>
     </p>
     <button v-if="!touchedDevice && request.status === ''"
       class="reservation__cancel-desktop-btn"
@@ -172,6 +174,10 @@ export default class ParkingDatesListItem extends Vue {
 
     &--lost {
       color: $color-lost-text;
+    }
+
+    &--abandoned {
+      color: $color-abandoned-text;
     }
   }
 }
