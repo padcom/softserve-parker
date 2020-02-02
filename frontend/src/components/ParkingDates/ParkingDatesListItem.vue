@@ -21,7 +21,7 @@
       }"
     >
       {{ this.request.date | date }}
-      <span v-if="request.status">- {{ this.request.status }}</span>
+      <span v-if="request.status">- {{ this.request.status | status }}</span>
     </p>
     <button v-if="!touchedDevice && request.status === ''"
       class="reservation__cancel-desktop-btn"
