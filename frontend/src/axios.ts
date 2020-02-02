@@ -2,15 +2,9 @@ import axios from 'axios'
 import bus from './bus'
 import logger from './logger'
 
-function isTimeRefreshQuery (query?: string): boolean {
-  return query !== undefined && query.includes('{ today, deadline, cancelHour }')
-}
-
 axios.interceptors.request.use(
   config => {
-    if (!isTimeRefreshQuery(config.data.query)) {
-      bus.emit('request-begin', { config })
-    }
+    bus.emit('request-begin', { config })
     return config
   },
   error => {
@@ -30,10 +24,10 @@ axios.interceptors.response.use(
   }
 )
 
-bus.on('request-begin', ({ config }) => {
+bus.on('request-begin', ({ config }: { config: any }) => {
   logger.debug('[HTTP] Request started', config.url)
 })
 
-bus.on('request-end', ({ error, response }) => {
+bus.on('request-end', ({ error, response }: { error: any, response: any }) => {
   logger.debug('[HTTP] Request ended', response ? response.config.url : error)
 })

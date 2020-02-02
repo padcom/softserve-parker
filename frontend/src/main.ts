@@ -19,7 +19,7 @@ moment.updateLocale('en', {
 })
 
 store.dispatch('time/update').then(() => {
-  setInterval(() => store.dispatch('time/update'), 10000)
+  setInterval(() => store.dispatch('time/update'), 5000)
   // @ts-ignore
   window.app = new Vue({
     router,

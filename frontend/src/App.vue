@@ -3,7 +3,6 @@
     <OfflineInfo />
     <AppHeader />
     <router-view />
-    <Loader :loading="loading" />
   </div>
 </template>
 
@@ -12,7 +11,6 @@ import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 
 import AppHeader from './components/AppHeader'
-import Loader from './components/Loader'
 import OfflineInfo from './components/OfflineInfo'
 import { AuthGetter } from '@/store/auth'
 import { UIGetter, UIAction } from '@/store/ui'
@@ -21,7 +19,6 @@ import logger from './logger'
 @Component({
   components: {
     AppHeader,
-    Loader,
     OfflineInfo,
   },
 })
