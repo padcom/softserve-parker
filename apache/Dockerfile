@@ -13,7 +13,7 @@ RUN apt-get update && \
 RUN a2enmod proxy_http ssl
 
 ADD 001-parker.conf /etc/apache2/sites-enabled/
-ADD chain.crt /etc/ssl/certs/
+ADD parker-chain.crt /etc/ssl/certs/
 ADD parker.aplaline.com.crt /etc/ssl/certs/
 ADD parker.aplaline.com.key /etc/ssl/private/
 
