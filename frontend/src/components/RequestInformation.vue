@@ -1,5 +1,5 @@
 <template>
-  <div v-if="request !== null && isBeforeCancelHour" class="request-information"
+  <div v-if="request !== null" class="request-information"
     :class="{
       'request-information--won': request.status === 'won',
       'request-information--lost': request.status === 'lost',
@@ -54,10 +54,6 @@ export default class RequestInformation extends Vue {
 
   get status () {
     return this.request.status === 'won' ? 'confirmed' : 'rejected'
-  }
-
-  get isBeforeCancelHour () {
-    return moment(this.now).isBefore(moment(this.today + ' ' + this.cancelHour))
   }
 
   async cancel () {

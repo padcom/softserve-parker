@@ -4,8 +4,14 @@
       {{ infoMessage }}
     </Modal>
 
-    <LastMinuteNotice :request="firstAbandonedRequest" @takeit="takeLastMinuteSpot" />
-    <RequestInformation :request="todayRequest" @cancel="abandonRequest" />
+    <LastMinuteNotice v-if="isBeforeCancelHour"
+      :request="firstAbandonedRequest"
+      @takeit="takeLastMinuteSpot"
+    />
+    <RequestInformation v-if="isBeforeCancelHour"
+      :request="todayRequest"
+      @cancel="abandonRequest"
+    />
 
     <Title borderBottom>Parking dates</Title>
     <div class="home-page__content">
@@ -191,6 +197,13 @@ export default class Home extends Vue {
   // --------------------------------------------------------------------------
   // handle request abandoning (request has been granted but cancels it)
   // --------------------------------------------------------------------------
+
+  @TimeState now
+  @TimeState cancelHour
+
+  get isBeforeCancelHour () {
+    return moment(this.now).isBefore(moment(this.today + ' ' + this.cancelHour))
+  }
 
   async abandonRequest (request) {
     this.updateRequestStatus(request, 'abandoned')
