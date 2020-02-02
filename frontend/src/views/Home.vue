@@ -4,11 +4,13 @@
       {{ infoMessage }}
     </Modal>
 
+    {{ todayRequest | json }}
+
     <RequestInformation v-if="isBeforeCancelHour"
       :request="todayRequest"
       @cancel="abandonRequest"
     />
-    <LastMinuteNotice v-if="isBeforeCancelHour"
+    <LastMinuteNotice v-if="isBeforeCancelHour && hasLostRequest"
       :request="firstAbandonedRequest"
       @takeit="takeLastMinuteSpot"
     />
@@ -174,13 +176,18 @@ export default class Home extends Vue {
   }
 
   // --------------------------------------------------------------------------
-  // handle request abandoning (request has been granted but cancels it)
+  // handle asking for request that someone else abandoned
   // --------------------------------------------------------------------------
 
   abandonedRequests = []
 
   get firstAbandonedRequest () {
     return this.abandonedRequests[0] || null
+  }
+
+  get hasLostRequest () {
+    const request = this.getRequestByDate(this.today)
+    return request && [ 'won', 'lost' ].includes(request.status)
   }
 
   async takeLastMinuteSpot (request) {
