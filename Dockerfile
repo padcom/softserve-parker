@@ -6,6 +6,11 @@ ARG domain=parker.aplaline.com
 ARG port=3000
 
 ENV CONFIRM_URL_BASE=http://$domain
+ENV SMTP_HOST=127.0.0.1
+ENV SMTP_PORT=2525
+ENV SMTP_SECURE=false
+ENV SMTP_USER=
+ENV SMTP_PASSWORD=
 
 COPY common /common/
 COPY backend/dist /app/
