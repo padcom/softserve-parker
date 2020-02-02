@@ -4,13 +4,14 @@
     :name="name"
     :type="type"
     @click="$emit('click')"
-    v-bind:class="[
-      'btn',
+    :class="[
+      `btn`,
       `btn--${color}`,
       {
         'btn--full-width': fullWidth,
         'btn--outlined': outlined,
-        'btn--disabled': disabled
+        'btn--disabled': disabled,
+        'btn--transparent': transparent,
       }
     ]"
   >
@@ -31,6 +32,7 @@ export default class Btn extends Vue {
   @Prop({ type: Boolean, default: false }) outlined
   @Prop({ type: Boolean, default: false }) fullWidth
   @Prop({ type: Boolean, default: false }) disabled
+  @Prop({ type: Boolean, default: false }) transparent
   @Prop({ type: [ String, Boolean ], default: false }) icon
 }
 </script>
@@ -61,10 +63,18 @@ export default class Btn extends Vue {
     background-color: $color-black;
   }
 
+  &--white {
+    color: $color-black-text;
+    background-color: $color-white;
+  }
+
   &--outlined {
-    background-color: transparent;
     border: 2px solid $color-black;
     color: $color-black;
+  }
+
+  &--transparent {
+    background-color: transparent;
   }
 
   &--full-width {

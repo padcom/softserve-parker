@@ -24,6 +24,7 @@
           <Btn
             outlined
             fullWidth
+            transparent
             :disabled="isTomorrowAlreadyRequested || isTomorrowWeekend"
             @click="requestReservationsForTomorrow"
           >

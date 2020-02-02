@@ -20,6 +20,7 @@
       icon="/img/plus.png"
       outlined
       fullWidth
+      transparent
       @click="saveDate"
       :disabled="selected === null"
     >
