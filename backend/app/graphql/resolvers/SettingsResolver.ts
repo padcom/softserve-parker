@@ -18,7 +18,6 @@ export class SettingsResolver {
     return Settings.cancelHour()
   }
 
-  @Authorized('admin')
   @Query(() => Settings!)
   async settings () {
     return Settings.all()

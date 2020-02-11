@@ -1,5 +1,6 @@
 <template>
   <div class="month">
+    <!--if there is no new line after the div it causes an error! -->
     <table @mouseleave="$emit('clearHover')">
       <tr class="month__week" v-for="week in weeks" :key="week[0].format()">
         <td

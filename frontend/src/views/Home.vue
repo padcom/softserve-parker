@@ -4,8 +4,6 @@
       {{ infoMessage }}
     </Modal>
 
-    {{ todayRequest | json }}
-
     <RequestInformation v-if="isBeforeCancelHour"
       :request="todayRequest"
       @cancel="abandonRequest"
