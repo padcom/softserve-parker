@@ -49,7 +49,7 @@ export class User {
     return user
   }
 
-  static async updateUser (state: string, firstName: string, lastName: string, plate: string, phone: string, id: number, roles: string, description: string) {
+  static async updateUser (state: string, firstName: string, lastName: string, plate: string, phone: string, id: number, roles: string, email: string, description: string) {
     const { updateUser } = await query(`mutation updateUser(
         $state: String!,
         $firstName: String!,
@@ -58,6 +58,7 @@ export class User {
         $phone: String!,
         $roles: String!,
         $description: String
+        $email: String!
         $id: ID!,
       ) {
         updateUser(
@@ -67,6 +68,7 @@ export class User {
           plate: $plate,
           phone: $phone,
           roles: $roles,
+          email: $email,
           description: $description,
           id: $id
         )
@@ -78,6 +80,7 @@ export class User {
       plate,
       phone,
       roles,
+      email,
       description,
       id,
     })

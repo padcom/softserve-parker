@@ -7,6 +7,9 @@
     <v-card-text>
       <v-container>
         <v-row>
+          <v-col cols="12" sm="12">
+            <v-text-field v-model="user.email" label="First name" :error="!user.email" />
+          </v-col>
           <v-col cols="12" sm="6">
             <v-text-field v-model="user.firstName" label="First name" :error="!user.firstName" />
           </v-col>
@@ -60,13 +63,13 @@ export default class UserForm extends Vue {
 
   onSubmit () {
     if (this.isFormFilledUp()) {
-      const user = this.user
-      this.$emit('onSubmit', user)
+      this.$emit('onSubmit', this.user)
     }
   }
 
   isFormFilledUp (): boolean {
     return Boolean(
+      this.user.email &&
       this.user.firstName &&
       this.user.lastName &&
       this.user.plate &&
