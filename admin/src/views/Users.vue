@@ -48,7 +48,7 @@
           {{ getValue(item.phone) }}
         </template>
         <template v-slot:item.roles="{ item }">
-          <span v-if="item.state !== 'deleted'">{{ getValue(item.roles) }}</span>
+          <span>{{ getValue(item.roles) }}</span>
         </template>
         <template v-slot:item.state="{ item }">
           <v-tooltip bottom v-if="item.description">
