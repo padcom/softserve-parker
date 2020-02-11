@@ -6,8 +6,11 @@ import router from './router'
 import store from './store'
 import './axios'
 import './filters'
+import { cleanup } from './cleanup'
 
 Vue.config.productionTip = false
+
+cleanup()
 
 const moment = extendMoment(Moment)
 
