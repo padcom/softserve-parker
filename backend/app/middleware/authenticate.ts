@@ -1,6 +1,7 @@
 import { Response, Request } from 'express'
 import * as fs from 'fs'
 import * as path from 'path'
+import { URL } from 'url'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import { logger } from '../logger'
@@ -17,6 +18,15 @@ function validateParams (req: Request): void | UnauthenticatedError {
 async function assertPasswordsMatching (password: string, hash: string): Promise<void | UnauthenticatedError> {
   const match: boolean = await bcrypt.compare(password, hash)
   if (!match) throw new UnauthenticatedError('Incorrect password.')
+}
+
+async function assertAdminRoleForAdminUI (user: User, referrer: string) {
+  const url = new URL(referrer)
+  if (url.pathname.startsWith('/admin')) {
+    if (!user.roles.includes('admin')) {
+      throw new UnauthenticatedError('Access denied')
+    }
+  }
 }
 
 async function getJSONToken (userID: number, email: string): Promise<string> {
@@ -56,6 +66,7 @@ export async function login (req: Request, res: Response) {
     validateParams(req);
     const user = await User.byEmail(req.body.email)
     await assertPasswordsMatching(req.body.password, user.password)
+    await assertAdminRoleForAdminUI(user, req.headers.referer)
     const token = await getJSONToken(user.id, user.email)
     await Session.create(token)
     res.end(token)
