@@ -8,7 +8,7 @@
       <v-container>
         <v-row>
           <v-col cols="12" sm="12">
-            <v-text-field v-model="user.email" label="First name" :error="!user.email" />
+            <v-text-field v-model="user.email" label="Email" :error="!user.email" />
           </v-col>
           <v-col cols="12" sm="6">
             <v-text-field v-model="user.firstName" label="First name" :error="!user.firstName" />
@@ -26,7 +26,7 @@
             <v-select v-model="user.roles" label="Role" :items="[ 'user', 'admin', 'vip' ]" required/>
           </v-col>
           <v-col cols="12" sm="6">
-            <v-select v-model="user.state" label="State" :items="[ 'active', 'inactive', 'deleted' ]" />
+            <v-select v-model="user.state" label="State" :items="allowedUserStates" />
           </v-col>
           <v-col cols="12" sm="12">
             <v-textarea v-model="user.description" label="Description" rows="2" counter="255" :error="!isDescriptionValid" />
@@ -81,6 +81,14 @@ export default class UserForm extends Vue {
 
   get isDescriptionValid () {
     return this.user.description === undefined || this.user.description === null || this.user.description.length <= 255
+  }
+
+  get allowedUserStates () {
+    const result = [ 'active', 'inactive' ]
+    if (this.user.state === 'deleted') {
+      result.push('deleted')
+    }
+    return result
   }
 }
 </script>
