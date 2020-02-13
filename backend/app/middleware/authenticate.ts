@@ -29,6 +29,12 @@ async function assertAdminRoleForAdminUI (user: User, referrer: string) {
   }
 }
 
+async function assertUserIsActive (user: User) {
+  if (user.state !== 'active') {
+    throw new Error('Your account has been deactivated')
+  }
+}
+
 async function getJSONToken (userID: number, email: string): Promise<string> {
   return jwt.sign({ userID, email }, cert, { algorithm: 'RS256' });
 }
@@ -66,6 +72,7 @@ export async function login (req: Request, res: Response) {
     validateParams(req);
     const user = await User.byEmail(req.body.email)
     await assertPasswordsMatching(req.body.password, user.password)
+    await assertUserIsActive(user)
     await assertAdminRoleForAdminUI(user, req.headers.referer)
     const token = await getJSONToken(user.id, user.email)
     await Session.create(token)
