@@ -98,5 +98,9 @@ export default class UserForm extends Vue {
     const re = /@softserveinc.com\s*$/
     return re.test(email.toLowerCase())
   }
+
+  mounted () {
+    this.allowedUserStates = this.getAllowedUserStates(this.user.state)
+  }
 }
 </script>
