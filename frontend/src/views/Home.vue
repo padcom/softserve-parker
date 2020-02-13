@@ -185,7 +185,7 @@ export default class Home extends Vue {
 
   get hasLostRequest () {
     const request = this.getRequestByDate(this.today)
-    return request && [ 'won', 'lost' ].includes(request.status)
+    return request && [ 'lost' ].includes(request.status)
   }
 
   async takeLastMinuteSpot (request) {
