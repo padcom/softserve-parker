@@ -8,7 +8,7 @@
       <v-container>
         <v-row>
           <v-col cols="12" sm="12">
-            <v-text-field v-model="user.email" label="Email" :error="!user.email" />
+            <v-text-field v-model="user.email" label="Email" :error="!isValidEmail(user.email)" />
           </v-col>
           <v-col cols="12" sm="6">
             <v-text-field v-model="user.firstName" label="First name" :error="!user.firstName" />
@@ -38,7 +38,7 @@
     <v-card-actions>
       <v-spacer />
       <v-btn text @click="$emit('close')">Cancel</v-btn>
-      <v-btn color="blue darken-1" text @click="onSubmit">Save</v-btn>
+      <v-btn color="blue darken-1" text @click="onSubmit" :disabled="!isFormFilledUp">Save</v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -50,9 +50,12 @@ import { Vue, Component, Watch, Prop } from 'vue-property-decorator'
 export default class UserForm extends Vue {
   @Prop({ type: Object, required: true }) userProp: any
 
+  allowedUserStates = [ 'active', 'inactive' ]
+
   @Watch('userProp')
   onUserChanged (value: object) {
     this.user = { ...value }
+    this.allowedUserStates = this.getAllowedUserStates(this.user.state)
   }
 
   user = { description: '', ...this.userProp }
@@ -62,20 +65,20 @@ export default class UserForm extends Vue {
   }
 
   onSubmit () {
-    if (this.isFormFilledUp()) {
+    if (this.isFormFilledUp) {
       this.$emit('onSubmit', this.user)
     }
   }
 
-  isFormFilledUp (): boolean {
+  get isFormFilledUp (): boolean {
     return Boolean(
-      this.user.email &&
+      this.isValidEmail(this.user.email) &&
       this.user.firstName &&
       this.user.lastName &&
       this.user.plate &&
       this.user.phone &&
       this.user.roles &&
-      (this.isDescriptionValid)
+      this.isDescriptionValid
     )
   }
 
@@ -83,12 +86,17 @@ export default class UserForm extends Vue {
     return this.user.description === undefined || this.user.description === null || this.user.description.length <= 255
   }
 
-  get allowedUserStates () {
+  getAllowedUserStates (currentUserState: string) {
     const result = [ 'active', 'inactive' ]
-    if (this.user.state === 'deleted') {
+    if (currentUserState === 'deleted') {
       result.push('deleted')
     }
     return result
+  }
+
+  isValidEmail (email: string) {
+    const re = /@softserveinc.com\s*$/
+    return re.test(email.toLowerCase())
   }
 }
 </script>
