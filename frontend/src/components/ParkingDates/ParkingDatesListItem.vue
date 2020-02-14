@@ -20,7 +20,7 @@
         'reservation__date--animeted-movement': animetedMovementActive,
       }"
     >
-      {{ this.request.id }} {{ this.request.date | date }}
+      {{ this.request.date | date }}
       <span v-if="request.status">- {{ this.request.status | status }}</span>
     </p>
     <button v-if="!touchedDevice && request.status === ''"
