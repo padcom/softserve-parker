@@ -1,6 +1,6 @@
 <template>
   <div class="avatar">
-    <img class="avatar__photo" :src="avatar" :alt="user.email" />
+    <img class="avatar__photo" :src="avatar" alt="avatar" :title="user.email" />
   </div>
 </template>
 
