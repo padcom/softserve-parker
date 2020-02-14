@@ -8,7 +8,7 @@
       <v-container>
         <v-row>
           <v-col cols="12" sm="6">
-            <v-text-field v-model="user.email" label="Email" :error="!user.email" />
+            <v-text-field v-model="user.email" label="Email" :error="!isValidEmail(user.email)" />
           </v-col>
           <v-col cols="12" sm="6">
             <v-text-field v-model="user.password" type="password" label="Password" :error="!user.password" />
@@ -41,7 +41,7 @@
     <v-card-actions>
       <v-spacer />
       <v-btn text @click="$emit('close')">Cancel</v-btn>
-      <v-btn color="blue darken-1" text @click="onSubmit">Save</v-btn>
+      <v-btn color="blue darken-1" text @click="onSubmit" :disabled="!isFormFilledUp">Save</v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -55,7 +55,7 @@ export default class UserForm extends Vue {
 
   @Watch('userProp')
   onUserChanged (value: object) {
-    this.user = { ...value }
+    this.user = { email: '', ...value }
   }
 
   user = { ...this.userProp }
@@ -65,25 +65,31 @@ export default class UserForm extends Vue {
   }
 
   onSubmit () {
-    if (this.isFormFilledUp()) {
+    if (this.isFormFilledUp) {
       const user = this.user
       this.$emit('onSubmit', user)
     }
   }
 
-  isFormFilledUp (): boolean {
+  get isFormFilledUp () {
     return Boolean(
+      this.isValidEmail(this.user.email) &&
       this.user.firstName &&
       this.user.lastName &&
       this.user.plate &&
       this.user.phone &&
       this.user.roles &&
-      (this.isDescriptionValid)
+      this.isDescriptionValid
     )
   }
 
   get isDescriptionValid () {
     return this.user.description === undefined || this.user.description === null || this.user.description.length <= 255
+  }
+
+  isValidEmail (email: string) {
+    const re = /@softserveinc.com\s*$/
+    return email && re.test(email.toLowerCase())
   }
 }
 </script>
