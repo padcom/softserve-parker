@@ -128,7 +128,8 @@ export default class Month extends Vue {
   }
 
   isWeekend (date) {
-    return date.day() === 6 || date.day() === 0
+    return false
+    // return date.day() === 6 || date.day() === 0
   }
 
   daySelected (day) {
