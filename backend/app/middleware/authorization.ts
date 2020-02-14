@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken'
 import { logger } from '../logger'
 import { UnauthenticatedError } from '../customErrors'
 import { Session } from '../domain/Session'
+import { User } from '../domain/User'
 
 function getTokenFromRequest (req: Request): string {
   const authHeader: string = req.header('Authorization')
@@ -16,6 +17,15 @@ function assertUserIsAuthorized (userToken: string, sessionToken: string): void 
   const cert: string = fs.readFileSync(path.resolve(__dirname, '../../public.key'), 'utf8')
   if (!sessionToken || !jwt.verify(userToken, cert)) {
     throw new UnauthenticatedError('Unauthorized')
+  }
+}
+
+async function assertUserIsActive (token: string) {
+  const data = jwt.decode(token)
+  // @ts-ignore
+  const user = await User.byEmail(data.email)
+  if (user.state !== 'active') {
+    throw new UnauthenticatedError('Account is disabled or deleted')
   }
 }
 
@@ -34,6 +44,7 @@ export async function isAuthorized (req: Request, res: Response, next: NextFunct
     const userToken: string = getTokenFromRequest(req)
     const token: string = await Session.fetchToken(userToken)
     assertUserIsAuthorized(userToken, token)
+    await assertUserIsActive(token)
     next()
   } catch (e) {
     logger.error(e)
