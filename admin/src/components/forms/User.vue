@@ -2,7 +2,7 @@
   <v-card class="user-editor">
     <v-card-title>
       <span class="headline">Edit user</span>
-      {{ isUserDeleted }}
+      <div v-if="isUserDeleted" style="font-size: 12px">This user is DELETED and cannot be changed. Change the status to edit.</div>
     </v-card-title>
 
     <v-card-text>
@@ -109,3 +109,6 @@ export default class UserForm extends Vue {
   }
 }
 </script>
+
+<style scoped>
+</style>
