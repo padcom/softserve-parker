@@ -2,34 +2,35 @@
   <v-card class="user-editor">
     <v-card-title>
       <span class="headline">Edit user</span>
+      {{ isUserDeleted }}
     </v-card-title>
 
     <v-card-text>
       <v-container>
         <v-row>
           <v-col cols="12" sm="12">
-            <v-text-field v-model="user.email" label="Email" :error="!isValidEmail(user.email)" />
+            <v-text-field v-model="user.email" label="Email" :error="!isValidEmail(user.email)" :readonly="isUserDeleted" />
           </v-col>
           <v-col cols="12" sm="6">
-            <v-text-field v-model="user.firstName" label="First name" :error="!user.firstName" />
+            <v-text-field v-model="user.firstName" label="First name" :error="!user.firstName" :readonly="isUserDeleted" />
           </v-col>
           <v-col cols="12" sm="6">
-            <v-text-field v-model="user.lastName" label="Last name" :error="!user.lastName" />
+            <v-text-field v-model="user.lastName" label="Last name" :error="!user.lastName" :readonly="isUserDeleted" />
           </v-col>
           <v-col cols="12" sm="6">
-            <v-text-field v-model="user.phone" type="string" label="Phone number" :error="!user.phone" />
+            <v-text-field v-model="user.phone" type="string" label="Phone number" :error="!user.phone" :readonly="isUserDeleted" />
           </v-col>
           <v-col cols="12" sm="6">
-            <v-text-field v-model="user.plate" label="Plate number" :error="!user.plate" />
+            <v-text-field v-model="user.plate" label="Plate number" :error="!user.plate" :readonly="isUserDeleted" />
           </v-col>
           <v-col cols="12" sm="6">
-            <v-select v-model="user.roles" label="Role" :items="[ 'user', 'admin', 'vip' ]" required/>
+            <v-select v-model="user.roles" label="Role" :items="[ 'user', 'admin', 'vip' ]" required :readonly="isUserDeleted"/>
           </v-col>
           <v-col cols="12" sm="6">
             <v-select v-model="user.state" label="State" :items="allowedUserStates" />
           </v-col>
           <v-col cols="12" sm="12">
-            <v-textarea v-model="user.description" label="Description" rows="2" counter="255" :error="!isDescriptionValid" />
+            <v-textarea v-model="user.description" label="Description" rows="2" counter="255" :error="!isDescriptionValid" :readonly="isUserDeleted" />
           </v-col>
         </v-row>
       </v-container>
@@ -101,6 +102,10 @@ export default class UserForm extends Vue {
 
   mounted () {
     this.allowedUserStates = this.getAllowedUserStates(this.user.state)
+  }
+
+  get isUserDeleted () {
+    return this.user.state === 'deleted'
   }
 }
 </script>
