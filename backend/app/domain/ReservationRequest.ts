@@ -176,17 +176,17 @@ export class ReservationRequest {
     const history = await History.byDateAndUserId(abandoned.date, abandoned.userId)
     await History.setState(history.id, 'cancelled')
 
-    const user = await lost.user()
+    const user = await User.byId(lost.userId)
 
     await History.create(
-        history.date,
-        history.numberOfParkingSpots,
-        history.numberOfRequests,
-        lost.userId,
-        user.plate,
-        lost.rank,
-        'used'
-    )
+      history.date,
+      history.numberOfParkingSpots,
+      history.numberOfRequests,
+      lost.userId,
+      user.plate,
+      lost.rank,
+      'used'
+    );
 
     await ReservationRequest.updateStatus(abandonedId, 'cancelled')
     await ReservationRequest.updateStatus(lostId, 'won')
