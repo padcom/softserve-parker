@@ -38,6 +38,12 @@ export class History {
     return User.byId(this.userId)
   }
 
+  @Field(() => Number)
+  numberOfParkingSpots: number
+
+  @Field(() => Number)
+  numberOfRequests: number
+
   private static mapRowsToHistory (rows): History[] {
     return rows.map(row => ({ ...row, date: format(row.date) }))
   }
