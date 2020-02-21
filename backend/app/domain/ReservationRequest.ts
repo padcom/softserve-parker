@@ -6,6 +6,7 @@ import { db } from '../db'
 import { User } from './User'
 import { Settings } from './Settings'
 import { History } from './History'
+import { logger } from '../logger'
 
 @ObjectType({
   description: 'Object representing reservation request.',
@@ -100,7 +101,7 @@ export class ReservationRequest {
   }
 
   static async updateStatus (id: number, status: string) {
-    console.log('Updating status of request', id, 'to', status)
+    logger.info('Updating status of request', id, 'to', status)
 
     const [ result ] = await db.execute(
       `UPDATE reservationRequest SET status=? WHERE id = ?`,
@@ -180,8 +181,8 @@ export class ReservationRequest {
 
     await History.create(
       history.date,
-      history.numberOfParkingSpots,
-      history.numberOfRequests,
+      history.capacity,
+      history.requests,
       lost.userId,
       user.plate,
       lost.rank,

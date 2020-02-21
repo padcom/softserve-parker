@@ -2,6 +2,7 @@ import { Field, ID, ObjectType } from 'type-graphql'
 import { OkPacket, FieldPacket, RowDataPacket } from 'mysql'
 import { db } from '../db'
 import { User } from './User'
+import { logger } from '../logger'
 
 import format from 'common/date/format'
 
@@ -37,12 +38,6 @@ export class History {
   user (): Promise<User> {
     return User.byId(this.userId)
   }
-
-  @Field(() => Number)
-  numberOfParkingSpots: number
-
-  @Field(() => Number)
-  numberOfRequests: number
 
   private static mapRowsToHistory (rows): History[] {
     return rows.map(row => ({ ...row, date: format(row.date) }))
@@ -91,10 +86,10 @@ export class History {
   }
 
   static async setState (id: number, state: string) {
-    console.log('Updating status of history entry', id, 'to', state)
+    logger.info('Updating status of history entry', id, 'to', state)
 
     const [ result ] = await db.execute(
-      `UPDATE history SET state=? WHERE id = ?`,
+      'UPDATE history SET state=? WHERE id=?',
       [ state, id ]
     ) as OkPacket[]
 
