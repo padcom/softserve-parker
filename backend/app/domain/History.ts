@@ -72,4 +72,34 @@ export class History {
 
     return this.mapRowsToHistory(rows)
   }
+
+  static async byDateAndUserId (date: string, userId: number): Promise<History> {
+    const [ rows ]: [ RowDataPacket[], FieldPacket[] ] = await db.execute(
+      'SELECT * FROM history WHERE date=? and userId=?',
+      [ date, userId ]
+    )
+
+    const entries = this.mapRowsToHistory(rows)
+    if (entries.length > 0) return entries[0]
+    else return null
+  }
+
+  static async setState (id: number, state: string) {
+    console.log('Updating status of history entry', id, 'to', state)
+
+    const [ result ] = await db.execute(
+      `UPDATE history SET state=? WHERE id = ?`,
+      [ state, id ]
+    ) as OkPacket[]
+
+    if (result.affectedRows === 0) {
+      throw new Error('History entry not found')
+    }
+
+    if (result.affectedRows !== 1) {
+      throw new Error('More than one request has been updated!')
+    }
+
+    return result.affectedRows
+  }
 }

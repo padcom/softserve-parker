@@ -5,6 +5,7 @@ import { db } from '../db'
 
 import { User } from './User'
 import { Settings } from './Settings'
+import { History } from './History'
 
 @ObjectType({
   description: 'Object representing reservation request.',
@@ -172,8 +173,13 @@ export class ReservationRequest {
     const lost = await ReservationRequest.byIdAndStatus(lostId, 'lost')
     if (!lost) return false
 
-    await this.updateStatus(abandonedId, 'cancelled')
-    await this.updateStatus(lostId, 'won')
+    const history = await History.byDateAndUserId(abandoned.date, abandoned.userId)
+    if (history) {
+      await History.setState(history.id, 'cancelled')
+    }
+
+    await ReservationRequest.updateStatus(abandonedId, 'cancelled')
+    await ReservationRequest.updateStatus(lostId, 'won')
 
     return true
   }
