@@ -272,7 +272,11 @@ export default class Home extends Vue {
 
   openCalendar () {
     logger.debug('openCalendar()')
-    this.selectedRequestDays = this.isTomorrowAlreadyRequested || this.isTomorrowWeekend ? null : moment.range(this.tomorrow, this.tomorrow)
+    this.selectedRequestDays =
+      moment(this.today).isBefore('2020-03-01') ||
+      this.isTomorrowAlreadyRequested || this.isTomorrowWeekend
+        ? null
+        : moment.range(this.tomorrow, this.tomorrow)
     this.showCalendar = true
   }
 

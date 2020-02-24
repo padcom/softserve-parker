@@ -13,7 +13,7 @@
           :class="{
             month__day: true,
             'month__day--disabled':
-              day.isBefore(tomorrow) || isWeekend(day) || isInDisabledDates(day) || !day.isSame(date, 'month'),
+              day.isBefore('2020-03-01') || day.isBefore(tomorrow) || isWeekend(day) || isInDisabledDates(day) || !day.isSame(date, 'month'),
             'month__day--highlighted':
               day.within(highlighted) && day.isSame(date, 'month'),
             'month__day--selected':
@@ -134,6 +134,7 @@ export default class Month extends Vue {
   daySelected (day) {
     logger.debug('Month.daySelected', day.format('YYYY-MM-DD'))
     if (
+      day.isAfter('2020-03-01') &&
       day.isAfter(this.today) &&
       day.within(this.valid) &&
       !this.isWeekend(day) &&
