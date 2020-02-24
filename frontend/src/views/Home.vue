@@ -321,7 +321,7 @@ export default class Home extends Vue {
     const dates = Array
       .from(range.by('day'))
       .map(date => date.format('YYYY-MM-DD'))
-      // .filter(date => !isWeekendDay(date))
+      .filter(date => !isWeekendDay(date))
 
     await this.createReservationRequests(dates)
     await this.updateReservationRequests(dates, '')
