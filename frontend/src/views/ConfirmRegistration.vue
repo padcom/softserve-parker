@@ -2,7 +2,7 @@
   <section class="registration-confirmation">
     <Loader :loading="!confirmed && !error" />
     <p class="registration-confirmation__text" v-if="error">Something went wrong.</p>
-    <p class="registration-confirmation__text" v-if="confirmed">You'r account has been activeted</p>
+    <p class="registration-confirmation__text" v-if="confirmed">Your account has been activated</p>
     <Btn v-if="confirmed" v-on:click="redirectToLoginPage" outlined fullWidth transparent>OK</Btn>
   </section>
 </template>

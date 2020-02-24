@@ -6,7 +6,7 @@
       :isValid="isPasswordValid"
     />
     <PasswordField
-      placeholder="Confirm new passwrod"
+      placeholder="Confirm new password"
       v-model="passwordConfirmation"
       :isValid="isPasswordConfirmationValid"
     />
