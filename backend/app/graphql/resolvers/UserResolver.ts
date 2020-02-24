@@ -1,5 +1,6 @@
-import { Arg, Int, Query, Resolver, Mutation, ID } from 'type-graphql'
+import { Arg, Int, Query, Resolver, Mutation, ID, Authorized, Ctx, UnauthorizedError } from 'type-graphql'
 import { User } from '../../domain/User'
+import { UnauthenticatedError } from '../../customErrors'
 
 @Resolver(User)
 export class UserResolver {
@@ -9,6 +10,7 @@ export class UserResolver {
     return true
   }
 
+  @Authorized('admin')
   @Query(() => [User], {
     description: 'Returns all users',
   })
@@ -22,10 +24,18 @@ export class UserResolver {
   async user (
     @Arg('email', () => String!)
     email: string,
+    @Ctx()
+    context,
   ) {
-    return User.byEmail(email)
+    const user = await User.byEmail(context.user)
+    if (user.roles === 'admin' || context.user === email) {
+      return User.byEmail(email)
+    } else {
+      throw new UnauthenticatedError('This action is not allowed')
+    }
   }
 
+  @Authorized('admin')
   @Mutation(() => ID, {
     description: 'Returns newly created user id',
   })
@@ -57,6 +67,7 @@ export class UserResolver {
     return newUserId
   }
 
+  @Authorized('admin')
   @Mutation(() => Int, {
     description: 'Update user',
   })
@@ -83,6 +94,7 @@ export class UserResolver {
     return User.update(id, state, firstName, lastName, plate, phone, roles, email, description)
   }
 
+  @Authorized('admin')
   @Mutation(() => Int, {
     description: 'Remove user',
   })
@@ -109,5 +121,12 @@ export class UserResolver {
     } else if (user && user.state === 'deleted') {
       throw new Error(`User with id ${id} is deleted`)
     }
+  }
+
+  @Query(() => Int!, {
+    description: 'Return number of users',
+  })
+  async numberOfUsers () {
+    return (await User.active()).length
   }
 }

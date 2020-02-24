@@ -24,4 +24,10 @@ export class User {
   static async resetPassword (token: string, password: string) {
     return axios.post('/password/reset', { token, password })
   }
+
+  static async getNumberOfUsers () {
+    const { numberOfUsers } = await query(`query { numberOfUsers }`)
+
+    return numberOfUsers
+  }
 }

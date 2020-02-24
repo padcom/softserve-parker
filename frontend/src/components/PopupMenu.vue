@@ -13,7 +13,6 @@ import { AuthState } from '@/store/auth'
 import Defocuser from 'defocuser'
 
 import { User } from '@/domain/User'
-import { RankingAPI } from '@/domain/RankingAPI'
 import Ranking from '@/components/Ranking.vue'
 
 @Component({
@@ -30,12 +29,12 @@ export default class PopupMenu extends Vue {
   total = -1
 
   async loadUserRating () {
-    const [ user, ranking ] = await Promise.all([
+    const [ user, count ] = await Promise.all([
       User.getByEmail(this.user.email, [ 'rank' ]),
-      RankingAPI.getRanking(),
+      User.getNumberOfUsers(),
     ])
     this.rank = user.rank + 1
-    this.total = ranking.reduce((acc, item) => item.rank > acc ? item.rank : acc, 0) + 1
+    this.total = count
   }
 
   mounted () {

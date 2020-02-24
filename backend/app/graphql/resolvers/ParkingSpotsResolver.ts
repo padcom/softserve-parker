@@ -19,21 +19,4 @@ export class ParkingSpotsResolver {
   ) {
     return ParkingSpot.fetch(skip, limit)
   }
-
-  @Mutation(() => ParkingSpot, {
-    description:
-      'Updates information whether a parking spot is reserved or not',
-  })
-  async setParkingSpotReservationStatus (
-    @Arg('id', () => Int!, {
-      description: 'Parking spot id you want to change',
-    })
-    id: number,
-    @Arg('status', () => Boolean!, {
-      description: 'Reservation status you want to change to',
-    })
-    status: boolean
-  ) {
-    return ParkingSpot.setReservation(status, id)
-  }
 }
