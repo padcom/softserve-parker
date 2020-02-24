@@ -131,7 +131,14 @@ export class User {
           from: EMAIL,
           to: email,
           subject: 'Email Confirmation', 
-          html: `<p>Please confirm your email address <a href='${CONFIRM_URL_BASE}/#/confirm-registration/${userId}'>here</a>.<p/>`,
+          html: `
+            <p>
+              Welcome in SoftServe Parker. This app will help you with parking place reservation.
+              To confirm registration please click the link below:
+            </p>
+            <p>
+              <a href='${CONFIRM_URL_BASE}/#/confirm-registration/${userId}'>Confirmation link</a>.
+            <p/>`,
       });
 
     logger.info(`EMAIL: ${JSON.stringify(response)}`)

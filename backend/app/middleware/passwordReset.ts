@@ -17,7 +17,7 @@ router.post('/request-reset-link', async (req, res) => {
       to: user.email,
       subject: 'Password reset',
       html: `
-        <p>Click the following link to reset your password</p>
+        <p>Click the following link to reset your password for Parker:</p>
         <p>
           <a href="${CONFIRM_URL_BASE}/#/reset?token=${token}">Link</a>
         </p>
