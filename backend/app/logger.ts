@@ -1,4 +1,7 @@
 import winston from 'winston'
+import GelfTransport from 'winston-gelf'
+
+import config from './config'
 
 export const logger = winston.createLogger({
   format: winston.format.combine(winston.format.json()), // SoftServe logging system (Splunk) prefers JSON error format
@@ -13,7 +16,26 @@ export const logger = winston.createLogger({
   ],
 })
 
-// Docker will be running the processes and it needs console logs to do logging
-logger.add(new winston.transports.Console({
-  format: winston.format.simple(),
-}))
+// For development - dump logs to console
+if (config.NODE_ENV === 'development') {
+  logger.add(new winston.transports.Console({
+    format: winston.format.simple(),
+  }))
+}
+
+if (config.GELF_HOST && config.GELF_PORT) {
+  logger.info(`Starting GELF transport to ${config.GELF_HOST}:${config.GELF_PORT}`)
+  logger.add(new GelfTransport({
+    gelfPro: {
+      fields: {
+        env: config.NODE_ENV,
+        facility: 'parker',
+      },
+      adapterName: 'udp',
+      adapterOptions: {
+        host: config.GELF_HOST,
+        port: config.GELF_PORT,
+      }
+    }
+  }))
+}
