@@ -31,7 +31,7 @@ async function assertAdminRoleForAdminUI (user: User, referrer: string) {
 
 async function assertUserIsActive (user: User) {
   if (user.state !== 'active') {
-    throw new Error('Your account has been deactivated')
+    throw new Error('Your account is not active')
   }
 }
 
