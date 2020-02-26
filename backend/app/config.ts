@@ -15,6 +15,7 @@ const envVariableValidators = {
   SMTP_PASSWORD: str({ default: '', desc: 'The password for the smtp login' }),
   GELF_HOST: str({ default: '', desc: 'GELF host for logging' }),
   GELF_PORT: port({ default: 12201, desc: 'GELF port for logging' }),
+  LOG_LEVEL: str({ default: 'info', desc: 'Log level' })
 }
 
 dotenv.config()

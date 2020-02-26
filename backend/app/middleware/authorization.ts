@@ -6,8 +6,9 @@ import { logger } from '../logger'
 import { UnauthenticatedError } from '../customErrors'
 import { Session } from '../domain/Session'
 import { User } from '../domain/User'
+import { isTimeQuery } from '../graphql/utils'
 
-function getTokenFromRequest (req: Request): string {
+export function getTokenFromRequest (req: Request): string {
   const authHeader: string = req.header('Authorization')
   if (!authHeader) throw new UnauthenticatedError('Token not provided')
   return authHeader.split(' ')[1]
@@ -35,7 +36,7 @@ export async function isAuthorized (req: Request, res: Response, next: NextFunct
     return next()
   }
 
-  if (req.method === 'POST' && req.body.query === 'query { today, deadline, cancelHour }') {
+  if (req.method === 'POST' && isTimeQuery(req.body.query)) {
     // allowing for date query to not be authorized
     return next()
   }

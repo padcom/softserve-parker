@@ -78,7 +78,7 @@ export async function login (req: Request, res: Response) {
     await Session.create(token)
     res.end(token)
   } catch (e) {
-    logger.error(e)
+    logger.error(`Error while logging in for user ${req.body.email}: ${e.message}`)
     const status = getErrorStatus(e)
     res.status(status).end(getErrorMessage(e))
   }

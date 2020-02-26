@@ -12,6 +12,7 @@ import { logger } from './logger'
 import { isAuthorized } from './middleware/authorization'
 import { login, logout, signUp, confirmSignUp } from './middleware/authenticate'
 import passwordReset from './middleware/passwordReset'
+import logging from './middleware/logging'
 
 import { CronJob } from 'cron'
 import { task } from './engine'
@@ -25,15 +26,15 @@ async function main () {
   app.use(cors())
   app.use(express.json())
 
-  app.use('/login', wrap(login))
-  app.use('/logout', wrap(logout))
-  app.use('/signup', wrap(signUp))
-  app.use('/confirm-registration', wrap(confirmSignUp))
-  app.use('/password', wrap(passwordReset))
+  app.use('/login', logging, wrap(login))
+  app.use('/logout', logging, wrap(logout))
+  app.use('/signup', logging, wrap(signUp))
+  app.use('/confirm-registration', logging, wrap(confirmSignUp))
+  app.use('/password', logging, wrap(passwordReset))
 
   const server = await graphql
   // @ts-ignore
-  app.use('/graphql', isAuthorized, wrap(server.getMiddleware({ path: '/' })))
+  app.use('/graphql', logging, isAuthorized, wrap(server.getMiddleware({ path: '/' })))
 
   app.use(express.static('public'))
 

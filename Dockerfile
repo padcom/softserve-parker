@@ -13,6 +13,7 @@ ENV SMTP_USER=
 ENV SMTP_PASSWORD=
 ENV GELF_HOST=
 ENV GELF_PORT=
+ENV LOG_LEVEL=info
 
 COPY common /common/
 COPY backend/dist /app/

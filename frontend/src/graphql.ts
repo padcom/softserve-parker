@@ -2,11 +2,15 @@ import axios from 'axios'
 import bus from './bus'
 import logger from './logger'
 
+function isTimeQuery (query: string): boolean {
+  return query === 'query { today, deadline, cancelHour }'
+}
+
 export async function query<T> (query: string, variables: object = {}) {
   const router = require('@/router').default
   const token = window.localStorage.getItem('parker:token')
 
-  if (!token && query !== 'query { today, deadline, cancelHour }') {
+  if (!token && !isTimeQuery(query)) {
     bus.emit('clear-credentials')
     await router.push('/login')
     throw new Error('User unauthenticated')
