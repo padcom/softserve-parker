@@ -1,8 +1,11 @@
-import { Arg, Int, ID, Query, Resolver, Mutation } from 'type-graphql'
+import { Arg, Ctx, Int, ID, Query, Resolver, Mutation, Authorized } from 'type-graphql'
 import { ReservationRequest } from '../../domain/ReservationRequest'
+
+import { logger } from '../../logger'
 
 @Resolver(ReservationRequest)
 export class ReservationRequestResolver {
+  @Authorized('admin')
   @Query(() => [ ReservationRequest ], {
     description: 'Returns all reservation requests in someday',
   })
@@ -19,6 +22,7 @@ export class ReservationRequestResolver {
     return ReservationRequest.between(from, to)
   }
 
+  @Authorized()
   @Query(() => [ ReservationRequest ], {
     description: 'Returns list of reservation requests for given user id',
   })
@@ -34,7 +38,8 @@ export class ReservationRequestResolver {
   ) {
     return ReservationRequest.byUserId(userId, from)
   }
-  
+
+  @Authorized('admin')
   @Query(() => [ ReservationRequest ], {
     description: 'Returns a list of upcoming reservation requests'
   })
@@ -42,6 +47,7 @@ export class ReservationRequestResolver {
     return ReservationRequest.upcoming()
   }
 
+  @Authorized()
   @Mutation(() => [ ReservationRequest ], {
     description:
       'Creates reservation requests.',
@@ -54,11 +60,16 @@ export class ReservationRequestResolver {
     @Arg('dates', () => [String!]!, {
       description: 'Dates for which will be created requests.',
     })
-    dates: string[]
+    dates: string[],
+    @Ctx()
+    context
   ) {
+    logger.info(`Requested createReservationRequest by ${context.user}`)
+
     return ReservationRequest.create(userId, dates)
   }
 
+  @Authorized()
   @Mutation(() => Number)
   async setReservationRequestStatus (
     @Arg('id', () => Int!, {
@@ -68,11 +79,16 @@ export class ReservationRequestResolver {
     @Arg('status', () => String!, {
       description: 'New status',
     })
-    status: string
+    status: string,
+    @Ctx()
+    context
   ) {
+    logger.info(`Requested setReservationRequestStatus by ${context.user}`)
+
     return ReservationRequest.updateStatus(id, status)
   }
 
+  @Authorized()
   @Mutation(() => Boolean!)
   async takeLastMinuteSpot (
     @Arg('abandoned', () => ID!, {
@@ -83,10 +99,15 @@ export class ReservationRequestResolver {
       description: 'Id of lost request',
     })
     lost: number,
+    @Ctx()
+    context
   ) {
+    logger.info(`Requested takeLastMinuteSpot by ${context.user}`)
+
     return ReservationRequest.takeLastMinuteSpot(abandoned, lost)
   }
 
+  @Authorized()
   @Query(() => [ ReservationRequest! ])
   async abandonedRequests (
     @Arg('date', () => String!)

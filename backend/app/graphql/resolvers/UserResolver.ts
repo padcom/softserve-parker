@@ -1,6 +1,7 @@
 import { Arg, Int, Query, Resolver, Mutation, ID, Authorized, Ctx, UnauthorizedError } from 'type-graphql'
 import { User } from '../../domain/User'
 import { UnauthenticatedError } from '../../customErrors'
+import { logger } from '../../logger'
 
 @Resolver(User)
 export class UserResolver {
@@ -58,7 +59,11 @@ export class UserResolver {
     state: string,
     @Arg('description', () => String, { nullable: true })
     description: string,
+    @Ctx()
+    context
   ) {
+    logger.info(`Requested creation of user ${email} by ${context.user}`)
+
     const newUserId = await User.create(email, password, firstName, lastName, plate, phone, roles, state, description)
     if (description) {
       await User.updateDescription(newUserId, description)
@@ -90,7 +95,11 @@ export class UserResolver {
     email: string,
     @Arg('description', () => String, { nullable: true })
     description: string,
+    @Ctx()
+    context
   ) {
+    logger.info(`Requested update of user ${email} by ${context.user}`)
+
     return User.update(id, state, firstName, lastName, plate, phone, roles, email, description)
   }
 
@@ -101,17 +110,26 @@ export class UserResolver {
   async removeUser (
     @Arg('id', () => ID!)
     id: number,
+    @Ctx()
+    context
   ) {
+    logger.info(`Requested removal of user ${id} by ${context.user}`)
+
     return User.delete(id)
   }
 
+  @Authorized('admin')
   @Mutation(() => String!, {
     description: 'Send confirmation email, returns email',
   })
   async sendConfirmationEmail (
     @Arg('id', () => ID!)
-    id
+    id,
+    @Ctx()
+    context
   ) {
+    logger.info(`Requested sending confirmation email for user ${id} by ${context.user}`)
+
     const user = await User.byId(id)
     if (user.state === 'inactive') {
       await User.sendConfirmationEmail(user.email, id)

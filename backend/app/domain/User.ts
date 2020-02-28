@@ -74,12 +74,16 @@ export class User {
       throw new Error('Unable to create new user - reason unknown')
     }
 
+    logger.info(`User ${email} created`)
+
     if (description) {
       User.updateDescription(result.insertId, description)
+      logger.info(`Description has been updated for user ${email}`)
     }
 
     if (state === 'inactive') {
       await User.sendConfirmationEmail(email, result.insertId)
+      logger.info(`Confirmation email sent to ${email}`)
     }
 
     return result.insertId
@@ -96,8 +100,11 @@ export class User {
       throw new Error('Unable to update user - reason unknown')
     }
 
+    logger.info(`User ${email} updated`)
+
     if (description !== null && description !== undefined) {
       this.updateDescription(id, description)
+      logger.info(`Description has been updated for user ${email}`)
     }
 
     return id
@@ -113,6 +120,8 @@ export class User {
     if (result.affectedRows !== 1) {
       throw new Error('Unable to update user description - reason unknown')
     }
+
+    logger.info(`Description has been updated for user ${id}`)
 
     return id
   }
@@ -154,6 +163,7 @@ export class User {
       throw new Error('User not found')
     }
 
+    logger.info(`User status set for user ${id}: ${value}`)
     return id
   }
 
@@ -169,6 +179,8 @@ export class User {
       logger.warn('Multiple users deleted')
     }
 
+    logger.info(`User ${email} deleted`)
+
     return result.affectedRows
   }
 
@@ -183,6 +195,8 @@ export class User {
     } else if (result.affectedRows > 1) {
       logger.warn('Multiple users anonymized!')
     }
+
+    logger.info(`User ${id} deleted`)
 
     return result.affectedRows
   }
@@ -240,6 +254,8 @@ export class User {
     if (rows.affectedRows == 0) {
       throw new Error('User not found')
     }
+
+    logger.info(`User ${userId} password updated`)
 
     return userId
   }

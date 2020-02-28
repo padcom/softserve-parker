@@ -1,8 +1,9 @@
-import { Query, Arg, Resolver } from 'type-graphql'
+import { Query, Arg, Resolver, Authorized } from 'type-graphql'
 import { History } from '../../domain/History'
 
 @Resolver(History)
 export class HistoryResolver {
+  @Authorized('admin')
   @Query(() => [ History ], {
     description: 'Returns parking usage history',
   })

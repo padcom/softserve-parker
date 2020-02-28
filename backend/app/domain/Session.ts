@@ -12,6 +12,8 @@ export class Session {
       throw new Error('Unable to create new user - reason unknown')
     }
 
+    logger.info(`Session created for token ${token}`)
+
     return result.insertId
   }
 
@@ -23,6 +25,8 @@ export class Session {
     } else if (result.affectedRows > 1) {
       logger.warn('Multiple users deleted')
     }
+
+    logger.info(`Session deleted for token ${token}`)
 
     return result.affectedRows
   }

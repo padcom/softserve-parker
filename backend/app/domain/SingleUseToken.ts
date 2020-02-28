@@ -2,6 +2,8 @@ import { v4 as uuid } from 'uuid'
 import { db } from '../db'
 import { OkPacket, RowDataPacket, FieldPacket } from 'mysql2'
 
+import { logger } from '../logger'
+
 type TokenState = '' | 'invalid'
 
 interface Token {
@@ -23,6 +25,8 @@ export class SingleUseToken {
     if (result.affectedRows !== 1) {
       throw new Error('Unable to create new user - reason unknown')
     }
+
+    logger.info(`SUT created for email ${email}`)
 
     return token
   }
@@ -50,6 +54,8 @@ export class SingleUseToken {
     if (result.affectedRows !== 1) {
       throw new Error('Unable to token - reason unknown')
     }
+
+    logger.info(`SUT ${token} invalidated`)
 
     return id
   }

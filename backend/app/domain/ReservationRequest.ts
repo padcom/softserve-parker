@@ -58,6 +58,8 @@ export class ReservationRequest {
       [ dates.map(date => [ userId, date, '' ]) ],
     )
 
+    logger.info(`Reservation request created for user ${userId}, dates: ${dates}`)
+
     return this.byUserIdAndDates(userId, dates)
   }
 
@@ -115,6 +117,8 @@ export class ReservationRequest {
     if (result.affectedRows !== 1) {
       throw new Error('More than one request has been updated!')
     } 
+
+    logger.info(`Reservation request ${id} status updated to ${status}`)
 
     return result.affectedRows
   }

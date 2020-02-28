@@ -53,6 +53,8 @@ export class History {
       throw new Error('Unable to create new history entry - reason unknown')
     }
 
+    logger.info(`History entry created for ${date} for user ${userId} with state ${state}`)
+
     return result.insertId
   }
 
@@ -100,6 +102,8 @@ export class History {
     if (result.affectedRows !== 1) {
       throw new Error('More than one request has been updated!')
     }
+
+    logger.info(`History entry ${id} updated to state ${state}`)
 
     return result.affectedRows
   }

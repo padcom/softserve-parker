@@ -2,6 +2,8 @@ import { Field, ObjectType } from 'type-graphql'
 import { RowDataPacket, OkPacket } from 'mysql'
 import { db } from '../db'
 
+import { logger } from '../logger'
+
 import parse from 'date-fns/parse'
 import isAfter from 'date-fns/isAfter'
 import startOfDay from 'date-fns/startOfDay'
@@ -40,6 +42,8 @@ export class Settings {
     if (result.affectedRows !== 1) {
       throw new Error('Unable to update setting - reason unknown')
     }
+
+    logger.info(`Setting ${setting} updated to value ${value}`)
 
     return value
   }
