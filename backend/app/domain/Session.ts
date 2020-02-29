@@ -1,9 +1,38 @@
+import { Field, ObjectType } from 'type-graphql'
 import { RowDataPacket, FieldPacket, OkPacket } from 'mysql'
+import jwt from 'jsonwebtoken'
 import { db } from '../db'
 import { logger } from '../logger'
 
+@ObjectType({
+  description: 'Object representing logged in user',
+})
 export class Session {
+  @Field(() => String!)
+  id: string
+
+  @Field(() => String!)
   token: string
+
+  @Field(() => String!)
+  userId () {
+    try {
+      // @ts-ignore
+      return jwt.decode(this.token).userID
+    } catch {
+      return ''
+    }
+  }
+
+  @Field(() => String!)
+  email () {
+    try {
+      // @ts-ignore
+      return jwt.decode(this.token).email
+    } catch {
+      return ''
+    }
+  }
 
   static async create (token: string) {
     const [ result ] = await db.execute(`INSERT INTO sessions (token) VALUES (?)`, [ token ]) as OkPacket[]
@@ -50,5 +79,13 @@ export class Session {
   static async fetchToken (token: string) {
     const session = await this.fetch(token)
     return session ? session.token : null
+  }
+
+  static async all () {
+    const [ rows ]: [ RowDataPacket[], FieldPacket[] ] = await db.execute(
+      'SELECT id, token FROM sessions'
+    )
+
+    return rows as Session[]
   }
 }

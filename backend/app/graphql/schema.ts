@@ -6,8 +6,10 @@ import { SettingsResolver } from './resolvers/SettingsResolver'
 import { RankingResolver } from './resolvers/RankingResolver'
 import { HistoryResolver } from './resolvers/HistoryResolver'
 import { StatisticsResolver } from './resolvers/StatisticsResolver'
+import { SessionResolver } from './resolvers/SessionResolver'
 
 const resolvers = [
+  SessionResolver,
   SettingsResolver,
   UserResolver,
   ReservationRequestResolver,
