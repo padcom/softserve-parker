@@ -60,6 +60,7 @@ export default class App extends Vue {
     { icon: 'mdi-account-multiple', text: 'Users', url: '/users' },
     { icon: 'mdi-clipboard-text', text: 'User\'s history', url: '/users-history' },
     { icon: 'mdi-settings', text: 'Settings', url: '/settings' },
+    { icon: 'mdi-white-balance-sunny', text: 'Logged in users', url: '/sessions' },
   ]
 
   drawer = null
