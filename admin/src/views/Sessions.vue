@@ -44,6 +44,7 @@ import addDays from 'common/date/addDays'
 })
 export default class ParkingStatus extends Vue {
   headers = [
+    { text: 'ID', align: 'left', sortable: true, value: 'id' },
     { text: 'User ID', align: 'left', sortable: true, value: 'userId' },
     { text: 'email', align: 'left', sortable: true, value: 'email' },
   ]
