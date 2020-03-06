@@ -142,7 +142,7 @@ export class User {
           subject: 'Email Confirmation', 
           html: `
             <p>
-              Welcome in SoftServe Parker. This app will help you with parking place reservation.
+              Welcome in Company Parker. This app will help you with parking place reservation.
               To confirm registration please click the link below:
             </p>
             <p>

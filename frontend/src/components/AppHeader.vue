@@ -7,7 +7,7 @@
     </figure>
 
     <figure class="header__logo-wrapper">
-      <img class="header__logo" src="/img/logo.jpg" alt="SoftServe Logo" />
+      <img class="header__logo" src="/img/logo2.jpg" alt="Company Logo" />
     </figure>
 
     <div class="header__right">

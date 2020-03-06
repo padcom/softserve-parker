@@ -3,7 +3,7 @@
     <h5 class="faq-page__head">FAQ</h5>
     <h5 class="faq-page__header">1. What is Parker?</h5>
     <p class="faq-page__paragraph">
-      Parker is an in-house SoftServe app, that allows employees and associates working in Wrocław office to reserve parking spots. Please check Terms and Conditions.
+      Parker is an in-house Company app, that allows employees and associates working in Wrocław office to reserve parking spots. Please check Terms and Conditions.
     </p>
     <h5 class="faq-page__header">2. How to use Parker comfortably?</h5>
     <p class="faq-page__paragraph">

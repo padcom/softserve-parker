@@ -38,7 +38,7 @@
     {
       "_id": "wrk_ac9929baca954e248a5e71fee0794d31",
       "created": 1565250030790,
-      "description": "GraphQL calls for the internal SoftServe project \"Parker\", which is a parking spot reservation PWA.\n\nMaintainer:\nArutr Tagisow - atagi@softserveinc.com",
+      "description": "GraphQL calls for the internal Company project \"Parker\", which is a parking spot reservation PWA.\n\nMaintainer:\nArutr Tagisow - atagi@softserveinc.com",
       "modified": 1565250092553,
       "name": "Parker",
       "parentId": null,
